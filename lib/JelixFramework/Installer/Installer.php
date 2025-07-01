@@ -1,9 +1,9 @@
 <?php
 /**
  * @author      Laurent Jouanneau
- * @copyright   2008-2024 Laurent Jouanneau
+ * @copyright   2008-2025 Laurent Jouanneau
  *
- * @see        http://www.jelix.org
+ * @see         https://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 
@@ -24,6 +24,8 @@ use Jelix\Core\Profiles;
 use Jelix\Dependencies\Item;
 use Jelix\Dependencies\ItemException;
 use Jelix\Dependencies\Resolver;
+use Jelix\Installer\WarmUp\WarmUp;
+use Jelix\Installer\WarmUp\WarmUpLauncherInterface;
 
 /**
  * main class for the installation.
@@ -93,6 +95,16 @@ class Installer
     protected $globalSetup;
 
     /**
+     * @var WarmUp
+     */
+    protected $warmUp;
+
+    /**
+     * @var  array  key = module name, value = path
+     */
+    protected $enabledModules = array();
+
+    /**
      * initialize the installation.
      *
      * GlobalSetup reads configurations files of all entry points, and prepare object for
@@ -113,6 +125,7 @@ class Installer
         $this->globalSetup = $globalSetup;
 
         $this->mainEntryPoint = $globalSetup->getMainEntryPoint();
+        $this->warmUp = new WarmUp(\jApp::app());
     }
 
     public static function setModuleAsInstalled($moduleName, $initialVersion, $versionDate)
@@ -182,6 +195,11 @@ class Installer
         if ($this->mainEntryPoint->getConfigObj()->disableInstallers) {
             $this->notice('install.installers.disabled');
         }
+
+        $this->enabledModules = array_map(function($module) {
+            return $module->getPath();
+            }, $this->globalSetup->getEnabledModuleComponentsList()
+        );
 
         $this->globalSetup->setReadWriteConfigMode(false);
         $componentsToInstall = $this->runPreInstall($modulesChain);
@@ -358,6 +376,8 @@ class Installer
             return false;
         }
 
+        $this->warmUp->launch($this->enabledModules, WarmUpLauncherInterface::STEP_PREINSTALL);
+
         return $componentsToInstall;
     }
 
@@ -423,6 +443,8 @@ class Installer
                     );
                     $this->ok('install.module.installed', $component->getName());
                     $installedModules[] = array($installer, $component, $action);
+                    $this->warmUp->launch([$component->getName() => $component->getPath()], WarmUpLauncherInterface::STEP_MODULE_INSTALL);
+
                 } elseif ($action == Resolver::ACTION_UPGRADE) {
                     $lastversion = '';
                     /** @var \Jelix\Installer\Module\Installer|\jInstallerModule $upgrader */
@@ -494,6 +516,8 @@ class Installer
                         array($component->getName(), $component->getSourceVersion())
                     );
                     $installedModules[] = array($installer, $component, $action);
+                    $this->warmUp->launch([$component->getName() => $component->getPath()], WarmUpLauncherInterface::STEP_MODULE_INSTALL);
+
                 } elseif ($action == Resolver::ACTION_REMOVE) {
                     if ($installer) {
                         if ($installer instanceof \jInstallerModule) {
@@ -511,6 +535,8 @@ class Installer
                     $installerIni->removeValue($component->getName().'.firstversion.date', 'modules');
                     $this->ok('install.module.uninstalled', $component->getName());
                     $installedModules[] = array($installer, $component, $action);
+
+                    $this->warmUp->launch([$component->getName() => $component->getPath()], WarmUpLauncherInterface::STEP_MODULE_UNINSTALL);
                 }
 
                 if ($saveConfigIni) {
@@ -527,6 +553,7 @@ class Installer
         if (!$result) {
             return false;
         }
+        $this->warmUp->launch($this->enabledModules, WarmUpLauncherInterface::STEP_INSTALL);
 
         return $installedModules;
     }
@@ -601,6 +628,11 @@ class Installer
             }
         }
 
+        $this->globalSetup->getInstallerIni()->save();
+
+        if ($result) {
+            $this->warmUp->launch($this->enabledModules, WarmUpLauncherInterface::STEP_POSTINSTALL);
+        }
         return $result;
     }
 

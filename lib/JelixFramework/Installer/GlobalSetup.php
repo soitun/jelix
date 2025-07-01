@@ -1,9 +1,9 @@
 <?php
 /**
  * @author      Laurent Jouanneau
- * @copyright   2017-2023 Laurent Jouanneau
+ * @copyright   2017-2025 Laurent Jouanneau
  *
- * @see        http://www.jelix.org
+ * @see         https://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 
@@ -462,6 +462,16 @@ class GlobalSetup
     public function getModuleComponentsList()
     {
         return $this->modules;
+    }
+
+    /**
+     * @return ModuleInstallerLauncher[]
+     */
+    public function getEnabledModuleComponentsList()
+    {
+        return array_filter($this->modules, function($module) {
+            return $module->isEnabled();
+        });
     }
 
     /**
