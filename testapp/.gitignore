@@ -19,6 +19,8 @@ var/mails/*
 composer.lock
 temp/*
 !temp/.dummy
+tests-jelix/jelix/routing/app1/var/lib/*
+!tests-jelix/jelix/routing/app1/var/lib/.dummy
 tests-jelix/jelix/installer/app1/var/config/installer.ini.php
 tests-jelix/jelix/installer/app1/var/config/installer.bak.ini.php
 tests-jelix/jelix/installer/app1/var/config/liveconfig.ini.php

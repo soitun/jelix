@@ -13,4 +13,5 @@ var/uploads/*
 !var/uploads/.dummy
 var/mails/*
 !var/mails/.dummy
-
+var/lib/*
+!var/lib/.dummy
