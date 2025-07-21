@@ -7,7 +7,7 @@
  * @contributor Loic Mathaud, Dominique Papin, Julien Issler
  * @contributor Uriel Corfa (Emotic SARL), Thomas, Olivier Demah, Adrien Lagroy de Croutte
  *
- * @copyright   2006-2022 Laurent Jouanneau
+ * @copyright   2006-2025 Laurent Jouanneau
  * @copyright   2007 Loic Mathaud, 2007-2008 Dominique Papin
  * @copyright   2007 Emotic SARL
  * @copyright   2008-2015 Julien Issler, 2009 Thomas, 2009 Olivier Demah
@@ -72,7 +72,7 @@ class jFormsCompiler_jf_1_1 extends jFormsCompiler_jf_1_0
         if (isset($control->oncheckvalue)) {
             $check = $control->oncheckvalue;
             if (isset($check['locale'])) {
-                $source[] = '$ctrl->valueLabelOnCheck=jLocale::get(\''.$check['locale'].'\');';
+                $source[] = '$ctrl->valueLabelOnCheck=Locale::get(\''.$check['locale'].'\');';
             } elseif (isset($check['label'])) {
                 $source[] = '$ctrl->valueLabelOnCheck=\''.str_replace("'", "\\'", (string) $check['label']).'\';';
             }
@@ -83,7 +83,7 @@ class jFormsCompiler_jf_1_1 extends jFormsCompiler_jf_1_0
         if (isset($control->onuncheckvalue)) {
             $check = $control->onuncheckvalue;
             if (isset($check['locale'])) {
-                $source[] = '$ctrl->valueLabelOnUncheck=jLocale::get(\''.$check['locale'].'\');';
+                $source[] = '$ctrl->valueLabelOnUncheck=Locale::get(\''.$check['locale'].'\');';
             } elseif (isset($check['label'])) {
                 $source[] = '$ctrl->valueLabelOnUncheck=\''.str_replace("'", "\\'", (string) $check['label']).'\';';
             }
@@ -99,7 +99,7 @@ class jFormsCompiler_jf_1_1 extends jFormsCompiler_jf_1_0
         if (isset($control->emptyitem)) {
             if (isset($control->emptyitem['locale'])) {
                 $labellocale = (string) $control->emptyitem['locale'];
-                $source[] = '$ctrl->emptyItemLabel=jLocale::get(\''.$labellocale.'\');';
+                $source[] = '$ctrl->emptyItemLabel=Locale::get(\''.$labellocale.'\');';
             } else {
                 $label = (string) $control->emptyitem;
                 $source[] = '$ctrl->emptyItemLabel=\''.str_replace("'", "\\'", $label).'\';';
@@ -415,7 +415,7 @@ class jFormsCompiler_jf_1_1 extends jFormsCompiler_jf_1_0
 
             if (isset($item->label['locale'])) {
                 $labellocale = (string) $item->label['locale'];
-                $source[] = '$choicectrl->createItem(\''.str_replace("'", "\\'", $value).'\', jLocale::get(\''.$labellocale.'\'));';
+                $source[] = '$choicectrl->createItem(\''.str_replace("'", "\\'", $value).'\', Locale::get(\''.$labellocale.'\'));';
             } else {
                 $label = (string) $item->label;
                 $source[] = '$choicectrl->createItem(\''.str_replace("'", "\\'", $value).'\', \''.str_replace("'", "\\'", $label).'\');';
@@ -590,7 +590,7 @@ class jFormsCompiler_jf_1_1 extends jFormsCompiler_jf_1_0
                 } else {
                     $group = '$ctrl->datasource->data[';
                     if (isset($elem['locale'])) {
-                        $group .= "jLocale::get('".(string) $elem['locale']."')]=array(";
+                        $group .= "Locale::get('".(string) $elem['locale']."')]=array(";
                     } elseif (isset($elem['label'])) {
                         $group .= "'".str_replace("'", "\\'", (string) $elem['label'])."']=array(";
                     } else {
@@ -630,7 +630,7 @@ class jFormsCompiler_jf_1_1 extends jFormsCompiler_jf_1_0
     {
         $value = "'".str_replace("'", "\\'", (string) $item['value'])."'=>";
         if (isset($item['locale'])) {
-            $value .= "jLocale::get('".(string) $item['locale']."'),";
+            $value .= "Locale::get('".(string) $item['locale']."'),";
         } elseif ((string) $item != '') {
             $value .= "'".str_replace("'", "\\'", (string) $item)."',";
         } else {

@@ -6,7 +6,7 @@
  * @author     Laurent Jouanneau
  * @contributor Julien Issler, Hadrien Lanneau
  *
- * @copyright  2005-2011 Laurent Jouanneau
+ * @copyright  2005-2025 Laurent Jouanneau
  * @copyright 2008 Julien Issler, 2010 Hadrien Lanneau
  *
  * @see        http://www.jelix.org
@@ -15,6 +15,7 @@
  * @param mixed $tpl
  * @param mixed $locale
  */
+use Jelix\Locale\Locale;
 
 /**
  * function plugin :  write the localized string corresponding to the given locale key.
@@ -31,17 +32,17 @@ function jtpl_function_html_jlocale($tpl, $locale)
     if (func_num_args() == 4 && is_array(func_get_arg(2))) {
         $param2 = func_get_arg(2);
         $param3 = func_get_arg(3);
-        $str = jLocale::get($locale, $param2, $param3);
+        $str = Locale::get($locale, $param2, $param3);
     } elseif (func_num_args() == 3 && is_array(func_get_arg(2))) {
         $param = func_get_arg(2);
-        $str = jLocale::get($locale, $param);
+        $str = Locale::get($locale, $param);
     } elseif (func_num_args() > 2) {
         $params = func_get_args();
         unset($params[0], $params[1]);
 
-        $str = jLocale::get($locale, $params);
+        $str = Locale::get($locale, $params);
     } else {
-        $str = jLocale::get($locale);
+        $str = Locale::get($locale);
     }
     if (preg_match('/\.html$/', $locale)) {
         echo $str;

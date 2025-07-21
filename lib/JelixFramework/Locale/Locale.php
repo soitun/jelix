@@ -15,6 +15,7 @@
 namespace Jelix\Locale;
 
 use jApp as App;
+use jBundle;
 
 /**
  * static class to get a localized string.
@@ -87,6 +88,9 @@ class Locale
      */
     public static function get($key, $args = null, $locale = null, $tryOtherLocales = true)
     {
+        if (App::config()->charset != 'UTF-8') {
+            return \jLocale::get($key, $args, $locale, null, $tryOtherLocales);
+        }
         list($bundle, $file) = self::getBundleAndSelector($key, $locale);
 
         //try to get the message from the bundle.
@@ -120,11 +124,14 @@ class Locale
     /**
      * @param $key
      * @param $locale
-     * @return Bundle
+     * @return Bundle|jBundle
      * @throws \Jelix\Core\Selector\Exception
      */
     public static function getBundle($key, $locale = null)
     {
+        if (App::config()->charset != 'UTF-8') {
+            return \jLocale::getBundle($key, $locale);
+        }
         list($bundle, $selector) = self::getBundleAndSelector($key, $locale);
         return $bundle;
     }

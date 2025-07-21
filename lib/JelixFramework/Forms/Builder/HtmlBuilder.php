@@ -3,7 +3,7 @@
  * @author      Laurent Jouanneau
  * @contributor Julien Issler, Dominique Papin, Claudio Bernardes
  *
- * @copyright   2006-2024 Laurent Jouanneau
+ * @copyright   2006-2025 Laurent Jouanneau
  * @copyright   2008-2016 Julien Issler, 2008 Dominique Papin, 2012 Claudio Bernardes
  *
  * @see        http://www.jelix.org
@@ -15,6 +15,7 @@ namespace Jelix\Forms\Builder;
 use Jelix\Forms\HtmlWidget\ParentWidgetInterface;
 use Jelix\Forms\HtmlWidget\WidgetBase;
 use Jelix\Forms\HtmlWidget\WidgetInterface;
+use Jelix\Locale\Locale;
 
 /**
  * Main HTML form builder.
@@ -306,20 +307,20 @@ class HtmlBuilder extends BuilderBase
                     if ($ctrls[$cname]->alertRequired) {
                         echo '<li>', $ctrls[$cname]->alertRequired, '</li>';
                     } else {
-                        echo '<li>', \jLocale::get('jelix~formserr.js.err.required', $ctrls[$cname]->label), '</li>';
+                        echo '<li>', Locale::get('jelix~formserr.js.err.required', $ctrls[$cname]->label), '</li>';
                     }
                 } elseif ($err === \jForms::ERRDATA_INVALID) {
                     if ($ctrls[$cname]->alertInvalid) {
                         echo '<li>', $ctrls[$cname]->alertInvalid, '</li>';
                     } else {
-                        echo '<li>', \jLocale::get('jelix~formserr.js.err.invalid', $ctrls[$cname]->label), '</li>';
+                        echo '<li>', Locale::get('jelix~formserr.js.err.invalid', $ctrls[$cname]->label), '</li>';
                     }
                 } elseif ($err === \jForms::ERRDATA_INVALID_FILE_SIZE) {
-                    echo '<li>', \jLocale::get('jelix~formserr.js.err.invalid.file.size', $ctrls[$cname]->label), '</li>';
+                    echo '<li>', Locale::get('jelix~formserr.js.err.invalid.file.size', $ctrls[$cname]->label), '</li>';
                 } elseif ($err === \jForms::ERRDATA_INVALID_FILE_TYPE) {
-                    echo '<li>', \jLocale::get('jelix~formserr.js.err.invalid.file.type', $ctrls[$cname]->label), '</li>';
+                    echo '<li>', Locale::get('jelix~formserr.js.err.invalid.file.type', $ctrls[$cname]->label), '</li>';
                 } elseif ($err === \jForms::ERRDATA_FILE_UPLOAD_ERROR) {
-                    echo '<li>', \jLocale::get('jelix~formserr.js.err.file.upload', $ctrls[$cname]->label), '</li>';
+                    echo '<li>', Locale::get('jelix~formserr.js.err.file.upload', $ctrls[$cname]->label), '</li>';
                 } elseif ($err != '') {
                     echo '<li>', $err, '</li>';
                 }

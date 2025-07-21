@@ -6,12 +6,14 @@
  * @author      Laurent Jouanneau
  * @contributor Julien Issler, Olivier Demah, Adrien Lagroy de Croutte
  *
- * @copyright   2008-2022 Laurent Jouanneau
+ * @copyright   2008-2025 Laurent Jouanneau
  * @copyright   2009 Julien Issler, 2010 Olivier Demah, 2020 Adrien Lagroy de Croutte
  *
  * @see        http://jelix.org
  * @licence     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public Licence, see LICENCE file
  */
+use Jelix\Locale\Locale;
+
 class jAcl2DbAdminUIManager
 {
     const FILTER_GROUP_ALL_USERS = -2;
@@ -30,7 +32,7 @@ class jAcl2DbAdminUIManager
     {
         if ($labelKey) {
             try {
-                return jLocale::get($labelKey);
+                return Locale::get($labelKey);
             } catch (Exception $e) {
             }
         }
@@ -58,7 +60,7 @@ class jAcl2DbAdminUIManager
         $o->id_aclgrp = '__anonymous';
 
         try {
-            $o->name = jLocale::get('jacl2db_admin~acl2.anonymous.group.name');
+            $o->name = Locale::get('jacl2db_admin~acl2.anonymous.group.name');
         } catch (Exception $e) {
             $o->name = 'Anonymous';
         }

@@ -6,7 +6,7 @@
  * @author     Laurent Jouanneau
  * @contributor   Philippe Villiers
  *
- * @copyright   2012 Laurent Jouanneau
+ * @copyright   2012-2025 Laurent Jouanneau
  *
  * @see        http://www.jelix.org
  * @licence    GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
@@ -63,7 +63,7 @@ function jtpl_modifier_common_datetime($date, $format_out = 'lang_datetime', $fo
     );
 
     if (isset($format[$format_out])) {
-        $format_out = jLocale::get($format[$format_out]);
+        $format_out = \Jelix\Locale\Locale::get($format[$format_out]);
     }
 
     return $date->format($format_out);

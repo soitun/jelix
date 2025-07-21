@@ -4,9 +4,10 @@
  * @subpackage coord_plugin
  *
  * @author   Laurent Jouanneau
- * @copyright 2006-2012 Laurent Jouanneau
+ * @copyright 2006-2025 Laurent Jouanneau
  * @licence  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
+use Jelix\Locale\Locale;
 
 /**
  * plugin for language auto detection.
@@ -37,7 +38,7 @@ class AutoLocaleCoordPlugin implements jICoordPlugin
         if ($this->config['enableUrlDetection']) {
             $l = jApp::coord()->request->getParam($this->config['urlParamNameLanguage']);
             if ($l !== null) {
-                $lang = jLocale::getCorrespondingLocale($l);
+                $lang = Locale::getCorrespondingLocale($l);
                 if ($lang != '') {
                     $langDetected = true;
                 }
@@ -48,7 +49,7 @@ class AutoLocaleCoordPlugin implements jICoordPlugin
             if (isset($_SESSION['JX_LANG'])) {
                 $lang = $_SESSION['JX_LANG'];
             } elseif ($this->config['useDefaultLanguageBrowser']) {
-                $lang = jLocale::getPreferedLocaleFromRequest();
+                $lang = Locale::getPreferedLocaleFromRequest();
             }
         }
 

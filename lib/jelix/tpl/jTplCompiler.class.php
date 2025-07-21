@@ -81,7 +81,7 @@ class jTplCompiler extends \Jelix\Castor\CompilerCore implements jISimpleCompile
 
     protected function getCompiledLocaleRetriever($locale)
     {
-        return 'jLocale::get(\''.$locale.'\')';
+        return '\\Jelix\\Locale\\Locale::get(\''.$locale.'\')';
     }
 
     public function addMetaContent($content)

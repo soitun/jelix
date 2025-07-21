@@ -4,7 +4,7 @@
  * @subpackage  jacl2db_admin
  *
  * @author    Laurent Jouanneau
- * @copyright 2008-2022 Laurent Jouanneau
+ * @copyright 2008-2025 Laurent Jouanneau
  *
  * @see        http://jelix.org
  * @licence     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public Licence, see LICENCE file
@@ -25,7 +25,7 @@ class jacl2db_adminListener extends jEventListener
         }
 
         if ($url) {
-            $item = new masterAdminMenuItem('rights', jLocale::get('jacl2db_admin~acl2.menu.item.rights'), $url, 30, 'system');
+            $item = new masterAdminMenuItem('rights', \Jelix\Locale\Locale::get('jacl2db_admin~acl2.menu.item.rights'), $url, 30, 'system');
             $item->icon = jApp::urlJelixWWWPath().'design/images/rights.png';
             $event->add($item);
         }

@@ -128,7 +128,7 @@ class jLocale
      * @param $key
      * @param $locale
      * @param $charset
-     * @return array jBundle and selector object
+     * @return jBundle
      * @throws jExceptionSelector
      */
     public static function getBundle($key, $locale = null, $charset = null)

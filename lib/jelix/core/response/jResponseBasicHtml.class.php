@@ -6,12 +6,13 @@
  * @author      Laurent Jouanneau
  * @contributor Julien Issler, Brice Tence
  *
- * @copyright   2010-2024 Laurent Jouanneau
+ * @copyright   2010-2025 Laurent Jouanneau
  * @copyright   2011 Julien Issler, 2011 Brice Tence
  *
  * @see        http://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
+use Jelix\Locale\Locale;
 
 /**
  * interface for plugins for jResponseBasicHtml or jResponseHtml, which allows
@@ -146,8 +147,8 @@ class jResponseBasicHtml extends jResponse
     public function __construct()
     {
         $this->_charset = jApp::config()->charset;
-        $this->_locale = jLocale::getCurrentLocale();
-        $this->_lang = jLocale::getCurrentLang();
+        $this->_locale = Locale::getCurrentLocale();
+        $this->_lang = Locale::getCurrentLang();
 
         // load plugins
         $plugins = jApp::config()->jResponseHtml['plugins'];
@@ -300,7 +301,7 @@ class jResponseBasicHtml extends jResponse
     public function outputErrors()
     {
 
-        $locale = jLocale::getCurrentLocale();
+        $locale = Locale::getCurrentLocale();
         if (file_exists(jApp::appPath('app/responses/error.'.$locale.'.php'))) {
             $file = jApp::appPath('app/responses/error.'.$locale.'.php');
         } else if (file_exists(jApp::appPath('app/responses/error.en_US.php'))) {

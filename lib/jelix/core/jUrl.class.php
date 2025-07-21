@@ -8,7 +8,7 @@
  * @contributor Loic Mathaud
  * @contributor Hadrien Lanneau
  *
- * @copyright   2005-2020 Laurent Jouanneau
+ * @copyright   2005-2025 Laurent Jouanneau
  * @copyright   2007 Thibault Piront
  * @copyright   2006 Loic Mathaud, 2010 Hadrien Lanneau
  * @copyright   2001-2005 CopixTeam
@@ -18,6 +18,7 @@
  * @see        http://jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
+use Jelix\Locale\Locale;
 
 /**
  * Object that contains url data, and which provides static method helpers.
@@ -275,8 +276,8 @@ class jUrl extends jUrlBase
 
         if ($highlevel) {
             if ($url_escape_from == null) {
-                $url_escape_from = explode(' ', jLocale::get('jelix~format.url_escape_from'));
-                $url_escape_to = explode(' ', jLocale::get('jelix~format.url_escape_to'));
+                $url_escape_from = explode(' ', Locale::get('jelix~format.url_escape_from'));
+                $url_escape_to = explode(' ', Locale::get('jelix~format.url_escape_to'));
             }
             // first, we do transliteration.
             // we don't use iconv because it is system dependant

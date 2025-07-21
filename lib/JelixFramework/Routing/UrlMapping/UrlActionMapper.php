@@ -1,13 +1,14 @@
 <?php
 /**
  * @author      Laurent Jouanneau
- * @copyright   2005-2018 Laurent Jouanneau
+ * @copyright   2005-2025 Laurent Jouanneau
  *
  * @see        http://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 
 namespace Jelix\Routing\UrlMapping;
+use Jelix\Locale\Locale;
 
 /**
  * an url engine to parse,analyse and create significant url
@@ -342,7 +343,7 @@ class UrlActionMapper
                         $v = substr($v, 2);
                         if ($typePS == 'l') {
                             if ($paramStatic === null) {
-                                $paramStatic = \jLocale::getCurrentLang();
+                                $paramStatic = Locale::getCurrentLang();
                             } elseif (preg_match('/^(\w{2,3})_\w{2,3}$/', $paramStatic, $m)) { // if the value is a locale instead of lang, translate it
                                 $paramStatic = $m[1];
                             }
@@ -350,7 +351,7 @@ class UrlActionMapper
                             if ($paramStatic === null) {
                                 $paramStatic = \jApp::config()->locale;
                             } elseif (preg_match('/^\w{2,3}$/', $paramStatic, $m)) { // if the value is a lang instead of locale, translate it
-                                $paramStatic = \jLocale::langToLocale($paramStatic);
+                                $paramStatic = Locale::langToLocale($paramStatic);
                             }
                         }
                     }
@@ -423,7 +424,7 @@ class UrlActionMapper
                 $value = str_replace('%2F', '/', urlencode($value));
             } elseif ($escape & self::ESCAPE_LANG) {
                 if ($value == '') {
-                    $value = \jLocale::getCurrentLang();
+                    $value = Locale::getCurrentLang();
                 } elseif (preg_match('/^(\w{2,3})_\w{2,3}$/', $value, $m)) {
                     $value = $m[1];
                 }
@@ -431,7 +432,7 @@ class UrlActionMapper
                 if ($value == '') {
                     $value = \jApp::config()->locale;
                 } elseif (preg_match('/^\w{2,3}$/', $value, $m)) {
-                    $value = \jLocale::langToLocale($value);
+                    $value = Locale::langToLocale($value);
                 }
             } else {
                 $value = urlencode($value);
@@ -642,7 +643,7 @@ class UrlActionMapper
                     $typeStatic = $v[1];
                     $v = substr($v, 2);
                     if ($typeStatic == 'l') {
-                        \jApp::config()->locale = \jLocale::langToLocale($v);
+                        \jApp::config()->locale = Locale::langToLocale($v);
                     } elseif ($typeStatic == 'L') {
                         \jApp::config()->locale = $v;
                     }
@@ -663,7 +664,7 @@ class UrlActionMapper
                         if ($escapes[$k] & self::ESCAPE_LANG) {
                             $v = $matches[$k];
                             if (preg_match('/^\w{2,3}$/', $v, $m)) {
-                                \jApp::config()->locale = \jLocale::langToLocale($v);
+                                \jApp::config()->locale = Locale::langToLocale($v);
                             } else {
                                 \jApp::config()->locale = $v;
                                 $params[$name] = substr($v, 0, strpos($v, '_'));
@@ -671,7 +672,7 @@ class UrlActionMapper
                         } elseif ($escapes[$k] & self::ESCAPE_LOCALE) {
                             $v = $matches[$k];
                             if (preg_match('/^\w{2,3}$/', $v, $m)) {
-                                \jApp::config()->locale = $params[$name] = \jLocale::langToLocale($v);
+                                \jApp::config()->locale = $params[$name] = Locale::langToLocale($v);
                             } else {
                                 \jApp::config()->locale = $v;
                             }

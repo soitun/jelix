@@ -7,12 +7,12 @@
  * @contributor Laurent Jouanneau, Julien Issler, Dominique Papin
  *
  * @copyright   2012 Claudio Bernardes
- * @copyright   2006-2017 Laurent Jouanneau, 2008-2011 Julien Issler, 2008 Dominique Papin
+ * @copyright   2006-2025 Laurent Jouanneau, 2008-2011 Julien Issler, 2008 Dominique Papin
  *
  * @see        http://www.jelix.org
  * @licence     http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
-
+use Jelix\Locale\Locale;
 /**
  * HTML form builder.
  *
@@ -102,7 +102,7 @@ class datetime_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
             $v['minutes'] = '00';
             $v['seconds'] = '00';
         }
-        $f = jLocale::get('jelix~format.datetime');
+        $f = Locale::get('jelix~format.datetime');
         for ($i = 0; $i < strlen($f); ++$i) {
             if ($f[$i] == 'Y') {
                 $this->_outputDateControlYear($this->ctrl, $attr, $v['year']);
@@ -130,13 +130,13 @@ class datetime_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
         $attr['id'] .= 'day';
         if (jApp::config()->forms['controls.datetime.input'] == 'textboxes') {
             $attr['value'] = $value;
-            echo '<input type="text" size="2" maxlength="2" placeholder="'.htmlspecialchars(jLocale::get('jelix~jforms.date.day.label')).'"';
+            echo '<input type="text" size="2" maxlength="2" placeholder="'.htmlspecialchars(Locale::get('jelix~jforms.date.day.label')).'"';
             $this->_outputAttr($attr);
             echo '/>';
         } else {
             echo '<select';
             $this->_outputAttr($attr);
-            echo '><option value="">'.htmlspecialchars(jLocale::get('jelix~jforms.date.day.label')).'</option>';
+            echo '><option value="">'.htmlspecialchars(Locale::get('jelix~jforms.date.day.label')).'</option>';
             for ($i = 1; $i < 32; ++$i) {
                 $k = ($i < 10) ? '0'.$i : $i;
                 echo '<option value="'.$k.'"'.($k == $value ? ' selected="selected"' : '').'>'.$k.'</option>';
@@ -151,20 +151,20 @@ class datetime_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
         $attr['id'] .= 'month';
         if (jApp::config()->forms['controls.datetime.input'] == 'textboxes') {
             $attr['value'] = $value;
-            echo '<input type="text" size="2" maxlength="2" placeholder="'.htmlspecialchars(jLocale::get('jelix~jforms.date.month.label')).'"';
+            echo '<input type="text" size="2" maxlength="2" placeholder="'.htmlspecialchars(Locale::get('jelix~jforms.date.month.label')).'"';
             $this->_outputAttr($attr);
             echo '/>';
         } else {
             $monthLabels = jApp::config()->forms['controls.datetime.months.labels'];
             echo '<select';
             $this->_outputAttr($attr);
-            echo '><option value="">'.htmlspecialchars(jLocale::get('jelix~jforms.date.month.label')).'</option>';
+            echo '><option value="">'.htmlspecialchars(Locale::get('jelix~jforms.date.month.label')).'</option>';
             for ($i = 1; $i < 13; ++$i) {
                 $k = ($i < 10) ? '0'.$i : $i;
                 if ($monthLabels == 'names') {
-                    $l = htmlspecialchars(jLocale::get('jelix~date_time.month.'.$k.'.label'));
+                    $l = htmlspecialchars(Locale::get('jelix~date_time.month.'.$k.'.label'));
                 } elseif ($monthLabels == 'shortnames') {
-                    $l = htmlspecialchars(jLocale::get('jelix~date_time.month.'.$k.'.shortlabel'));
+                    $l = htmlspecialchars(Locale::get('jelix~date_time.month.'.$k.'.shortlabel'));
                 } else {
                     $l = $k;
                 }
@@ -180,7 +180,7 @@ class datetime_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
         $attr['id'] .= 'year';
         if (jApp::config()->forms['controls.datetime.input'] == 'textboxes') {
             $attr['value'] = $value;
-            echo '<input type="text" size="4" maxlength="4" placeholder="'.htmlspecialchars(jLocale::get('jelix~jforms.date.year.label')).'"';
+            echo '<input type="text" size="4" maxlength="4" placeholder="'.htmlspecialchars(Locale::get('jelix~jforms.date.year.label')).'"';
             $this->_outputAttr($attr);
             echo '/>';
         } else {
@@ -189,7 +189,7 @@ class datetime_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
             if ($minDate && $maxDate) {
                 echo '<select';
                 $this->_outputAttr($attr);
-                echo '><option value="">'.htmlspecialchars(jLocale::get('jelix~jforms.date.year.label')).'</option>';
+                echo '><option value="">'.htmlspecialchars(Locale::get('jelix~jforms.date.year.label')).'</option>';
                 for ($i = $minDate->year; $i <= $maxDate->year; ++$i) {
                     echo '<option value="'.$i.'"'.($i == $value ? ' selected="selected"' : '').'>'.$i.'</option>';
                 }
@@ -209,13 +209,13 @@ class datetime_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
         $attr['id'] .= 'hour';
         if (jApp::config()->forms['controls.datetime.input'] == 'textboxes') {
             $attr['value'] = $value;
-            echo '<input type="text" size="2" maxlength="2" placeholder="'.htmlspecialchars(jLocale::get('jelix~jforms.time.hour.label')).'"';
+            echo '<input type="text" size="2" maxlength="2" placeholder="'.htmlspecialchars(Locale::get('jelix~jforms.time.hour.label')).'"';
             $this->_outputAttr($attr);
             echo $this->_endt;
         } else {
             echo '<select';
             $this->_outputAttr($attr);
-            echo '><option value="">'.htmlspecialchars(jLocale::get('jelix~jforms.time.hour.label')).'</option>';
+            echo '><option value="">'.htmlspecialchars(Locale::get('jelix~jforms.time.hour.label')).'</option>';
             for ($i = 0; $i < 24; ++$i) {
                 $k = ($i < 10) ? '0'.$i : $i;
                 echo '<option value="'.$k.'"'.((string) $k === $value ? ' selected="selected"' : '').'>'.$k.'</option>';
@@ -230,13 +230,13 @@ class datetime_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
         $attr['id'] .= 'minutes';
         if (jApp::config()->forms['controls.datetime.input'] == 'textboxes') {
             $attr['value'] = $value;
-            echo '<input type="text" size="2" maxlength="2" placeholder="'.htmlspecialchars(jLocale::get('jelix~jforms.time.minutes.label')).'"';
+            echo '<input type="text" size="2" maxlength="2" placeholder="'.htmlspecialchars(Locale::get('jelix~jforms.time.minutes.label')).'"';
             $this->_outputAttr($attr);
             echo $this->_endt;
         } else {
             echo '<select';
             $this->_outputAttr($attr);
-            echo '><option value="">'.htmlspecialchars(jLocale::get('jelix~jforms.time.minutes.label')).'</option>';
+            echo '><option value="">'.htmlspecialchars(Locale::get('jelix~jforms.time.minutes.label')).'</option>';
             for ($i = 0; $i < 60; ++$i) {
                 $k = ($i < 10) ? '0'.$i : $i;
                 echo '<option value="'.$k.'"'.((string) $k === $value ? ' selected="selected"' : '').'>'.$k.'</option>';
@@ -253,13 +253,13 @@ class datetime_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
             echo '<input type="hidden" id="'.$attr['id'].'" name="'.$attr['name'].'" value="'.$value.'"/>';
         } elseif (jApp::config()->forms['controls.datetime.input'] == 'textboxes') {
             $attr['value'] = $value;
-            echo '<input type="text" placeholder="'.htmlspecialchars(jLocale::get('jelix~jforms.time.seconds.label')).'"';
+            echo '<input type="text" placeholder="'.htmlspecialchars(Locale::get('jelix~jforms.time.seconds.label')).'"';
             $this->_outputAttr($attr);
             echo $this->_endt;
         } else {
             echo '<select';
             $this->_outputAttr($attr);
-            echo '><option value="">'.htmlspecialchars(jLocale::get('jelix~jforms.time.seconds.label')).'</option>';
+            echo '><option value="">'.htmlspecialchars(Locale::get('jelix~jforms.time.seconds.label')).'</option>';
             for ($i = 0; $i < 60; ++$i) {
                 $k = ($i < 10) ? '0'.$i : $i;
                 echo '<option value="'.$k.'"'.((string) $k === $value ? ' selected="selected"' : '').'>'.$k.'</option>';

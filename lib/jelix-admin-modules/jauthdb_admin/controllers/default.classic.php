@@ -5,12 +5,13 @@
  * @subpackage  jauthdb_admin
  *
  * @author    Laurent Jouanneau
- * @copyright 2009-2023 Laurent Jouanneau
+ * @copyright 2009-2025 Laurent Jouanneau
  *
  * @see      http://jelix.org
  *
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public Licence
  */
+use Jelix\Locale\Locale;
 
 /**
  * controller to manage all users.
@@ -174,14 +175,14 @@ class defaultCtrl extends jController
     {
         $login = $this->param('j_user_login');
         if ($login === null) {
-            jMessage::add(jLocale::get('crud.message.bad.id', 'null'), 'error');
+            jMessage::add(Locale::get('crud.message.bad.id', 'null'), 'error');
 
             return $this->redirect('default:index');
         }
         $dao = jDao::create($this->dao, $this->dbProfile);
         $daorec = $dao->getByLogin($login);
         if (!$daorec) {
-            jMessage::add(jLocale::get('crud.message.bad.id', $login), 'error');
+            jMessage::add(Locale::get('crud.message.bad.id', $login), 'error');
 
             return $this->redirect('default:index');
         }
@@ -260,7 +261,7 @@ class defaultCtrl extends jController
     {
         $form = jForms::get($this->form);
         if ($form == null) {
-            jMessage::add(jLocale::get('crud.message.bad.form'), 'error');
+            jMessage::add(Locale::get('crud.message.bad.form'), 'error');
 
             return $this->redirect('default:index');
         }
@@ -271,7 +272,7 @@ class defaultCtrl extends jController
 
         $login = trim($form->getData('login'));
         if (jAuth::getUser($login)) {
-            $form->setErrorOn('login', jLocale::get('crud.message.create.existing.user', $login));
+            $form->setErrorOn('login', Locale::get('crud.message.create.existing.user', $login));
 
             return $this->redirect('default:create');
         }
@@ -296,7 +297,7 @@ class defaultCtrl extends jController
             $form->saveAllFiles($this->uploadsDirectory);
 
             jForms::destroy($this->form);
-            jMessage::add(jLocale::get('crud.message.create.ok', $user->login), 'notice');
+            jMessage::add(Locale::get('crud.message.create.ok', $user->login), 'notice');
 
             return $this->redirect('default:view', ['j_user_login' => $user->login]);
         }
@@ -312,7 +313,7 @@ class defaultCtrl extends jController
         $login = $this->param('j_user_login');
 
         if ($login === null) {
-            jMessage::add(jLocale::get('crud.message.bad.id', 'null'), 'error');
+            jMessage::add(Locale::get('crud.message.bad.id', 'null'), 'error');
 
             return $this->redirect('default:index');
         }
@@ -320,7 +321,7 @@ class defaultCtrl extends jController
         $dao = jDao::create($this->dao, $this->dbProfile);
         $daoUser = $dao->getByLogin($login);
         if (!$daoUser) {
-            jMessage::add(jLocale::get('crud.message.bad.id', $login), 'error');
+            jMessage::add(Locale::get('crud.message.bad.id', $login), 'error');
 
             return $this->redirect('default:index');
         }
@@ -358,7 +359,7 @@ class defaultCtrl extends jController
         $login = $this->param('j_user_login');
         $form = jForms::get($this->form, $login);
         if ($form === null || $login === null) {
-            jMessage::add(jLocale::get('crud.message.bad.id', $login), 'error');
+            jMessage::add(Locale::get('crud.message.bad.id', $login), 'error');
 
             return $this->redirect('default:index');
         }
@@ -388,7 +389,7 @@ class defaultCtrl extends jController
         $login = $this->param('j_user_login');
 
         if ($login === null) {
-            jMessage::add(jLocale::get('crud.message.bad.id', 'null'), 'error');
+            jMessage::add(Locale::get('crud.message.bad.id', 'null'), 'error');
 
             return $this->redirect('default:index');
         }
@@ -397,7 +398,7 @@ class defaultCtrl extends jController
         /** @var jDaoRecordBase $daoUser */
         $daoUser = $dao->getByLogin($login);
         if (!$daoUser) {
-            jMessage::add(jLocale::get('crud.message.bad.id', $login), 'error');
+            jMessage::add(Locale::get('crud.message.bad.id', $login), 'error');
 
             return $this->redirect('default:index');
         }
@@ -405,7 +406,7 @@ class defaultCtrl extends jController
         $form = jForms::get($this->form, $login);
 
         if ($form === null) {
-            jMessage::add(jLocale::get('crud.message.bad.form'), 'error');
+            jMessage::add(Locale::get('crud.message.bad.form'), 'error');
 
             return $this->redirect('default:index');
         }
@@ -431,7 +432,7 @@ class defaultCtrl extends jController
             // it will save files that are not saved by listeners of jauthdbAdminAfterUpdate
             $form->saveAllFiles($this->uploadsDirectory);
 
-            jMessage::add(jLocale::get('crud.message.update.ok', $login), 'notice');
+            jMessage::add(Locale::get('crud.message.update.ok', $login), 'notice');
             jForms::destroy($this->form, $login);
 
             return $this->redirect('default:view', ['j_user_login' => $login]);
@@ -444,7 +445,7 @@ class defaultCtrl extends jController
     {
         $login = $this->param('j_user_login');
         if ($login === null) {
-            jMessage::add(jLocale::get('crud.message.bad.id', 'null'), 'error');
+            jMessage::add(Locale::get('crud.message.bad.id', 'null'), 'error');
 
             return $this->redirect('default:index');
         }
@@ -453,7 +454,7 @@ class defaultCtrl extends jController
         /** @var jDaoRecordBase $daoUser */
         $daoUser = $dao->getByLogin($login);
         if (!$daoUser) {
-            jMessage::add(jLocale::get('crud.message.bad.id', $login), 'error');
+            jMessage::add(Locale::get('crud.message.bad.id', $login), 'error');
 
             return $this->redirect('default:index');
         }
@@ -476,20 +477,20 @@ class defaultCtrl extends jController
         $pwd = $this->param('pwd_confirm');
 
         if (jAuth::verifyPassword(jAuth::getUserSession()->login, $pwd) == false) {
-            jMessage::add(jLocale::get('crud.message.delete.invalid.pwd'), 'error');
+            jMessage::add(Locale::get('crud.message.delete.invalid.pwd'), 'error');
 
             return $this->redirect('default:confirmdelete', ['j_user_login' => $login]);
         }
 
         if ($login !== null && jAuth::getUserSession()->login != $login) {
             if (jAuth::removeUser($login)) {
-                jMessage::add(jLocale::get('crud.message.delete.ok', $login), 'notice');
+                jMessage::add(Locale::get('crud.message.delete.ok', $login), 'notice');
             } else {
-                jMessage::add(jLocale::get('crud.message.delete.notok'), 'error');
+                jMessage::add(Locale::get('crud.message.delete.notok'), 'error');
                 return $this->redirect('default:view', ['j_user_login' => $login]);
             }
         } else {
-            jMessage::add(jLocale::get('crud.message.delete.notok'), 'error');
+            jMessage::add(Locale::get('crud.message.delete.notok'), 'error');
         }
 
         return $this->redirect('default:index');

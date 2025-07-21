@@ -1,4 +1,5 @@
 <?php
+use Jelix\Locale\Locale;
 
 class jLocaleLangCodeTest extends \Jelix\UnitTests\UnitTestCase {
 
@@ -27,60 +28,60 @@ class jLocaleLangCodeTest extends \Jelix\UnitTests\UnitTestCase {
     function testLangToLocale() {
         jApp::config()->langToLocale = array();
         
-        $this->assertEquals('en_US', jLocale::langToLocale('en'));
-        $this->assertEquals('', jLocale::langToLocale('en_GB'));
-        $this->assertEquals('fr_FR', jLocale::langToLocale('fr'));
-        $this->assertEquals('be_BY', jLocale::langToLocale('be'));
+        $this->assertEquals('en_US', Locale::langToLocale('en'));
+        $this->assertEquals('', Locale::langToLocale('en_GB'));
+        $this->assertEquals('fr_FR', Locale::langToLocale('fr'));
+        $this->assertEquals('be_BY', Locale::langToLocale('be'));
         
         jApp::config()->langToLocale = array('locale'=>array('fr'=>'fr_CA'));
-        $this->assertEquals('fr_CA', jLocale::langToLocale('fr'));
+        $this->assertEquals('fr_CA', Locale::langToLocale('fr'));
     }
 
     function testGetCorrespondingLocale() {
         jApp::config()->availableLocales = array('en_US');
 
         $this->assertEquals(array('locale'=>array('en'=>'en_US')), jApp::config()->langToLocale);
-        $this->assertEquals('en_US', jLocale::getCorrespondingLocale('en'));
+        $this->assertEquals('en_US', Locale::getCorrespondingLocale('en'));
 
         jApp::config()->langToLocale = array('locale'=>array('en'=>'en_EN'));
         $this->assertEquals(array('locale'=>array('en'=>'en_EN')), jApp::config()->langToLocale);
-        $this->assertEquals('', jLocale::getCorrespondingLocale('en'));
+        $this->assertEquals('', Locale::getCorrespondingLocale('en'));
 
         jApp::config()->langToLocale = array('locale'=>array('en'=>'en_US'));
-        $this->assertEquals('en_US', jLocale::getCorrespondingLocale('en'));
+        $this->assertEquals('en_US', Locale::getCorrespondingLocale('en'));
         jApp::config()->langToLocale = array();
-        $this->assertEquals('en_US', jLocale::getCorrespondingLocale('en'));
-        $this->assertEquals('en_US', jLocale::getCorrespondingLocale('en_US'));
-        $this->assertEquals('en_US', jLocale::getCorrespondingLocale('en_GB'));
+        $this->assertEquals('en_US', Locale::getCorrespondingLocale('en'));
+        $this->assertEquals('en_US', Locale::getCorrespondingLocale('en_US'));
+        $this->assertEquals('en_US', Locale::getCorrespondingLocale('en_GB'));
         jApp::config()->availableLocales = array('en_US', 'fr_CA');
         jApp::config()->langToLocale = array('locale'=>array('fr'=>'fr_CA')); // simulate jConfigCompiler
-        $this->assertEquals('en_US', jLocale::getCorrespondingLocale('en'));
-        $this->assertEquals('fr_CA', jLocale::getCorrespondingLocale('fr'));
-        $this->assertEquals('fr_CA', jLocale::getCorrespondingLocale('fr_FR'));
+        $this->assertEquals('en_US', Locale::getCorrespondingLocale('en'));
+        $this->assertEquals('fr_CA', Locale::getCorrespondingLocale('fr'));
+        $this->assertEquals('fr_CA', Locale::getCorrespondingLocale('fr_FR'));
     }
 
     function testGetPreferedLocaleFromRequest() {
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'en_US,fr_CA,en_GB';
         jApp::config()->availableLocales = array('en_US');
-        $this->assertEquals('en_US', jLocale::getPreferedLocaleFromRequest());
+        $this->assertEquals('en_US', Locale::getPreferedLocaleFromRequest());
         
         jApp::config()->availableLocales = array('en_US', 'fr_CA');
         jApp::config()->langToLocale = array('locale'=>array('fr'=>'fr_CA')); // simulate jConfigCompiler
-        $this->assertEquals('en_US', jLocale::getPreferedLocaleFromRequest());
+        $this->assertEquals('en_US', Locale::getPreferedLocaleFromRequest());
 
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'fr_CA,en_GB';
         jApp::config()->availableLocales = array('en_US', 'fr_CA');
-        $this->assertEquals('fr_CA', jLocale::getPreferedLocaleFromRequest());
+        $this->assertEquals('fr_CA', Locale::getPreferedLocaleFromRequest());
 
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'fr_FR,en_US';
         jApp::config()->availableLocales = array('en_US', 'fr_CA');
-        $this->assertEquals('fr_CA', jLocale::getPreferedLocaleFromRequest());
+        $this->assertEquals('fr_CA', Locale::getPreferedLocaleFromRequest());
     }
 
     function testLocaleName() {
-        $this->assertEquals('فارسی', jLocale::getLangName('fa'));
-        $this->assertEquals('Persan', jLocale::getLangName('fa', 'fr'));
-        $this->assertEquals('Persian', jLocale::getLangName('fa', 'en'));
-        $this->assertEquals('Persian', jLocale::getLangName('fa', 'pgoidfgip'));
+        $this->assertEquals('فارسی', Locale::getLangName('fa'));
+        $this->assertEquals('Persan', Locale::getLangName('fa', 'fr'));
+        $this->assertEquals('Persian', Locale::getLangName('fa', 'en'));
+        $this->assertEquals('Persian', Locale::getLangName('fa', 'pgoidfgip'));
     }
 }

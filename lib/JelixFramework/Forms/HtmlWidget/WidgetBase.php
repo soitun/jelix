@@ -3,7 +3,7 @@
  * @author      Laurent Jouanneau
  * @contributor Julien Issler, Dominique Papin, Claudio Bernardes
  *
- * @copyright   2006-2020 Laurent Jouanneau
+ * @copyright   2006-2025 Laurent Jouanneau
  * @copyright   2008-2011 Julien Issler, 2008 Dominique Papin
  * @copyright   2012 Claudio Bernardes
  *
@@ -12,6 +12,7 @@
  */
 
 namespace Jelix\Forms\HtmlWidget;
+use Jelix\Locale\Locale;
 
 abstract class WidgetBase implements WidgetInterface
 {
@@ -232,13 +233,13 @@ abstract class WidgetBase implements WidgetInterface
         if ($this->ctrl->alertRequired) {
             $jsContent .= 'c.errRequired='.$this->escJsStr($this->ctrl->alertRequired).";\n";
         } else {
-            $jsContent .= 'c.errRequired='.$this->escJsStr(\jLocale::get('jelix~formserr.js.err.required', $this->ctrl->label)).";\n";
+            $jsContent .= 'c.errRequired='.$this->escJsStr(Locale::get('jelix~formserr.js.err.required', $this->ctrl->label)).";\n";
         }
 
         if ($this->ctrl->alertInvalid) {
             $jsContent .= 'c.errInvalid='.$this->escJsStr($this->ctrl->alertInvalid).";\n";
         } else {
-            $jsContent .= 'c.errInvalid='.$this->escJsStr(\jLocale::get('jelix~formserr.js.err.invalid', $this->ctrl->label)).";\n";
+            $jsContent .= 'c.errInvalid='.$this->escJsStr(Locale::get('jelix~formserr.js.err.invalid', $this->ctrl->label)).";\n";
         }
 
         return $jsContent;

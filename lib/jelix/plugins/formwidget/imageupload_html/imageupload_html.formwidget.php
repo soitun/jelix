@@ -4,11 +4,13 @@
  * @subpackage  forms_widget_plugin
  *
  * @author      Laurent Jouanneau
- * @copyright   2020-2022 Laurent Jouanneau
+ * @copyright   2020-2025 Laurent Jouanneau
  *
  * @see        https://jelix.org
  * @licence     http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
+use Jelix\Locale\Locale;
+
 require_once __DIR__.'/../upload2_html/upload2_html.formwidget.php';
 
 /**
@@ -114,7 +116,7 @@ class imageupload_htmlFormWidget extends upload2_htmlFormWidget
 
     protected function displaySelectButton()
     {
-        echo '<button class="jforms-image-select-btn" type="button">'.jLocale::get('jelix~jforms.upload.picture.choice.new.file').'</button>'."\n";
+        echo '<button class="jforms-image-select-btn" type="button">'.Locale::get('jelix~jforms.upload.picture.choice.new.file').'</button>'."\n";
     }
 
     protected function displayModifyButton($imageSelector, $currentFileName)
@@ -122,7 +124,7 @@ class imageupload_htmlFormWidget extends upload2_htmlFormWidget
         echo '<button class="jforms-image-modify-btn" type="button" 
             data-current-image="'.$imageSelector.'" 
             data-current-file-name="'.htmlspecialchars($currentFileName).'">'.
-            jLocale::get('jelix~jforms.upload.picture.choice.modify').
+            Locale::get('jelix~jforms.upload.picture.choice.modify').
             '</button>'."\n";
     }
 
@@ -135,13 +137,13 @@ class imageupload_htmlFormWidget extends upload2_htmlFormWidget
     {
         echo '<div class="jforms-image-dialog" style="display: none"
         data-dialog-width="'.$this->dialogWidth.'" data-dialog-height="'.$this->dialogHeight.'"
-        data-dialog-title="'.jLocale::get('jelix~jforms.upload.picture.dialog.title').'" 
-        data-dialog-ok-label="'.jLocale::get('jelix~ui.buttons.ok').'"
-        data-dialog-cancel-label="'.jLocale::get('jelix~ui.buttons.cancel').'">
+        data-dialog-title="'.Locale::get('jelix~jforms.upload.picture.dialog.title').'" 
+        data-dialog-ok-label="'.Locale::get('jelix~ui.buttons.ok').'"
+        data-dialog-cancel-label="'.Locale::get('jelix~ui.buttons.cancel').'">
     <div class="jforms-image-dialog-toolbar">
-        <button class="rotateleft" type="button">'.jLocale::get('jelix~jforms.upload.picture.edit.rotateleft').'</button>
-        <button class="rotateright" type="button">'.jLocale::get('jelix~jforms.upload.picture.edit.rotateRight').'</button>
-        <button class="cropreset" type="button">'.jLocale::get('jelix~jforms.upload.picture.edit.reset').'</button>
+        <button class="rotateleft" type="button">'.Locale::get('jelix~jforms.upload.picture.edit.rotateleft').'</button>
+        <button class="rotateright" type="button">'.Locale::get('jelix~jforms.upload.picture.edit.rotateRight').'</button>
+        <button class="cropreset" type="button">'.Locale::get('jelix~jforms.upload.picture.edit.reset').'</button>
     </div>
     <div class="jforms-image-dialog-img-container" style="border:2px solid black;">
         <canvas class="jforms-image-dialog-editor" style="max-width:100%"></canvas>
@@ -216,8 +218,8 @@ class imageupload_htmlFormWidget extends upload2_htmlFormWidget
                 'ref' => $this->ctrl->ref,
                 'readOnly' => $this->ctrl->isReadOnly(),
                 'required' => $this->ctrl->required,
-                'alertRequired' => ($this->ctrl->alertRequired ?: \jLocale::get('jelix~formserr.js.err.required', $this->ctrl->label)),
-                'alertInvalid' => ($this->ctrl->alertInvalid ?: \jLocale::get('jelix~formserr.js.err.invalid', $this->ctrl->label)),
+                'alertRequired' => ($this->ctrl->alertRequired ?: \Locale::get('jelix~formserr.js.err.required', $this->ctrl->label)),
+                'alertInvalid' => ($this->ctrl->alertInvalid ?: \Locale::get('jelix~formserr.js.err.invalid', $this->ctrl->label)),
             );
 
             $attr['data-jforms-input-props'] = json_encode($inputProp);
@@ -240,8 +242,8 @@ class imageupload_htmlFormWidget extends upload2_htmlFormWidget
             'ref' => $this->ctrl->ref,
             'required' => $this->ctrl->required,
             'currentAction' => $action,
-            'alertRequired' => ($this->ctrl->alertRequired ?: \jLocale::get('jelix~formserr.js.err.required', $this->ctrl->label)),
-            'alertInvalid' => ($this->ctrl->alertInvalid ?: \jLocale::get('jelix~formserr.js.err.invalid', $this->ctrl->label)),
+            'alertRequired' => ($this->ctrl->alertRequired ?: \Locale::get('jelix~formserr.js.err.required', $this->ctrl->label)),
+            'alertInvalid' => ($this->ctrl->alertInvalid ?: \Locale::get('jelix~formserr.js.err.invalid', $this->ctrl->label)),
         );
 
         $this->displayStartChoice(
@@ -263,8 +265,8 @@ class imageupload_htmlFormWidget extends upload2_htmlFormWidget
                 ($action == 'keep'),
                 (
                     $choices['keep'] === '' ?
-                    jLocale::get('jelix~jforms.upload.picture.choice.keep.empty')
-                    : jLocale::get('jelix~jforms.upload.choice.keep')
+                    Locale::get('jelix~jforms.upload.picture.choice.keep.empty')
+                    : Locale::get('jelix~jforms.upload.choice.keep')
                 )
             );
             if ($choices['keep'] !== '') {
@@ -279,7 +281,7 @@ class imageupload_htmlFormWidget extends upload2_htmlFormWidget
                 $idChoice.'_jf_action_keepnew',
                 $attrRadio.' value="keepnew"',
                 ($action == 'keepnew'),
-                jLocale::get('jelix~jforms.upload.picture.choice.keepnew')
+                Locale::get('jelix~jforms.upload.picture.choice.keepnew')
             );
             $this->_outputControlValue($choices['keepnew'], 'new');
             $this->displayEndChoiceItem();
@@ -290,7 +292,7 @@ class imageupload_htmlFormWidget extends upload2_htmlFormWidget
             $idChoice.'_jf_action_new',
             $attrRadio.' value="new"',
             ($action == 'new'),
-            jLocale::get('jelix~jforms.upload.picture.choice.new')
+            Locale::get('jelix~jforms.upload.picture.choice.new')
         );
         $this->displayInputImage($attr, $idItem, $choices['keep']);
         $this->displayEndChoiceItem();
@@ -302,7 +304,7 @@ class imageupload_htmlFormWidget extends upload2_htmlFormWidget
                 $idChoice.'_jf_action_del',
                 $attrRadio.' value="del"',
                 ($action == 'del'),
-                jLocale::get('jelix~jforms.upload.choice.del')
+                Locale::get('jelix~jforms.upload.choice.del')
             );
             $this->displayEndChoiceItem();
         }

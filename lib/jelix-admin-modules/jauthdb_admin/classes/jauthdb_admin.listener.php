@@ -20,7 +20,7 @@ class jauthdb_adminListener extends jEventListener
         $driver = $plugin->config['driver'];
         $hasDao = isset($plugin->config[$driver]['dao'], $plugin->config[$driver]['compatiblewithdb']) && $plugin->config[$driver]['compatiblewithdb'];
         if ($plugin && ($driver == 'Db' || $hasDao) && jAcl2::check('auth.users.list')) {
-            $item = new masterAdminMenuItem('users', jLocale::get('jauthdb_admin~auth.adminmenu.item.list'), jUrl::get('jauthdb_admin~default:index'), 10, 'system');
+            $item = new masterAdminMenuItem('users', \Jelix\Locale\Locale::get('jauthdb_admin~auth.adminmenu.item.list'), jUrl::get('jauthdb_admin~default:index'), 10, 'system');
             $item->icon = jApp::urlJelixWWWPath().'design/images/user.png';
             $event->add($item);
         }

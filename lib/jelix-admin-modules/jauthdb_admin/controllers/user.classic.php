@@ -5,12 +5,13 @@
  * @subpackage  jauthdb_admin
  *
  * @author    Laurent Jouanneau
- * @copyright 2009-2023 Laurent Jouanneau
+ * @copyright 2009-2025 Laurent Jouanneau
  *
  * @see      http://jelix.org
  *
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public Licence
  */
+use Jelix\Locale\Locale;
 
 /**
  * controller to allow a user to edit his own profile in the admin.
@@ -74,7 +75,7 @@ class userCtrl extends jController
         }
 
         if ($login != jAuth::getUserSession()->login) {
-            jMessage::add(jLocale::get('jacl2~errors.action.right.needed'), 'error');
+            jMessage::add(Locale::get('jacl2~errors.action.right.needed'), 'error');
 
             return $this->redirect('master_admin~default:index');
         }
@@ -82,7 +83,7 @@ class userCtrl extends jController
         $dao = jDao::create($this->dao, $this->dbProfile);
         $daoUser = $dao->getByLogin($login);
         if (!$daoUser) {
-            jMessage::add(jLocale::get('crud.message.bad.id', $login), 'error');
+            jMessage::add(Locale::get('crud.message.bad.id', $login), 'error');
 
             return $this->redirect('master_admin~default:index');
         }
@@ -122,7 +123,7 @@ class userCtrl extends jController
         }
 
         if ($login != jAuth::getUserSession()->login) {
-            jMessage::add(jLocale::get('jacl2~errors.action.right.needed'), 'error');
+            jMessage::add(Locale::get('jacl2~errors.action.right.needed'), 'error');
 
             return $this->redirect('master_admin~default:index');
         }
@@ -130,7 +131,7 @@ class userCtrl extends jController
         $dao = jDao::create($this->dao, $this->dbProfile);
         $daoUser = $dao->getByLogin($login);
         if (!$daoUser) {
-            jMessage::add(jLocale::get('crud.message.bad.id', $login), 'error');
+            jMessage::add(Locale::get('crud.message.bad.id', $login), 'error');
 
             return $this->redirect('master_admin~default:index');
         }
@@ -173,7 +174,7 @@ class userCtrl extends jController
         }
 
         if ($login != jAuth::getUserSession()->login) {
-            jMessage::add(jLocale::get('jacl2~errors.action.right.needed'), 'error');
+            jMessage::add(Locale::get('jacl2~errors.action.right.needed'), 'error');
 
             return $this->redirect('master_admin~default:index');
         }
@@ -203,7 +204,7 @@ class userCtrl extends jController
         $login = $this->param('j_user_login');
 
         if ($login != jAuth::getUserSession()->login) {
-            jMessage::add(jLocale::get('jacl2~errors.action.right.needed'), 'error');
+            jMessage::add(Locale::get('jacl2~errors.action.right.needed'), 'error');
 
             return $this->redirect('master_admin~default:index');
         }
@@ -212,7 +213,7 @@ class userCtrl extends jController
         /** @var jDaoRecordBase $daoUser */
         $daoUser = $dao->getByLogin($login);
         if (!$daoUser) {
-            jMessage::add(jLocale::get('crud.message.bad.id', $login), 'error');
+            jMessage::add(Locale::get('crud.message.bad.id', $login), 'error');
 
             return $this->redirect('master_admin~default:index');
         }
@@ -247,7 +248,7 @@ class userCtrl extends jController
             // it will save files that are not already saved by listeners of jauthdbAdminAfterUpdate
             $form->saveAllFiles($this->uploadsDirectory);
 
-            jMessage::add(jLocale::get('crud.message.update.ok', $login), 'notice');
+            jMessage::add(Locale::get('crud.message.update.ok', $login), 'notice');
             jForms::destroy($this->form, $login);
 
             return $this->redirect('user:index', ['j_user_login' => $login]);

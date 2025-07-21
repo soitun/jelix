@@ -6,7 +6,7 @@
  * @author      Laurent Jouanneau
  * @contributor Julien Issler, Dominique Papin
  *
- * @copyright   2006-2020 Laurent Jouanneau
+ * @copyright   2006-2025 Laurent Jouanneau
  * @copyright   2008-2011 Julien Issler, 2008 Dominique Papin
  *
  * @see        http://www.jelix.org
@@ -14,7 +14,7 @@
  *
  * @deprecated
  */
-
+use Jelix\Locale\Locale;
 /**
  * HTML form builder.
  *
@@ -176,20 +176,20 @@ class jFormsBuilderHtml extends jFormsBuilderBase
                     if ($ctrls[$cname]->alertRequired) {
                         echo '<li>', $ctrls[$cname]->alertRequired,'</li>';
                     } else {
-                        echo '<li>', jLocale::get('jelix~formserr.js.err.required', $ctrls[$cname]->label),'</li>';
+                        echo '<li>', Locale::get('jelix~formserr.js.err.required', $ctrls[$cname]->label),'</li>';
                     }
                 } elseif ($err === jForms::ERRDATA_INVALID) {
                     if ($ctrls[$cname]->alertInvalid) {
                         echo '<li>', $ctrls[$cname]->alertInvalid,'</li>';
                     } else {
-                        echo '<li>', jLocale::get('jelix~formserr.js.err.invalid', $ctrls[$cname]->label),'</li>';
+                        echo '<li>', Locale::get('jelix~formserr.js.err.invalid', $ctrls[$cname]->label),'</li>';
                     }
                 } elseif ($err === jForms::ERRDATA_INVALID_FILE_SIZE) {
-                    echo '<li>', jLocale::get('jelix~formserr.js.err.invalid.file.size', $ctrls[$cname]->label),'</li>';
+                    echo '<li>', Locale::get('jelix~formserr.js.err.invalid.file.size', $ctrls[$cname]->label),'</li>';
                 } elseif ($err === jForms::ERRDATA_INVALID_FILE_TYPE) {
-                    echo '<li>', jLocale::get('jelix~formserr.js.err.invalid.file.type', $ctrls[$cname]->label),'</li>';
+                    echo '<li>', Locale::get('jelix~formserr.js.err.invalid.file.type', $ctrls[$cname]->label),'</li>';
                 } elseif ($err === jForms::ERRDATA_FILE_UPLOAD_ERROR) {
-                    echo '<li>', jLocale::get('jelix~formserr.js.err.file.upload', $ctrls[$cname]->label),'</li>';
+                    echo '<li>', Locale::get('jelix~formserr.js.err.file.upload', $ctrls[$cname]->label),'</li>';
                 } elseif ($err != '') {
                     echo '<li>', $err,'</li>';
                 }
@@ -356,13 +356,13 @@ class jFormsBuilderHtml extends jFormsBuilderBase
         if ($ctrl->alertRequired) {
             $this->jsContent .= 'c.errRequired='.$this->escJsStr($ctrl->alertRequired).";\n";
         } else {
-            $this->jsContent .= 'c.errRequired='.$this->escJsStr(jLocale::get('jelix~formserr.js.err.required', $ctrl->label)).";\n";
+            $this->jsContent .= 'c.errRequired='.$this->escJsStr(Locale::get('jelix~formserr.js.err.required', $ctrl->label)).";\n";
         }
 
         if ($ctrl->alertInvalid) {
             $this->jsContent .= 'c.errInvalid='.$this->escJsStr($ctrl->alertInvalid).";\n";
         } else {
-            $this->jsContent .= 'c.errInvalid='.$this->escJsStr(jLocale::get('jelix~formserr.js.err.invalid', $ctrl->label)).";\n";
+            $this->jsContent .= 'c.errInvalid='.$this->escJsStr(Locale::get('jelix~formserr.js.err.invalid', $ctrl->label)).";\n";
         }
 
         if ($this->isRootControl) {
@@ -453,7 +453,7 @@ class jFormsBuilderHtml extends jFormsBuilderBase
         } else {
             echo '<select';
             $this->_outputAttr($attr);
-            echo '><option value="">'.htmlspecialchars(jLocale::get('jelix~jforms.date.day.label')).'</option>';
+            echo '><option value="">'.htmlspecialchars(Locale::get('jelix~jforms.date.day.label')).'</option>';
             for ($i = 1; $i < 32; ++$i) {
                 $k = ($i < 10) ? '0'.$i : $i;
                 echo '<option value="'.$k.'"'.($k == $value ? ' selected="selected"' : '').'>'.$k.'</option>';
@@ -475,13 +475,13 @@ class jFormsBuilderHtml extends jFormsBuilderBase
             $monthLabels = jApp::config()->forms['controls.datetime.months.labels'];
             echo '<select';
             $this->_outputAttr($attr);
-            echo '><option value="">'.htmlspecialchars(jLocale::get('jelix~jforms.date.month.label')).'</option>';
+            echo '><option value="">'.htmlspecialchars(Locale::get('jelix~jforms.date.month.label')).'</option>';
             for ($i = 1; $i < 13; ++$i) {
                 $k = ($i < 10) ? '0'.$i : $i;
                 if ($monthLabels == 'names') {
-                    $l = htmlspecialchars(jLocale::get('jelix~date_time.month.'.$k.'.label'));
+                    $l = htmlspecialchars(Locale::get('jelix~date_time.month.'.$k.'.label'));
                 } elseif ($monthLabels == 'shortnames') {
-                    $l = htmlspecialchars(jLocale::get('jelix~date_time.month.'.$k.'.shortlabel'));
+                    $l = htmlspecialchars(Locale::get('jelix~date_time.month.'.$k.'.shortlabel'));
                 } else {
                     $l = $k;
                 }
@@ -506,7 +506,7 @@ class jFormsBuilderHtml extends jFormsBuilderBase
             if ($minDate && $maxDate) {
                 echo '<select';
                 $this->_outputAttr($attr);
-                echo '><option value="">'.htmlspecialchars(jLocale::get('jelix~jforms.date.year.label')).'</option>';
+                echo '><option value="">'.htmlspecialchars(Locale::get('jelix~jforms.date.year.label')).'</option>';
                 for ($i = $minDate->year; $i <= $maxDate->year; ++$i) {
                     echo '<option value="'.$i.'"'.($i == $value ? ' selected="selected"' : '').'>'.$i.'</option>';
                 }
@@ -532,7 +532,7 @@ class jFormsBuilderHtml extends jFormsBuilderBase
         } else {
             echo '<select';
             $this->_outputAttr($attr);
-            echo '><option value="">'.htmlspecialchars(jLocale::get('jelix~jforms.time.hour.label')).'</option>';
+            echo '><option value="">'.htmlspecialchars(Locale::get('jelix~jforms.time.hour.label')).'</option>';
             for ($i = 0; $i < 24; ++$i) {
                 $k = ($i < 10) ? '0'.$i : $i;
                 echo '<option value="'.$k.'"'.((string) $k === $value ? ' selected="selected"' : '').'>'.$k.'</option>';
@@ -553,7 +553,7 @@ class jFormsBuilderHtml extends jFormsBuilderBase
         } else {
             echo '<select';
             $this->_outputAttr($attr);
-            echo '><option value="">'.htmlspecialchars(jLocale::get('jelix~jforms.time.minutes.label')).'</option>';
+            echo '><option value="">'.htmlspecialchars(Locale::get('jelix~jforms.time.minutes.label')).'</option>';
             for ($i = 0; $i < 60; ++$i) {
                 $k = ($i < 10) ? '0'.$i : $i;
                 echo '<option value="'.$k.'"'.((string) $k === $value ? ' selected="selected"' : '').'>'.$k.'</option>';
@@ -576,7 +576,7 @@ class jFormsBuilderHtml extends jFormsBuilderBase
         } else {
             echo '<select';
             $this->_outputAttr($attr);
-            echo '><option value="">'.htmlspecialchars(jLocale::get('jelix~jforms.time.seconds.label')).'</option>';
+            echo '><option value="">'.htmlspecialchars(Locale::get('jelix~jforms.time.seconds.label')).'</option>';
             for ($i = 0; $i < 60; ++$i) {
                 $k = ($i < 10) ? '0'.$i : $i;
                 echo '<option value="'.$k.'"'.((string) $k === $value ? ' selected="selected"' : '').'>'.$k.'</option>';
@@ -600,7 +600,7 @@ class jFormsBuilderHtml extends jFormsBuilderBase
                 $v['day'] = $matches[3];
             }
         }
-        $f = jLocale::get('jelix~format.date');
+        $f = Locale::get('jelix~format.date');
         for ($i = 0; $i < strlen($f); ++$i) {
             if ($f[$i] == 'Y') {
                 $this->_outputDateControlYear($ctrl, $attr, $v['year']);
@@ -666,7 +666,7 @@ class jFormsBuilderHtml extends jFormsBuilderBase
             $v['minutes'] = '00';
             $v['seconds'] = '00';
         }
-        $f = jLocale::get('jelix~format.datetime');
+        $f = Locale::get('jelix~format.datetime');
         for ($i = 0; $i < strlen($f); ++$i) {
             if ($f[$i] == 'Y') {
                 $this->_outputDateControlYear($ctrl, $attr, $v['year']);
@@ -714,7 +714,7 @@ class jFormsBuilderHtml extends jFormsBuilderBase
                 $v['seconds'] = '00';
             }
         }
-        $f = jLocale::get('jelix~format.time');
+        $f = Locale::get('jelix~format.time');
         for ($i = 0; $i < strlen($f); ++$i) {
             if ($f[$i] == 'H') {
                 $this->_outputDateControlHour($ctrl, $attr, $v['hour'], 'controls.time.input');

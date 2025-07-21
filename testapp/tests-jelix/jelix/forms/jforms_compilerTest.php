@@ -293,7 +293,7 @@ $ctrl->required=true;
 $ctrl->label=\'Votre nom\';
 $this->addControl($ctrl);',
 3=>'$ctrl= new jFormsControlInput(\'nom\');
-$ctrl->label=jLocale::get(\'foo~bar\');
+$ctrl->label=Locale::get(\'foo~bar\');
 $this->addControl($ctrl);',
 4=>'$ctrl= new jFormsControlTextarea(\'nom\');
 $ctrl->label=\'Votre nom\';
@@ -382,7 +382,7 @@ $ctrl->label=\'Votre nom\';
 $ctrl->datasource= new jFormsStaticDatasource();
 $ctrl->datasource->data = array(
 \'aaa\'=>\'1aa\',
-\'bbb\'=>jLocale::get(\'locb\'),
+\'bbb\'=>Locale::get(\'locb\'),
 \'ccc\'=>\'ccc\',
 );
 $this->addControl($ctrl);',
@@ -395,7 +395,7 @@ $ctrl->label=\'Votre nom\';
 $ctrl->datasource= new jFormsStaticDatasource();
 $ctrl->datasource->data = array(
 \'aaa\'=>\'1aa\',
-\'bbb\'=>jLocale::get(\'locb\'),
+\'bbb\'=>Locale::get(\'locb\'),
 \'ccc\'=>\'ccc\',
 );
 $this->addControl($ctrl);',
@@ -409,7 +409,7 @@ $ctrl->size=8;
 $ctrl->datasource= new jFormsStaticDatasource();
 $ctrl->datasource->data = array(
 \'aaa\'=>\'1aa\',
-\'bbb\'=>jLocale::get(\'locb\'),
+\'bbb\'=>Locale::get(\'locb\'),
 \'ccc\'=>\'ccc\',
 );
 $this->addControl($ctrl);',
@@ -422,7 +422,7 @@ $ctrl->label=\'Votre nom\';
 $ctrl->datasource= new jFormsStaticDatasource();
 $ctrl->datasource->data = array(
 \'aaa\'=>\'1aa\',
-\'bbb\'=>jLocale::get(\'locb\'),
+\'bbb\'=>Locale::get(\'locb\'),
 \'ccc\'=>\'ccc\',
 );
 $this->addControl($ctrl);',
@@ -436,7 +436,7 @@ $ctrl->label=\'Votre nom\';
 $ctrl->datasource= new jFormsStaticDatasource();
 $ctrl->datasource->data = array(
 \'aaa\'=>\'1aa\',
-\'bbb\'=>jLocale::get(\'locb\'),
+\'bbb\'=>Locale::get(\'locb\'),
 \'ccc\'=>\'ccc\',
 );
 $this->addControl($ctrl);',
@@ -449,7 +449,7 @@ $ctrl->label=\'Votre nom\';
 $ctrl->datasource= new jFormsStaticDatasource();
 $ctrl->datasource->data = array(
 \'aaa\'=>\'1aa\',
-\'bbb\'=>jLocale::get(\'locb\'),
+\'bbb\'=>Locale::get(\'locb\'),
 \'ccc\'=>\'ccc\',
 );
 $ctrl->defaultValue=array (
@@ -461,7 +461,7 @@ $ctrl->label=\'Votre nom\';
 $ctrl->datasource= new jFormsStaticDatasource();
 $ctrl->datasource->data = array(
 \'aaa\'=>\'1aa\',
-\'bbb\'=>jLocale::get(\'locb\'),
+\'bbb\'=>Locale::get(\'locb\'),
 \'ccc\'=>\'ccc\',
 );
 $ctrl->defaultValue=array (
@@ -476,7 +476,7 @@ $ctrl->defaultValue=array(\'aaa\');
 $ctrl->datasource= new jFormsStaticDatasource();
 $ctrl->datasource->data = array(
 \'aaa\'=>\'1aa\',
-\'bbb\'=>jLocale::get(\'locb\'),
+\'bbb\'=>Locale::get(\'locb\'),
 \'ccc\'=>\'ccc\',
 );
 $ctrl->multiple=true;
@@ -487,7 +487,7 @@ $ctrl->defaultValue= array(\'bbb\',\'aaa\',);
 $ctrl->datasource= new jFormsStaticDatasource();
 $ctrl->datasource->data = array(
 \'aaa\'=>\'1aa\',
-\'bbb\'=>jLocale::get(\'locb\'),
+\'bbb\'=>Locale::get(\'locb\'),
 \'ccc\'=>\'ccc\',
 );
 $ctrl->multiple=true;
@@ -514,11 +514,11 @@ $ctrl->alertRequired=\'vous avez oublié le nom\';
 $this->addControl($ctrl);',
 47=>'$ctrl= new jFormsControlInput(\'nom\');
 $ctrl->label=\'Votre nom\';
-$ctrl->alertInvalid=jLocale::get(\'error.alert.invalid.nom\');
+$ctrl->alertInvalid=Locale::get(\'error.alert.invalid.nom\');
 $this->addControl($ctrl);',
 48=>'$ctrl= new jFormsControlInput(\'nom\');
 $ctrl->label=\'Votre nom\';
-$ctrl->alertRequired=jLocale::get(\'error.alert.invalid.nom\');
+$ctrl->alertRequired=Locale::get(\'error.alert.invalid.nom\');
 $ctrl->alertInvalid=\'Le nom est invalide\';
 $this->addControl($ctrl);',
 49=>'$ctrl= new jFormsControlCheckbox(\'nom\');
@@ -538,7 +538,7 @@ $this->addControl($ctrl2);',
 $ctrl->label=\'Votre mot de passe\';
 $ctrl2 = new jFormsControlSecretConfirm(\'pwd_confirm\');
 $ctrl2->primarySecret = \'pwd\';
-$ctrl2->label=jLocale::get(\'password.confirm\');
+$ctrl2->label=Locale::get(\'password.confirm\');
 $ctrl2->required = $ctrl->required;
 $this->addControl($ctrl);
 $this->addControl($ctrl2);',
@@ -553,7 +553,7 @@ $ctrl->standalone=false;
 $ctrl->datasource= new jFormsStaticDatasource();
 $ctrl->datasource->data = array(
 \'aaa\'=>\'1aa\',
-\'bbb\'=>jLocale::get(\'locb\'),
+\'bbb\'=>Locale::get(\'locb\'),
 \'ccc\'=>\'ccc\',
 );
 $this->addControl($ctrl);',

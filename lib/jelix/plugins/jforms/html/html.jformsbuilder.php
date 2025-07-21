@@ -6,7 +6,7 @@
  * @author      Laurent Jouanneau
  * @contributor Julien Issler, Dominique Papin, Olivier Demah
  *
- * @copyright   2006-2015 Laurent Jouanneau
+ * @copyright   2006-2025 Laurent Jouanneau
  * @copyright   2008 Julien Issler, 2008 Dominique Papin
  * @copyright   2009 Olivier Demah
  *
@@ -15,6 +15,7 @@
  *
  * @deprecated
  */
+use Jelix\Locale\Locale;
 include_once JELIX_LIB_PATH.'forms/legacy/jFormsBuilderHtml.class.php';
 
 /**
@@ -111,13 +112,13 @@ jFormsJQ.declareForm(jFormsJQ.tForm);
         if ($ctrl->alertRequired) {
             $this->jsContent .= 'c.errRequired='.$this->escJsStr($ctrl->alertRequired).";\n";
         } else {
-            $this->jsContent .= 'c.errRequired='.$this->escJsStr(jLocale::get('jelix~formserr.js.err.required', $ctrl->label)).";\n";
+            $this->jsContent .= 'c.errRequired='.$this->escJsStr(Locale::get('jelix~formserr.js.err.required', $ctrl->label)).";\n";
         }
 
         if ($ctrl->alertInvalid) {
             $this->jsContent .= 'c.errInvalid='.$this->escJsStr($ctrl->alertInvalid).";\n";
         } else {
-            $this->jsContent .= 'c.errInvalid='.$this->escJsStr(jLocale::get('jelix~formserr.js.err.invalid', $ctrl->label)).";\n";
+            $this->jsContent .= 'c.errInvalid='.$this->escJsStr(Locale::get('jelix~formserr.js.err.invalid', $ctrl->label)).";\n";
         }
 
         if ($this->isRootControl) {

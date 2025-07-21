@@ -7,7 +7,7 @@
  * @contributor Loic Mathaud, Dominique Papin
  * @contributor Uriel Corfa (Emotic SARL), Julien Issler
  *
- * @copyright   2006-2012 Laurent Jouanneau
+ * @copyright   2006-2025 Laurent Jouanneau
  * @copyright   2007 Loic Mathaud, 2007 Dominique Papin
  * @copyright   2007 Emotic SARL
  * @copyright   2008 Julien Issler
@@ -52,7 +52,9 @@ class jFormsCompiler implements jISimpleCompiler
         }
 
         $source = array();
-        $source[] = "<?php \nif (jApp::config()->compilation['checkCacheFiletime'] &&\n";
+        $source[] = "<?php ";
+        $source[] = 'use \\Jelix\\Locale\\Locale;';
+        $source[] = "if (jApp::config()->compilation['checkCacheFiletime'] &&\n";
         $source[] .= "filemtime('".$this->sourceFile.'\') > '.filemtime($this->sourceFile)."){ return false;\n}else{\n";
         $source[] = 'class '.$selector->getClass().' extends jFormsBase {';
 

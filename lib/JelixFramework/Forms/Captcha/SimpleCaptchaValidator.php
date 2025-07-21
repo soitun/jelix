@@ -1,13 +1,14 @@
 <?php
 /**
  * @author      Laurent Jouanneau
- * @copyright   2017 Laurent Jouanneau
+ * @copyright   2017-2025 Laurent Jouanneau
  *
  * @see        http://www.jelix.org
  * @licence     http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
 
 namespace Jelix\Forms\Captcha;
+use Jelix\Locale\Locale;
 
 class SimpleCaptchaValidator implements CaptchaValidatorInterface
 {
@@ -21,12 +22,12 @@ class SimpleCaptchaValidator implements CaptchaValidatorInterface
      */
     public function initOnDisplay()
     {
-        $numbers = \jLocale::get('jelix~captcha.number');
+        $numbers = Locale::get('jelix~captcha.number');
         $id = rand(1, intval($numbers));
 
         return array(
-            'question' => \jLocale::get('jelix~captcha.question.'.$id),
-            'expectedresponse' => \jLocale::get('jelix~captcha.response.'.$id),
+            'question' => Locale::get('jelix~captcha.question.'.$id),
+            'expectedresponse' => Locale::get('jelix~captcha.response.'.$id),
         );
     }
 

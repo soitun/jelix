@@ -10,7 +10,7 @@
  * @contributor Emmanuel Hesry, Brice G.
  * @contributor Hadrien Lanneau
  *
- * @copyright   2005-2011 Laurent Jouanneau
+ * @copyright   2005-2025 Laurent Jouanneau
  * @copyright   2007 Loic Mathaud
  * @copyright   2007-2008 Florian Hatat
  * @copyright   2001-2005 CopixTeam, GeraldCroes, Laurent Jouanneau
@@ -26,7 +26,7 @@
  * @see        http://www.jelix.org
  * @licence     http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
-
+use Jelix\Locale\Locale;
 /**
  * Utility to manipulate dates and convert date format.
  *
@@ -164,35 +164,35 @@ class jDateTime
         switch ($format) {
            case self::LANG_DFORMAT:
                $t = mktime($this->hour, $this->minute, $this->second, $this->month, $this->day, $this->year);
-               $lf = jLocale::get('jelix~format.date');
+               $lf = Locale::get('jelix~format.date');
                $str = date($lf, $t);
 
                break;
 
            case self::LANG_DTFORMAT:
                $t = mktime($this->hour, $this->minute, $this->second, $this->month, $this->day, $this->year);
-               $lf = jLocale::get('jelix~format.datetime');
+               $lf = Locale::get('jelix~format.datetime');
                $str = date($lf, $t);
 
                break;
 
            case self::LANG_TFORMAT:
                $t = mktime($this->hour, $this->minute, $this->second, 0, 0, 0);
-               $lf = jLocale::get('jelix~format.time');
+               $lf = Locale::get('jelix~format.time');
                $str = date($lf, $t);
 
                break;
 
            case self::LANG_SHORT_DTFORMAT:
                $t = mktime($this->hour, $this->minute, $this->second, $this->month, $this->day, $this->year);
-               $lf = jLocale::get('jelix~format.short_datetime');
+               $lf = Locale::get('jelix~format.short_datetime');
                $str = date($lf, $t);
 
                break;
 
            case self::LANG_SHORT_TFORMAT:
                $t = mktime($this->hour, $this->minute, $this->second, $this->month, $this->day, $this->year);
-               $lf = jLocale::get('jelix~format.short_time');
+               $lf = Locale::get('jelix~format.short_time');
                $str = date($lf, $t);
 
                break;
@@ -234,13 +234,13 @@ class jDateTime
            case self::FULL_LANG_DATE:
                $t = mktime($this->hour, $this->minute, $this->second, $this->month, $this->day, $this->year);
                // month translation
-               $month = jLocale::get('jelix~date_time.month.'.date('m', $t).'.label');
+               $month = Locale::get('jelix~date_time.month.'.date('m', $t).'.label');
                // day translation
-               $day = jLocale::get('jelix~date_time.day.'.date('w', $t).'.label');
+               $day = Locale::get('jelix~date_time.day.'.date('w', $t).'.label');
                // get the date formatting
-               $lf = jLocale::get('jelix~format.date_full');
+               $lf = Locale::get('jelix~format.date_full');
                // get the ordinal format of the day in the month especially for the English format (1st, 2nd, 3rd and th for the others)
-               $ordinal = jLocale::get('jelix~date_time.day.'.$this->day.'.ordinal');
+               $ordinal = Locale::get('jelix~date_time.day.'.$this->day.'.ordinal');
                // put all this in the right order using the formatting string
                $str = sprintf($lf, $day, $this->day, $ordinal, $month, $this->year);
 
@@ -281,31 +281,31 @@ class jDateTime
 
         switch ($format) {
             case self::LANG_DFORMAT:
-                $lf = jLocale::get('jelix~format.date');
+                $lf = Locale::get('jelix~format.date');
                 $ok = $this->_createDateFromFormat($lf, $str);
 
                 break;
 
             case self::LANG_DTFORMAT:
-                $lf = jLocale::get('jelix~format.datetime');
+                $lf = Locale::get('jelix~format.datetime');
                 $ok = $this->_createDateFromFormat($lf, $str);
 
                 break;
 
             case self::LANG_TFORMAT:
-                $lf = jLocale::get('jelix~format.time');
+                $lf = Locale::get('jelix~format.time');
                 $ok = $this->_createDateFromFormat($lf, $str);
 
                 break;
 
             case self::LANG_SHORT_TFORMAT:
-                $lf = jLocale::get('jelix~format.short_time');
+                $lf = Locale::get('jelix~format.short_time');
                 $ok = $this->_createDateFromFormat($lf, $str);
 
                 break;
 
             case self::LANG_SHORT_DTFORMAT:
-                $lf = jLocale::get('jelix~format.short_datetime');
+                $lf = Locale::get('jelix~format.short_datetime');
                 $ok = $this->_createDateFromFormat($lf, $str);
 
                 break;
