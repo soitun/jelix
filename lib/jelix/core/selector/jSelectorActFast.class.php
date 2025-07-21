@@ -40,7 +40,7 @@ class jSelectorActFast extends jSelectorModule implements jIActionSelector
      * @param $action
      * @param mixed $requestType
      *
-     * @throws jExceptionSelector
+     * @throws \Jelix\Core\Selector\Exception
      */
     public function __construct($requestType, $module, $action)
     {
@@ -54,7 +54,7 @@ class jSelectorActFast extends jSelectorModule implements jIActionSelector
             $this->method = $r[1] == '' ? 'index' : $r[1];
         }
         if (substr($this->method, 0, 2) == '__') {
-            throw new jExceptionSelector('jelix~errors.selector.method.invalid', $this->toString());
+            throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.method.invalid', $this->toString());
         }
         $this->resource = $this->controller.':'.$this->method;
         $this->request = $requestType;
@@ -64,7 +64,7 @@ class jSelectorActFast extends jSelectorModule implements jIActionSelector
     protected function _createPath()
     {
         if (!jApp::isModuleEnabled($this->module)) {
-            throw new jExceptionSelector('jelix~errors.selector.module.unknown', $this->toString());
+            throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.module.unknown', $this->toString());
         }
         $this->_path = jApp::getModulePath($this->module).'controllers/'.$this->controller.'.'.$this->request.'.php';
     }

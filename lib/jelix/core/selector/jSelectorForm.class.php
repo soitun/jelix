@@ -42,7 +42,7 @@ class jSelectorForm extends jSelectorModule
     protected function _createPath()
     {
         if (!jApp::isModuleEnabled($this->module)) {
-            throw new jExceptionSelector('jelix~errors.selector.module.unknown', $this->toString(true));
+            throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.module.unknown', $this->toString(true));
         }
 
         $resolutionInCache = jApp::config()->compilation['sourceFileResolutionInCache'];
@@ -91,7 +91,7 @@ class jSelectorForm extends jSelectorModule
 
         $this->_path = jApp::getModulePath($this->module).$this->_dirname.$this->resource.$this->_suffix;
         if (!is_readable($this->_path)) {
-            throw new jExceptionSelector('jelix~errors.selector.invalid.target', array($this->toString(), $this->type));
+            throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.invalid.target', array($this->toString(), $this->type));
         }
         $this->_where = 'modules/';
     }

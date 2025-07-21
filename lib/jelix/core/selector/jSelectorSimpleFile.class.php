@@ -29,7 +29,7 @@ class jSelectorSimpleFile implements jISelector
             $this->file = $m[1];
             $this->_path = $this->_basePath.$m[1];
         } else {
-            throw new jExceptionSelector('jelix~errors.selector.invalid.syntax', array($sel, $this->type));
+            throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.invalid.syntax', array($sel, $this->type));
         }
     }
 

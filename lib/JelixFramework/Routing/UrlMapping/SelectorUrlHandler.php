@@ -22,12 +22,12 @@ class SelectorUrlHandler extends \jSelectorClass
         if (\jApp::isModuleEnabled($this->module)) {
             $p = \jApp::getModulePath($this->module);
         } else {
-            throw new \jExceptionSelector('jelix~errors.selector.module.unknown', $this->toString());
+            throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.module.unknown', $this->toString());
         }
         $this->_path = $p.$this->_dirname.$this->subpath.$this->className.$this->_suffix;
 
         if (!file_exists($this->_path) || strpos($this->subpath, '..') !== false) { // second test for security issues
-            throw new \jExceptionSelector('jelix~errors.selector.invalid.target', array($this->toString(), $this->type));
+            throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.invalid.target', array($this->toString(), $this->type));
         }
     }
 }

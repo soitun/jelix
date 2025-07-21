@@ -55,12 +55,12 @@ class jSelectorTpl extends jSelectorModule
     }
 
     /**
-     * @throws jExceptionSelector
+     * @throws \Jelix\Core\Selector\Exception
      */
     protected function _createPath()
     {
         if (!jApp::isModuleEnabled($this->module)) {
-            throw new jExceptionSelector('jelix~errors.selector.module.unknown', $this->toString());
+            throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.module.unknown', $this->toString());
         }
         $config = jApp::config();
         $locale = $config->locale;
@@ -131,7 +131,7 @@ class jSelectorTpl extends jSelectorModule
             return;
         }
 
-        throw new jExceptionSelector('jelix~errors.selector.invalid.target', array($this->toString(), 'template'));
+        throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.invalid.target', array($this->toString(), 'template'));
     }
 
     protected function checkThemePath($theme, $lpath, $flpath, $mpath, $path)

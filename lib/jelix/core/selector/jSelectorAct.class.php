@@ -32,7 +32,6 @@ class jSelectorAct extends jSelectorActFast
      * @param bool   $enableRequestPart true if the selector can contain the request part
      * @param bool   $toRetrieveUrl     true if the goal to have this selector is to generate an url
      *
-     * @throws jExceptionSelector
      */
     public function __construct($sel, $enableRequestPart = false, $toRetrieveUrl = false)
     {
@@ -66,7 +65,7 @@ class jSelectorAct extends jSelectorActFast
 
             $this->_createPath();
         } else {
-            throw new jExceptionSelector('jelix~errors.selector.invalid.syntax', array($sel, $this->type));
+            throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.invalid.syntax', array($sel, $this->type));
         }
     }
 
@@ -76,7 +75,7 @@ class jSelectorAct extends jSelectorActFast
         if (isset($conf->_modulesPathList[$this->module])) {
             $p = $conf->_modulesPathList[$this->module];
         } else {
-            throw new jExceptionSelector('jelix~errors.selector.module.unknown', $this->toString());
+            throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.module.unknown', $this->toString());
         }
 
         $this->_path = $p.'controllers/'.$this->controller.'.'.$this->request.'.php';

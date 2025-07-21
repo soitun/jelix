@@ -88,7 +88,6 @@ class jLocale
      *                                locale, the fallback local or similar locale
      *
      * @throws Exception
-     * @throws jExceptionSelector
      *
      * @return string the localized string
      */
@@ -129,7 +128,6 @@ class jLocale
      * @param $locale
      * @param $charset
      * @return jBundle
-     * @throws jExceptionSelector
      */
     public static function getBundle($key, $locale = null, $charset = null)
     {
@@ -142,7 +140,6 @@ class jLocale
      * @param $locale
      * @param $charset
      * @return array
-     * @throws jExceptionSelector
      */
     protected static function getBundleAndSelector($key, $locale = null, $charset = null)
     {

@@ -152,7 +152,6 @@ class groupsCtrl extends jController
      *
      * @return jResponseHtml
      * @throws jException
-     * @throws jExceptionSelector
      */
     public function allrights()
     {
@@ -177,7 +176,6 @@ class groupsCtrl extends jController
      *
      * @return jResponseHtml
      * @throws jException
-     * @throws jExceptionSelector
      */
     public function rights()
     {
@@ -245,7 +243,6 @@ class groupsCtrl extends jController
      *
      * @return jResponseHtml
      * @throws jException
-     * @throws jExceptionSelector
      */
     public function rightres()
     {
@@ -325,7 +322,6 @@ class groupsCtrl extends jController
     /**
      * Set or unset a group as a default group
      * @return jResponseJson
-     * @throws jExceptionSelector
      */
     public function setdefault()
     {
@@ -351,7 +347,6 @@ class groupsCtrl extends jController
     /**
      * Create a group
      * @return jResponseRedirect
-     * @throws jExceptionSelector
      */
     public function newgroup()
     {
@@ -412,7 +407,6 @@ class groupsCtrl extends jController
     /**
      * Change the name of a group
      * @return jResponseJson
-     * @throws jExceptionSelector
      */
     public function changename()
     {
@@ -438,7 +432,6 @@ class groupsCtrl extends jController
     /**
      * delete a group
      * @return jResponseJson
-     * @throws jExceptionSelector
      */
     public function delgroup()
     {

@@ -43,7 +43,6 @@ class usersCtrl extends jController
     /**
      * Page to list all users
      * @return jResponseHtml
-     * @throws jExceptionSelector
      */
     public function index()
     {
@@ -177,7 +176,6 @@ class usersCtrl extends jController
     /**
      * Page showing rights of a user and his groups
      * @return jResponseHtml
-     * @throws jExceptionSelector
      */
     public function rights()
     {
@@ -218,7 +216,6 @@ class usersCtrl extends jController
      * Save rights
      *
      * @return jResponseRedirect
-     * @throws jExceptionSelector
      */
     public function saverights()
     {
@@ -280,7 +277,6 @@ class usersCtrl extends jController
     /**
      * Save rights on resources for the user
      * @return jResponseRedirect
-     * @throws jExceptionSelector
      */
     public function saverightres()
     {

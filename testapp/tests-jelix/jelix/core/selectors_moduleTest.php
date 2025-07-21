@@ -30,7 +30,7 @@ class selectors_moduleTest extends \Jelix\UnitTests\UnitTestCase {
                 $s = new jSelectorZone($sel);
                 $valid = $s->module == $res[0] && $s->resource == $res[1];
                 $this->assertTrue($valid,  ' test de jSelectorZone('.$sel. ') : contient ces données inattendues ('.$s->module.', '.$s->resource.')');
-            }catch(jExceptionSelector $e){
+            }catch(\Jelix\Core\Selector\Exception $e){
                 $this->fail( 'jExceptionSelector inattendue sur test de '.$sel. ' : '.$e->getMessage().' ('.$e->getLocaleKey().')');
             }catch(Exception $e){
                 $this->fail( 'exception inattendue sur test de '.$sel. ' : '.$e->getMessage());
@@ -51,7 +51,7 @@ class selectors_moduleTest extends \Jelix\UnitTests\UnitTestCase {
                 $s = new jSelectorClass($sel);
                 $valid = $s->module == $res[0] && $s->resource == $res[1] && $s->subpath == $res[2] && $s->className == $res[3];
                 $this->assertTrue($valid,  ' test de jSelectorClass('.$sel. ') : contient ces données inattendues ('.$s->module.', '.$s->resource.','.$s->subpath.','.$s->className.')');
-            }catch(jExceptionSelector $e){
+            }catch(\Jelix\Core\Selector\Exception $e){
                 $this->fail( 'jExceptionSelector inattendue sur test de '.$sel. ' : '.$e->getMessage().' ('.$e->getLocaleKey().')');
             }catch(Exception $e){
                 $this->fail( 'exception inattendue sur test de '.$sel. ' : '.$e->getMessage());
@@ -86,7 +86,7 @@ class selectors_moduleTest extends \Jelix\UnitTests\UnitTestCase {
             try{
                 $s = new jSelectorClass($sel);
                 $this->fail(' test de '.$sel.' : le selecteur devrait être invalide');
-            }catch(jExceptionSelector $e){
+            }catch(\Jelix\Core\Selector\Exception $e){
                  $this->assertTrue($e->getCode() == $res, ' test de '.$sel. ' : mauvais code exception ( '.$e->getCode().' au lieu de '.$res.' )');
             }catch(Exception $e){
                 $this->fail( 'exception inattendue sur test de '.$sel. ' : '.$e->getMessage());
@@ -108,7 +108,7 @@ class selectors_moduleTest extends \Jelix\UnitTests\UnitTestCase {
                 $s = new jSelectorIface($sel);
                 $valid = $s->module == $res[0] && $s->resource == $res[1] && $s->subpath == $res[2] && $s->className == $res[3];
                 $this->assertTrue($valid,  ' test de jSelectorIface('.$sel. ') : contient ces données inattendues ('.$s->module.', '.$s->resource.','.$s->subpath.','.$s->className.')');
-            }catch(jExceptionSelector $e){
+            }catch(\Jelix\Core\Selector\Exception $e){
                 $this->fail( 'jExceptionSelector inattendue sur test de '.$sel. ' : '.$e->getMessage().' ('.$e->getLocaleKey().')');
             }catch(Exception $e){
                 $this->fail( 'exception inattendue sur test de '.$sel. ' : '.$e->getMessage());

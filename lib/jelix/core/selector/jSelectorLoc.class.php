@@ -61,7 +61,7 @@ class jSelectorLoc extends jSelectorModule
             $this->_createPath();
             $this->_createCachePath();
         } else {
-            throw new jExceptionSelector('jelix~errors.selector.invalid.syntax', array($sel, $this->type));
+            throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.invalid.syntax', array($sel, $this->type));
         }
     }
 
@@ -72,7 +72,7 @@ class jSelectorLoc extends jSelectorModule
                 throw new Exception('jelix module is not enabled !!');
             }
 
-            throw new jExceptionSelector('jelix~errors.selector.module.unknown', $this->toString());
+            throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.module.unknown', $this->toString());
         }
 
         $this->_cacheSuffix = '.'.$this->locale.'.'.$this->charset.'.php';
@@ -114,7 +114,7 @@ class jSelectorLoc extends jSelectorModule
                     $c = null;
                 }
 
-                throw new jExceptionSelector('jelix~errors.selector.invalid.target', array($this->toString(), 'locale'), 1, $l, $c);
+                throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.invalid.target', array($this->toString(), 'locale'), 1, $l, $c);
             }
         }
         if ($resolutionInCache) {

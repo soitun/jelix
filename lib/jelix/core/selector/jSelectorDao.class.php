@@ -58,7 +58,7 @@ class jSelectorDao extends jSelectorModule implements DaoFileInterface
     protected function _createPath()
     {
         if (!jApp::isModuleEnabled($this->module)) {
-            throw new jExceptionSelector('jelix~errors.selector.module.unknown', $this->toString());
+            throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.module.unknown', $this->toString());
         }
 
         $resolutionInCache = jApp::config()->compilation['sourceFileResolutionInCache'];
@@ -109,7 +109,7 @@ class jSelectorDao extends jSelectorModule implements DaoFileInterface
         $this->_path = jApp::getModulePath($this->module).$this->_dirname.$this->resource.$this->_suffix;
 
         if (!is_readable($this->_path)) {
-            throw new jExceptionSelector('jelix~errors.selector.invalid.target', array($this->toString(), 'dao'));
+            throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.invalid.target', array($this->toString(), 'dao'));
         }
         $this->_where = 'modules/';
     }

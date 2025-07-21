@@ -50,7 +50,7 @@ class jSelectorFactory
      * @param string $selstr      the selector. It should be a full selector : "type:module~resource" (not "module~resource")
      * @param bool   $defaulttype
      *
-     * @throws jExceptionSelector
+     * @throws \Jelix\Core\Selector\Exception
      *
      * @return jISelector the corresponding selector
      */
@@ -67,6 +67,6 @@ class jSelectorFactory
             }
         }
 
-        throw new jExceptionSelector('jelix~errors.selector.invalid.syntax', array($selstr, ''));
+        throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.invalid.syntax', array($selstr, ''));
     }
 }

@@ -38,7 +38,7 @@ class jSelectorDaoRecord extends jSelectorModule implements CustomRecordClassFil
             $this->_path = '';
             $this->resource = $sel;
         } else {
-            throw new jExceptionSelector('jelix~errors.selector.invalid.syntax', array($sel, $this->type));
+            throw new \Jelix\Core\Selector\Exception('jelix~errors.selector.invalid.syntax', array($sel, $this->type));
         }
         $this->_createCachePath();
     }

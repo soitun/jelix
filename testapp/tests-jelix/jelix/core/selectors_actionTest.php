@@ -118,7 +118,7 @@ class selectors_actionTest extends \Jelix\UnitTests\UnitTestCase {
             $valid=true;
             try{
                 $s = new jSelectorAct($sel, true);
-            }catch(jExceptionSelector $e){
+            }catch(\Jelix\Core\Selector\Exception $e){
                 $valid=false;
             }
             $msg='';
@@ -170,7 +170,7 @@ class selectors_actionTest extends \Jelix\UnitTests\UnitTestCase {
             $valid=true;
             try{
                 $s = new jSelectorActFast($sel[0], $sel[1], $sel[2]);
-            }catch(jExceptionSelector $e){
+            }catch(\Jelix\Core\Selector\Exception $e){
                 $valid=false;
             }
             $msg='';
