@@ -14,7 +14,7 @@
  * @author      Laurent Jouanneau
  * @contributor Christophe Thiriot
  *
- * @copyright   2005-2007 Laurent Jouanneau
+ * @copyright   2005-2025 Laurent Jouanneau
  * @copyright   2008 Christophe Thiriot
  *
  * @see        http://www.jelix.org
@@ -26,6 +26,7 @@
  *
  * @package    jelix
  * @subpackage core_selector
+ * @deprecated use Jelix\Core\Selector\Exception instead
  */
 class jExceptionSelector extends jException
 {
