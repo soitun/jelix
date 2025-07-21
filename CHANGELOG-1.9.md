@@ -27,11 +27,18 @@ New features
   that will call `php dev.php compile $FULLPATH_OF_FILE`, to compile a single
   file without calling the installer before each test into your browser.
   Files that are compiled during installers:
-  - none for the moment
+  - properties files for locales
 
-**jLocale**
 
-- New methods `jLocale::getBundle()` and `jBundle::getAllKeys()`
+**Locales**
+
+- classes `jLocale` and `jBundle` are deprecated, and replaced by `Jelix\Locale\Locale`
+  and `Jelix\Locale\Bundle`. 
+- These new classes support only UTF-8 charsets. 
+- Properties files are now compiled during installation to improve performance 
+  at runtime, and are used by the new classes.
+  Deprecated classes continue to compile properties files at runtime.
+- New methods `Locale::getBundle()` and `Bundle::getAllKeys()`
 - Locales can be in a directory outside an application, like into a Composer package.
   The directory should be declared with the new API `jApp::declareLocalesDir()`.
 
@@ -127,7 +134,8 @@ Deprecated API and features
 * replace `jISelector` by `Jelix\Core\Selector\SelectorInterface`
 * replace `jExceptionSelector` by `Jelix\Core\Selector\Exception`
 * `jelix_scan_module_sel`
-
+* classes `jLocale` and `jBundle` are deprecated, and replaced by `Jelix\Locale\Locale`
+  and `Jelix\Locale\Bundle`.
 
 About jDb:
 

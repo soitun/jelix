@@ -1,11 +1,8 @@
 <?php
 /**
- * @package    jelix
- * @subpackage core
- *
  * @author     Laurent Jouanneau
  * @author     Gerald Croes
- * @copyright  2001-2005 CopixTeam, 2005-2024 Laurent Jouanneau
+ * @copyright  2001-2005 CopixTeam, 2005-2025 Laurent Jouanneau
  * Some parts of this file are took from Copix Framework v2.3dev20050901, CopixI18N.class.php, http://www.copix.org.
  * copyrighted by CopixTeam and released under GNU Lesser General Public Licence.
  * initial authors : Gerald Croes, Laurent Jouanneau.
@@ -14,19 +11,18 @@
  * @see        https://www.jelix.org
  * @licence    GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
-use Jelix\Locale\Locale;
+
+namespace Jelix\Locale;
+
+use jApp as App;
 
 /**
  * static class to get a localized string.
- *
- * @package  jelix
- * @subpackage core
- * @deprecated use Jelix\Locale\Locale instead
  */
-class jLocale
+class Locale
 {
     /**
-     * @var jBundle[][]
+     * @var Bundle[][]
      */
     public static $bundles = array();
 
@@ -41,12 +37,10 @@ class jLocale
      * gets the current locale (xx_YY).
      *
      * @return string
-     *
-     * @since 1.7.0
      */
     public static function getCurrentLocale()
     {
-        return jApp::config()->locale;
+        return App::config()->locale;
     }
 
     /**
@@ -56,7 +50,7 @@ class jLocale
      */
     public static function getCurrentLang()
     {
-        $s = jApp::config()->locale;
+        $s = App::config()->locale;
 
         return substr($s, 0, strpos($s, '_'));
     }
@@ -68,7 +62,7 @@ class jLocale
      */
     public static function getCurrentCountry()
     {
-        $s = jApp::config()->locale;
+        $s = App::config()->locale;
 
         return substr($s, strpos($s, '_') + 1);
     }
@@ -77,40 +71,39 @@ class jLocale
      * gets the correct string, for a given language.
      *   if it can't get the correct language, it will try to gets the string
      *   from the default language.
-     *   if both fails, it will raise an exception.
+     *   if both fail, it will raise an exception.
      *
      * @param string $key             the key of the localized string
      * @param array  $args            arguments to apply to the localized string with sprintf
      * @param string $locale          the lang code. if null, use the default language
-     * @param string $charset         the charset code. if null, use the default charset
      * @param bool   $tryOtherLocales if true and if the method does not find
      *                                the locale file or the key, it will try with the default
      *                                locale, the fallback local or similar locale
      *
      * @throws Exception
-     * @throws jExceptionSelector
+     * @throws \Jelix\Core\Selector\Exception
      *
      * @return string the localized string
      */
-    public static function get($key, $args = null, $locale = null, $charset = null, $tryOtherLocales = true)
+    public static function get($key, $args = null, $locale = null, $tryOtherLocales = true)
     {
-        list($bundle, $file) = self::getBundleAndSelector($key, $locale, $charset);
+        list($bundle, $file) = self::getBundleAndSelector($key, $locale);
 
         //try to get the message from the bundle.
-        $string = $bundle->get($file->messageKey, $file->charset);
+        $string = $bundle->get($file->messageKey);
         if ($string === null) {
 
             // locale key has not been found
             if (!$tryOtherLocales) {
                 throw new Exception('(210)The given locale key "'.$file->toString().
-                                    '" does not exists (lang:'.$file->locale.
-                                    ', charset:'.$file->charset.')');
+                    '" does not exists (lang:'.$file->locale.')');
             }
 
-            $words = self::tryOtherLocales($key, $args, $locale, $charset, jApp::config());
+            $words = self::tryOtherLocales($key, $args, $locale, App::config());
+
             if ($words === null) {
                 throw new Exception('(213)The given locale key "'.$file->toString().
-                                    '" does not exists in any default languages for the '.$file->charset.' charset');
+                    '" does not exists in any default languages');
             }
 
             return $words;
@@ -127,47 +120,40 @@ class jLocale
     /**
      * @param $key
      * @param $locale
-     * @param $charset
-     * @return array jBundle and selector object
-     * @throws jExceptionSelector
+     * @return Bundle
+     * @throws \Jelix\Core\Selector\Exception
      */
-    public static function getBundle($key, $locale = null, $charset = null)
+    public static function getBundle($key, $locale = null)
     {
-        list($bundle, $selector) = self::getBundleAndSelector($key, $locale, $charset);
+        list($bundle, $selector) = self::getBundleAndSelector($key, $locale);
         return $bundle;
     }
 
     /**
      * @param $key
      * @param $locale
-     * @param $charset
      * @return array
-     * @throws jExceptionSelector
+     * @throws \Jelix\Core\Selector\Exception
      */
-    protected static function getBundleAndSelector($key, $locale = null, $charset = null)
+    protected static function getBundleAndSelector($key, $locale = null)
     {
-        $config = jApp::config();
         try {
-            $file = new jSelectorLoc($key, $locale, $charset);
-        } catch (jExceptionSelector $e) {
+            $file = new LocaleSelector($key, $locale);
+        } catch (\Jelix\Core\Selector\Exception $e) {
             // the file is not found
             if ($e->getCode() == 12) {
                 // unknown module..
                 throw $e;
             }
-            if ($charset === null) {
-                $charset = $config->charset;
-            }
-
             throw new Exception('(212)No locale file found for the given locale key "'.$key
-                .'" in any other default languages (charset '.$charset.')');
+                .'" in any other default languages', 212, $e);
         }
 
         $locale = $file->locale;
         $keySelector = $file->module.'~'.$file->fileKey;
 
         if (!isset(self::$bundles[$keySelector][$locale])) {
-            self::$bundles[$keySelector][$locale] = new jBundle($file, $locale);
+            self::$bundles[$keySelector][$locale] = new Bundle($file, $locale);
         }
         return [ self::$bundles[$keySelector][$locale], $file ];
     }
@@ -181,7 +167,7 @@ class jLocale
      *
      * @return array
      */
-    public static function getAlternativeLocales($locale, $config)
+    public static function getAlternativeLocales($locale, object $config)
     {
         $otherLocales = array();
         $similarLocale = self::langToLocale(substr($locale, 0, strpos($locale, '_')));
@@ -200,13 +186,13 @@ class jLocale
         return $otherLocales;
     }
 
-    protected static function tryOtherLocales($key, $args, $locale, $charset, $config)
+    protected static function tryOtherLocales($key, $args, $locale, $config)
     {
         $otherLocales = self::getAlternativeLocales($locale, $config);
         foreach ($otherLocales as $loc) {
             try {
-                return jLocale::get($key, $args, $loc, $charset, false);
-            } catch (Exception $e) {
+                return Locale::get($key, $args, $loc, false);
+            } catch (\Exception $e) {
             }
         }
 
@@ -221,11 +207,28 @@ class jLocale
      * @param mixed  $l
      *
      * @return string the corresponding locale
-     * @deprecated use Jelix\Locale\Locale::getCorrespondingLocale() instead
      */
     public static function getCorrespondingLocale($l, $strictCorrespondance = false)
     {
-        return Locale::getCorrespondingLocale($l, $strictCorrespondance);
+        if (strpos($l, '_') === false) {
+            $l = self::langToLocale($l);
+        }
+
+        if ($l != '') {
+            $avLoc = &App::config()->availableLocales;
+            if (in_array($l, $avLoc)) {
+                return $l;
+            }
+            if ($strictCorrespondance) {
+                return '';
+            }
+            $l2 = self::langToLocale(substr($l, 0, strpos($l, '_')));
+            if ($l2 != $l && in_array($l2, $avLoc)) {
+                return $l2;
+            }
+        }
+
+        return '';
     }
 
     /**
@@ -233,37 +236,93 @@ class jLocale
      * by the browser, and which is available in the application.
      *
      * @return string the locale. empty if not found.
-     * @deprecated use Jelix\Locale\Locale::getPreferedLocaleFromRequest() instead
      */
     public static function getPreferedLocaleFromRequest()
     {
-       return Locale::getPreferedLocaleFromRequest();
+        if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            return '';
+        }
+
+        $languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        foreach ($languages as $bl) {
+            if (!preg_match('/^([a-zA-Z]{2,3})(?:[-_]([a-zA-Z]{2,3}))?(;q=[0-9]\\.[0-9])?$/', $bl, $match)) {
+                continue;
+            }
+            $l = strtolower($match[1]);
+            if (isset($match[2])) {
+                $l .= '_'.strtoupper($match[2]);
+            }
+            $lang = self::getCorrespondingLocale($l);
+            if ($lang != '') {
+                return $lang;
+            }
+        }
+
+        return '';
     }
+
+    /**
+     * @var array content of the lang_to_locale.ini.php
+     */
+    protected static $langToLocale;
 
     /**
      * returns the locale corresponding to a lang.
      *
      * The file lang_to_locale gives corresponding locales, but you can override these
-     * association into the langToLocale section of the main configuration
+     * associations into the langToLocale section of the main configuration
      *
      * @param string $lang a lang code (xx)
      *
      * @return string the corresponding locale (xx_YY)
-     * @deprecated use Jelix\Locale\Locale::langToLocale() instead
      */
     public static function langToLocale($lang)
     {
-        return Locale::langToLocale($lang);
+        $conf = App::config();
+        if (isset($conf->langToLocale['locale'][$lang])) {
+            return $conf->langToLocale['locale'][$lang];
+        }
+        if (is_null(self::$langToLocale)) {
+            $content = @parse_ini_file(__DIR__.'/lang_to_locale.ini.php');
+            self::$langToLocale = $content['locale'];
+        }
+        if (isset(self::$langToLocale[$lang])) {
+            return self::$langToLocale[$lang];
+        }
+
+        return '';
     }
+
+    /**
+     * @var string[][] first key is lang code of translation of names, second key is lang code
+     */
+    protected static $langNames = array();
 
     /**
      * @param string $lang       the lang for which we want the name
      * @param string $langOfName if empty, return the name in its own language
-     * @deprecated use Jelix\Locale\Locale::getLangName() instead
+     *
      * @since 1.7.0
      */
     public static function getLangName($lang, $langOfName = '')
     {
-        return Locale::getLangName($lang, $langOfName);
+        if ($langOfName == '') {
+            $langOfName = '_';
+        }
+
+        if (!isset(self::$langNames[$langOfName])) {
+            $fileName = 'lang_names_'.$langOfName.'.ini';
+            if (!file_exists(__DIR__.'/'.$fileName)) {
+                $fileName = 'lang_names_en.ini';
+            }
+            $names = parse_ini_file($fileName, false, INI_SCANNER_RAW);
+            self::$langNames[$langOfName] = $names['names'];
+        }
+
+        if (isset(self::$langNames[$langOfName][$lang])) {
+            return self::$langNames[$langOfName][$lang];
+        }
+
+        return $lang;
     }
 }

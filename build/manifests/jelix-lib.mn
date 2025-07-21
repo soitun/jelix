@@ -8,8 +8,49 @@ cd lib
   .htaccess
   composer.json
 
-cd lib/JelixFramework
+cd lib/JelixFramework/Core
   __ALL_RECURSIVELY__
+
+cd lib/JelixFramework/Dependencies
+  __ALL_RECURSIVELY__
+
+cd lib/JelixFramework/DevHelper
+  __ALL_RECURSIVELY__
+
+cd lib/JelixFramework/Event
+  __ALL_RECURSIVELY__
+
+cd lib/JelixFramework/Forms
+  __ALL_RECURSIVELY__
+
+cd lib/JelixFramework/Installer
+  __ALL_RECURSIVELY__
+
+cd lib/JelixFramework/Locale
+  __ALL_RECURSIVELY__
+! lang_to_locale.ini.php
+! lang_names__.ini
+! lang_names_en.ini
+! lang_names_fr.ini
+
+cd lib/JelixFramework/Routing
+  __ALL_RECURSIVELY__
+
+cd lib/JelixFramework/Scripts
+  __ALL_RECURSIVELY__
+
+cd lib/JelixFramework/Services
+  __ALL_RECURSIVELY__
+
+cd lib/JelixFramework/UnitTests
+  __ALL_RECURSIVELY__
+
+cd lib/JelixFramework/WebAssets
+  __ALL_RECURSIVELY__
+
+cd lib/JelixFramework/
+  __ALL__
+
 
 cd lib/jelix
   init.php
@@ -27,10 +68,7 @@ cd lib/jelix/controllers
 cd lib/jelix/core
   __ALL_RECURSIVELY__
 ! defaultconfig.ini.php
-! lang_to_locale.ini.php
-! lang_names__.ini
-! lang_names_en.ini
-! lang_names_fr.ini
+
 
 cd lib/jelix/core-modules/jelix
    __ALL__
