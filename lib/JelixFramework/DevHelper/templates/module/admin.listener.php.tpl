@@ -17,7 +17,7 @@ class admin%%module%%Listener extends jEventListener{
     function onmasteradminGetMenuContent ($event) {
         //if(jAcl2::check('%%module%%.my.right')) {
             $item = new masterAdminMenuItem('%%module%%',
-                                            jLocale::get('%%module%%~interface.menu.item'),
+                                            \Jelix\Locale\Locale::get('%%module%%~interface.menu.item'),
                                             jUrl::get('%%module%%~default:index'),
                                             5, 'toplinks');
             $event->add($item);

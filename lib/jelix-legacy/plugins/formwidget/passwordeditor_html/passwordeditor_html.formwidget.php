@@ -4,12 +4,12 @@
  * @subpackage  forms_widget_plugin
  *
  * @author       Laurent Jouanneau <laurent@jelix.org>
- * @copyright    2023-2024 Laurent Jouanneau
+ * @copyright    2023-2025 Laurent Jouanneau
  *
  * @link         https://jelix.org
  * @licence      http://www.gnu.org/licenses/gpl.html GNU General Public Licence, see LICENCE file
  */
-
+use Jelix\Locale\Locale;
 /**
  */
 class passwordeditor_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
@@ -92,17 +92,17 @@ class passwordeditor_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
         }
 
         $attrScore = array(
-            'data-strong-score' => jLocale::get('jelix~jforms.password.score.strong'),
-            'data-good-score' => jLocale::get('jelix~jforms.password.score.good'),
-            'data-weak-score' => jLocale::get('jelix~jforms.password.score.weak'),
-            'data-poor-score' => jLocale::get('jelix~jforms.password.score.poor'),
-            'data-badpass-score' => jLocale::get('jelix~jforms.password.score.bad.password'),
+            'data-strong-score' => Locale::get('jelix~jforms.password.score.strong'),
+            'data-good-score' => Locale::get('jelix~jforms.password.score.good'),
+            'data-weak-score' => Locale::get('jelix~jforms.password.score.weak'),
+            'data-poor-score' => Locale::get('jelix~jforms.password.score.poor'),
+            'data-badpass-score' => Locale::get('jelix~jforms.password.score.bad.password'),
         );
 
         $btnLabels = array(
-            'showLabel' =>   jLocale::get('jelix~jforms.password.editor.button.show'),
-            'regenerateLabel' =>  jLocale::get('jelix~jforms.password.editor.button.regenerate'),
-            'copyLabel' =>   jLocale::get('jelix~jforms.password.editor.button.copy'),
+            'showLabel' =>   Locale::get('jelix~jforms.password.editor.button.show'),
+            'regenerateLabel' =>  Locale::get('jelix~jforms.password.editor.button.regenerate'),
+            'copyLabel' =>   Locale::get('jelix~jforms.password.editor.button.copy'),
         );
 
         $this->displayInput($attr, $attrScore, $btnLabels);

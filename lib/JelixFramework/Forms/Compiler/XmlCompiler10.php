@@ -4,7 +4,7 @@
  * @contributor Loic Mathaud, Dominique Papin, Julien Issler
  * @contributor Uriel Corfa (Emotic SARL), Thomas
  *
- * @copyright   2006-2024 Laurent Jouanneau
+ * @copyright   2006-2025 Laurent Jouanneau
  * @copyright   2007 Loic Mathaud, 2007 Dominique Papin
  * @copyright   2007 Emotic SARL
  * @copyright   2008 Julien Issler, 2009 Thomas
@@ -664,7 +664,7 @@ class XmlCompiler10
         if (isset($control->placeholder)) {
             if (isset($control->placeholder['locale'])) {
                 $placeHolderlocale = (string) $control->placeholder['locale'];
-                $source[] = '$ctrl->placeholder=jLocale::get(\''.$placeHolderlocale.'\');';
+                $source[] = '$ctrl->placeholder=Locale::get(\''.$placeHolderlocale.'\');';
             } else {
                 $label = (string) $control->placeholder;
                 $source[] = '$ctrl->placeholder=\''.str_replace("'", "\\'", $label).'\';';

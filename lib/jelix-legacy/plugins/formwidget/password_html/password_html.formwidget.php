@@ -4,7 +4,7 @@
  * @subpackage  forms_widget_plugin
  *
  * @author       Laurent Jouanneau <laurent@jelix.org>
- * @copyright    2023-2024 Laurent Jouanneau
+ * @copyright    2023-2025 Laurent Jouanneau
  *
  * @link         https://jelix.org
  * @licence      http://www.gnu.org/licenses/gpl.html GNU General Public Licence, see LICENCE file
@@ -87,7 +87,7 @@ class password_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
         $attr['value'] = $this->getValue();
 
         $btnLabels = array(
-            'showLabel' =>   jLocale::get('jelix~jforms.password.editor.button.show'),
+            'showLabel' =>   \Jelix\Locale\Locale::get('jelix~jforms.password.editor.button.show'),
         );
 
         $this->displayInput($attr, $btnLabels);

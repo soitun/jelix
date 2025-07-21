@@ -7,7 +7,7 @@
  * @contributor Yann, Dominique Papin
  * @contributor Warren Seine, Alexis Métaireau, Julien Issler, Olivier Demah, Brice Tence
  *
- * @copyright   2005-2023 Laurent Jouanneau, 2006 Yann, 2007 Dominique Papin
+ * @copyright   2005-2025 Laurent Jouanneau, 2006 Yann, 2007 Dominique Papin
  * @copyright   2008 Warren Seine, Alexis Métaireau
  * @copyright   2009 Julien Issler, Olivier Demah
  * @copyright   2010 Brice Tence
@@ -16,6 +16,8 @@
  * @see        http://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
+use Jelix\Locale\Locale;
+
 require_once __DIR__.'/jResponseBasicHtml.class.php';
 
 /**
@@ -254,8 +256,8 @@ class jResponseHtml extends jResponseBasicHtml
             jApp::config()->webassets['useCollection'],
             jApp::urlBasePath(),
             array(
-                '$lang' => jLocale::getCurrentLang(),
-                '$locale' => jLocale::getCurrentLocale(),
+                '$lang' => Locale::getCurrentLang(),
+                '$locale' => Locale::getCurrentLocale(),
                 '$theme' => rtrim('themes/'.jApp::config()->theme, '/'),
                 '$jelix' => rtrim(jApp::urlJelixWWWPath(), '/'),
             )

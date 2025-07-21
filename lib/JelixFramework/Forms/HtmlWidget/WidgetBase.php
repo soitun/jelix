@@ -3,7 +3,7 @@
  * @author      Laurent Jouanneau
  * @contributor Julien Issler, Dominique Papin, Claudio Bernardes
  *
- * @copyright   2006-2024 Laurent Jouanneau
+ * @copyright   2006-2025 Laurent Jouanneau
  * @copyright   2008-2011 Julien Issler, 2008 Dominique Papin
  * @copyright   2012 Claudio Bernardes
  *
@@ -12,7 +12,6 @@
  */
 
 namespace Jelix\Forms\HtmlWidget;
-
 use Jelix\Locale\Locale;
 
 abstract class WidgetBase implements WidgetInterface

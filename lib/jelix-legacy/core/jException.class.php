@@ -6,12 +6,13 @@
  * @author      Laurent Jouanneau
  * @contributor Sylvain de Vathaire, Julien Issler
  *
- * @copyright   2005-2014 laurent Jouanneau, 2007 Sylvain de Vathaire
+ * @copyright   2005-2025 laurent Jouanneau, 2007 Sylvain de Vathaire
  * @copyright   2008 Julien Issler
  *
  * @see        http://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
+use Jelix\Locale\Locale;
 
 /**
  * Jelix Exception.
@@ -51,7 +52,7 @@ class jException extends Exception
             trigger_error("jException::__construct(): charset parameter is deprecated and not used any more.", E_USER_DEPRECATED);
         }
         try {
-            $message = \Jelix\Locale\Locale::get($localekey, $localeParams, $lang);
+            $message = Locale::get($localekey, $localeParams, $lang);
         } catch (Exception $e) {
             $message = $e->getMessage();
         }

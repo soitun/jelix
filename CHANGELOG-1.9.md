@@ -29,12 +29,18 @@ New features
   Files that are compiled during installers:
   - properties files for locales
 
+- The `charset` configuration property is deprecated. You should keep the default value
+  to UTF-8. If not, convert your locales and other data to UTF-8 as the support
+  of other charset will be gone in the next major version.
+
 
 **Locales**
 
+
 - classes `jLocale` and `jBundle` are deprecated, and replaced by `Jelix\Locale\Locale`
   and `Jelix\Locale\Bundle`. 
-- These new classes support only UTF-8 charsets. 
+- These new classes support only UTF-8 charsets. `Jelix\Locale\Locale` call `jLocale`
+  if the default charset is not UTF-8. 
 - Properties files are now compiled during installation to improve performance 
   at runtime, and are used by the new classes.
   Deprecated classes continue to compile properties files at runtime.

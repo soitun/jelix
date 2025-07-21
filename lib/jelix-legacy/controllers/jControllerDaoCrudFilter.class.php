@@ -4,11 +4,12 @@
  * @subpackage   controllers
  *
  * @author       Laurent Jouanneau
- * @copyright    2021-2024 Laurent Jouanneau
+ * @copyright    2021-2025 Laurent Jouanneau
  *
  * @see          https://www.jelix.org
  * @licence      http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
+use Jelix\Locale\Locale;
 
 use Jelix\Dao\DaoConditions;
 use Jelix\Forms\FormInstance;
@@ -147,7 +148,7 @@ class jControllerDaoCrudFilter extends jControllerDaoCrud
 
             if (!$form->getControl('_submitFilter')) {
                 $submit = new \Jelix\Forms\Controls\SubmitControl('_submitFilter');
-                $submit->label = jLocale::get('jelix~ui.buttons.search');
+                $submit->label = Locale::get('jelix~ui.buttons.search');
                 $form->addControl($submit);
             }
 

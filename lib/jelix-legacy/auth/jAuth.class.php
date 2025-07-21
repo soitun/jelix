@@ -6,7 +6,7 @@
  * @author     Laurent Jouanneau
  * @contributor Frédéric Guillot, Antoine Detante, Julien Issler, Dominique Papin, Tahina Ramaroson, Sylvain de Vathaire, Vincent Viaud
  *
- * @copyright  2001-2005 CopixTeam, 2005-2023 Laurent Jouanneau, 2007 Frédéric Guillot, 2007 Antoine Detante
+ * @copyright  2001-2005 CopixTeam, 2005-2025 Laurent Jouanneau, 2007 Frédéric Guillot, 2007 Antoine Detante
  * @copyright  2007-2008 Julien Issler, 2008 Dominique Papin, 2010 NEOV, 2010 BP2I
  *
  * This classes were get originally from an experimental branch of the Copix project (Copix 2.3dev, http://www.copix.org)
@@ -14,6 +14,8 @@
  * Initial author of this Copix classes is Laurent Jouanneau, and this classes were adapted for Jelix by him
  * @licence  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
+use Jelix\Locale\Locale;
+
 require JELIX_LIB_PATH.'auth/jIAuthDriver.iface.php';
 
 require JELIX_LIB_PATH.'auth/jIAuthDriver2.iface.php';
@@ -584,7 +586,7 @@ class jAuth
             if (isset($config['persistant_cookie_name'])) {
                 setcookie($config['persistant_cookie_name'], '', time() - 3600, $config['persistant_cookie_path'], '', false, true);
             } else {
-                jLog::log(jLocale::get('jelix~auth.error.persistant.incorrectconfig', 'persistant_cookie_name'), 'error');
+                jLog::log(Locale::get('jelix~auth.error.persistant.incorrectconfig', 'persistant_cookie_name'), 'error');
             }
         }
     }
@@ -744,7 +746,7 @@ class jAuth
         if (isset($config['persistant_enable']) && $config['persistant_enable']) {
             if (trim($config['persistant_encryption_key']) == ''
                 || trim($config['persistant_cookie_name']) == '') {
-                jLog::log(jLocale::get('jelix~auth.error.persistant.incorrectconfig', 'persistant_cookie_name, persistant_encryption_key'), 'error');
+                jLog::log(Locale::get('jelix~auth.error.persistant.incorrectconfig', 'persistant_cookie_name, persistant_encryption_key'), 'error');
 
                 return 0;
             }

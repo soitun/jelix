@@ -8,12 +8,14 @@
  * @contributor Julien Issler, Adrien Lagroy de Croutte
  *
  * @copyright   2020 Adrien Lagroy de Croutte
- * @copyright   2008-2022 Laurent Jouanneau
+ * @copyright   2008-2025 Laurent Jouanneau
  * @copyright   2009 Julien Issler, 2020 Adrien Lagroy de Croutte
  *
  * @see        http://jelix.org
  * @licence     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public Licence, see LICENCE file
  */
+use Jelix\Locale\Locale;
+
 class usersCtrl extends jController
 {
     public $pluginParams = array(
@@ -30,11 +32,11 @@ class usersCtrl extends jController
     protected function checkException(jAcl2DbAdminUIException $e, $category)
     {
         if ($e->getCode() == 1) {
-            jMessage::add(jLocale::get('acl2.error.invalid.user'), 'error');
+            jMessage::add(Locale::get('acl2.error.invalid.user'), 'error');
         } elseif ($e->getCode() == 2) {
-            jMessage::add(jLocale::get('acl2.message.' . $category . '.error.noacl.anybody'), 'error');
+            jMessage::add(Locale::get('acl2.message.' . $category . '.error.noacl.anybody'), 'error');
         } elseif ($e->getCode() == 3) {
-            jMessage::add(jLocale::get('acl2.message.' . $category . '.error.noacl.yourself'), 'error');
+            jMessage::add(Locale::get('acl2.message.' . $category . '.error.noacl.yourself'), 'error');
         }
     }
 
@@ -51,13 +53,13 @@ class usersCtrl extends jController
 
         $o = new StdClass();
         $o->id_aclgrp = '-2';
-        $o->name = jLocale::get('jacl2db_admin~acl2.all.users.option');
+        $o->name = Locale::get('jacl2db_admin~acl2.all.users.option');
         $o->grouptype = jAcl2DbUserGroup::GROUPTYPE_NORMAL;
         $groups[] = $o;
 
         $o = new StdClass();
         $o->id_aclgrp = '-1';
-        $o->name = jLocale::get('jacl2db_admin~acl2.without.groups.option');
+        $o->name = Locale::get('jacl2db_admin~acl2.without.groups.option');
         $o->grouptype = jAcl2DbUserGroup::GROUPTYPE_NORMAL;
         $groups[] = $o;
 
@@ -70,7 +72,7 @@ class usersCtrl extends jController
 
         $tpl = new jTpl();
         $tpl->assign(compact('grpid', 'groups'));
-        $rep->title = jLocale::get('acl2.users.title');
+        $rep->title = Locale::get('acl2.users.title');
         $rep->body->assign('MAIN', $tpl->fetch('users_list'));
         $rep->body->assign('selectedMenuItem', 'usersrights');
 
@@ -164,7 +166,7 @@ class usersCtrl extends jController
     {
         if ($labelKey) {
             try {
-                return jLocale::get($labelKey);
+                return Locale::get($labelKey);
             } catch (Exception $e) {
             }
         }
@@ -207,7 +209,7 @@ class usersCtrl extends jController
             $rep->body->assign('MAIN', $tpl->fetch('user_rights_view'));
         }
         $rep->body->assign('selectedMenuItem', 'rights');
-        $rep->title = jLocale::get('acl2.user.rights.title') . ' ' . $user;
+        $rep->title = Locale::get('acl2.user.rights.title') . ' ' . $user;
 
         return $rep;
     }
@@ -234,7 +236,7 @@ class usersCtrl extends jController
             }
             $manager = new jAcl2DbAdminUIManager();
             $manager->saveUserRights($login, $rights, $currentLogin);
-            jMessage::add(jLocale::get('acl2.message.user.rights.ok'), 'ok');
+            jMessage::add(Locale::get('acl2.message.user.rights.ok'), 'ok');
         } catch (jAcl2DbAdminUIException $e) {
             $this->checkException($e, 'saveuserrights');
         }
@@ -294,7 +296,7 @@ class usersCtrl extends jController
         $manager = new jAcl2DbAdminUIManager();
         $manager->removeUserRessourceRights($login, $subjects);
 
-        jMessage::add(jLocale::get('acl2.message.user.rights.ok'), 'ok');
+        jMessage::add(Locale::get('acl2.message.user.rights.ok'), 'ok');
 
         return $this->redirect('jacl2db_admin~users:rightres', array('user' => $login));
     }

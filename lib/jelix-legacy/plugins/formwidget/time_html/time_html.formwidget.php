@@ -6,11 +6,12 @@
  * @author      Adrien Lagroy de Croutte
  * @contributor Laurent Jouanneau
  *
- * @copyright   2020 Adrien Lagroy de Croutte, 2020-2024 Laurent Jouanneau
+ * @copyright   2020 Adrien Lagroy de Croutte, 2020-2025 Laurent Jouanneau
  *
  * @see         https://jelix.org
  * @licence     http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
+use Jelix\Locale\Locale;
 
 /**
  * HTML form builder.
@@ -84,7 +85,7 @@ class time_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
                 $v['seconds'] = $matches[4];
             }
         }
-        $f = jLocale::get('jelix~format.time');
+        $f = Locale::get('jelix~format.time');
         for ($i = 0; $i < strlen($f); ++$i) {
             if ($f[$i] == 'H') {
                 $this->_outputTimeControlHour($this->ctrl, $attr, $v['hour']);
@@ -106,13 +107,13 @@ class time_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
         $attr['id'] .= 'hour';
         if (jApp::config()->forms['controls.time.input'] == 'textboxes') {
             $attr['value'] = $value;
-            echo '<input type="text" size="2" maxlength="2" placeholder="'.htmlspecialchars(jLocale::get('jelix~jforms.time.hour.label')).'"';
+            echo '<input type="text" size="2" maxlength="2" placeholder="'.htmlspecialchars(Locale::get('jelix~jforms.time.hour.label')).'"';
             $this->_outputAttr($attr);
             echo $this->_endt;
         } else {
             echo '<select';
             $this->_outputAttr($attr);
-            echo '><option value="">'.htmlspecialchars(jLocale::get('jelix~jforms.time.hour.label')).'</option>';
+            echo '><option value="">'.htmlspecialchars(Locale::get('jelix~jforms.time.hour.label')).'</option>';
             for ($i = 0; $i < 24; ++$i) {
                 $k = ($i < 10) ? '0'.$i : $i;
                 echo '<option value="'.$k.'"'.((string) $k === $value ? ' selected="selected"' : '').'>'.$k.'</option>';
@@ -127,13 +128,13 @@ class time_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
         $attr['id'] .= 'minutes';
         if (jApp::config()->forms['controls.time.input'] == 'textboxes') {
             $attr['value'] = $value;
-            echo '<input type="text" size="2" maxlength="2" placeholder="'.htmlspecialchars(jLocale::get('jelix~jforms.time.minutes.label')).'"';
+            echo '<input type="text" size="2" maxlength="2" placeholder="'.htmlspecialchars(Locale::get('jelix~jforms.time.minutes.label')).'"';
             $this->_outputAttr($attr);
             echo $this->_endt;
         } else {
             echo '<select';
             $this->_outputAttr($attr);
-            echo '><option value="">'.htmlspecialchars(jLocale::get('jelix~jforms.time.minutes.label')).'</option>';
+            echo '><option value="">'.htmlspecialchars(Locale::get('jelix~jforms.time.minutes.label')).'</option>';
             for ($i = 0; $i < 60; ++$i) {
                 $k = ($i < 10) ? '0'.$i : $i;
                 echo '<option value="'.$k.'"'.((string) $k === $value ? ' selected="selected"' : '').'>'.$k.'</option>';
@@ -150,13 +151,13 @@ class time_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
             echo '<input type="hidden" id="'.$attr['id'].'" name="'.$attr['name'].'" value="'.$value.'"/>';
         } elseif (jApp::config()->forms['controls.time.input'] == 'textboxes') {
             $attr['value'] = $value;
-            echo '<input type="text"size="2" maxlength="2" placeholder="'.htmlspecialchars(jLocale::get('jelix~jforms.time.seconds.label')).'"';
+            echo '<input type="text"size="2" maxlength="2" placeholder="'.htmlspecialchars(Locale::get('jelix~jforms.time.seconds.label')).'"';
             $this->_outputAttr($attr);
             echo $this->_endt;
         } else {
             echo '<select';
             $this->_outputAttr($attr);
-            echo '><option value="">'.htmlspecialchars(jLocale::get('jelix~jforms.time.seconds.label')).'</option>';
+            echo '><option value="">'.htmlspecialchars(Locale::get('jelix~jforms.time.seconds.label')).'</option>';
             for ($i = 0; $i < 60; ++$i) {
                 $k = ($i < 10) ? '0'.$i : $i;
                 echo '<option value="'.$k.'"'.((string) $k === $value ? ' selected="selected"' : '').'>'.$k.'</option>';

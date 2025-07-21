@@ -4,7 +4,7 @@
  * @contributor Loic Mathaud, Dominique Papin, Julien Issler
  * @contributor Uriel Corfa (Emotic SARL), Thomas, Olivier Demah, Adrien Lagroy de Croutte
  *
- * @copyright   2006-2024 Laurent Jouanneau
+ * @copyright   2006-2025 Laurent Jouanneau
  * @copyright   2007 Loic Mathaud, 2007-2008 Dominique Papin
  * @copyright   2007 Emotic SARL
  * @copyright   2008-2015 Julien Issler, 2009 Thomas, 2009 Olivier Demah

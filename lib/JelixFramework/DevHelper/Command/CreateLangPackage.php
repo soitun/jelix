@@ -73,7 +73,7 @@ class CreateLangPackage extends \Jelix\DevHelper\AbstractCommandForApp
                 while (($fich = readdir($dir_r)) !== false) {
                     if ($fich != '.' && $fich != '..'
                         && is_file($source_dir.$fich)
-                        && strpos($fich, '.UTF-8.properties')
+                        && strpos($fich, '.properties')
                         && !file_exists($target_dir.$fich)) {
                         copy($source_dir.$fich, $target_dir.$fich);
                         if ($this->verbose()) {

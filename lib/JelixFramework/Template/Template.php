@@ -3,7 +3,7 @@
  * @author      Laurent Jouanneau
  * @contributor Dominique Papin
  *
- * @copyright   2005-2023 Laurent Jouanneau, 2007 Dominique Papin
+ * @copyright   2005-2025 Laurent Jouanneau, 2007 Dominique Papin
  *
  * @see        https://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html

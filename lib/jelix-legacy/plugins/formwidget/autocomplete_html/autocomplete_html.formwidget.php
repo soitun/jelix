@@ -5,12 +5,13 @@
  * @subpackage  forms_widget_plugin
  *
  * @author    Laurent Jouanneau
- * @copyright 2019-2024 Laurent Jouanneau
+ * @copyright 2019-2025 Laurent Jouanneau
  *
  * @see      https://jelix.org
  *
  * @license MIT
  */
+use Jelix\Locale\Locale;
 
 /**
  * Widget allowing to select a value by showing results from a search after
@@ -89,7 +90,7 @@ class autocomplete_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
         $attr['class'] .= ' autocomplete-select';
 
         $attrAutoComplete = array(
-            'placeholder' => jLocale::get('jelix~jforms.autocomplete.placeholder'),
+            'placeholder' => Locale::get('jelix~jforms.autocomplete.placeholder'),
         );
         if (isset($attr['attr-autocomplete'])) {
             $attrAutoComplete = array_merge($attrAutoComplete, $attr['attr-autocomplete']);
@@ -134,8 +135,8 @@ class autocomplete_htmlFormWidget extends \Jelix\Forms\HtmlWidget\WidgetBase
         echo '<div class="autocomplete-box">
                <input type="text" ';
         $this->_outputAttr($attrAutoComplete);
-        echo '> <span class="autocomplete-no-search-results" style="display:none">'.jLocale::get('jelix~jforms.autocomplete.no.results').'</span> 
-                <button class="autocomplete-trash btn btn-mini" title="'.jLocale::get('jelix~ui.buttons.erase').'" type="button"><i class="icon-trash"></i></button> 
+        echo '> <span class="autocomplete-no-search-results" style="display:none">'.Locale::get('jelix~jforms.autocomplete.no.results').'</span> 
+                <button class="autocomplete-trash btn btn-mini" title="'.Locale::get('jelix~ui.buttons.erase').'" type="button"><i class="icon-trash"></i></button> 
             ';
         $this->displaySelectChoices($attrSelect, $value, $emptyLabel);
         echo "</div>\n";

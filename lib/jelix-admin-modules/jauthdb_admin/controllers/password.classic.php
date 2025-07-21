@@ -5,13 +5,14 @@
  * @subpackage  jauthdb_admin
  *
  * @author    Laurent Jouanneau
- * @copyright 2009-2024 Laurent Jouanneau
+ * @copyright 2009-2025 Laurent Jouanneau
  *
  * @see      http://jelix.org
  *
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public Licence
  */
 use Jelix\Forms\Forms;
+use Jelix\Locale\Locale;
 
 class passwordCtrl extends jController
 {
@@ -37,7 +38,7 @@ class passwordCtrl extends jController
         if (($personalView && $login != jAuth::getUserSession()->login)
             || !jAuth::canChangePassword($login)
         ) {
-            jMessage::add(jLocale::get('jacl2~errors.action.right.needed'), 'error');
+            jMessage::add(Locale::get('jacl2~errors.action.right.needed'), 'error');
 
             return $this->redirect('master_admin~default:index');
         }
@@ -71,7 +72,7 @@ class passwordCtrl extends jController
         if (($personalView && $login != jAuth::getUserSession()->login)
             || !jAuth::canChangePassword($login)
         ) {
-            jMessage::add(jLocale::get('jacl2~errors.action.right.needed'), 'error');
+            jMessage::add(Locale::get('jacl2~errors.action.right.needed'), 'error');
 
             return $this->redirect('master_admin~default:index');
         }
@@ -89,7 +90,7 @@ class passwordCtrl extends jController
         $pwd = $form->getData('pwd');
         if (jAuth::changePassword($login, $pwd)) {
             Forms::destroy('jauthdb_admin~password_change', $login);
-            jMessage::add(jLocale::get('crud.message.change.password.ok', $login), 'notice');
+            jMessage::add(Locale::get('crud.message.change.password.ok', $login), 'notice');
             if ($personalView) {
                 return $this->redirect('user:index', ['j_user_login' => $login]);
             } else {
@@ -97,7 +98,7 @@ class passwordCtrl extends jController
             }
         }
 
-        $form->setErrorOn('pwd', jLocale::get('crud.message.change.password.notok'));
+        $form->setErrorOn('pwd', Locale::get('crud.message.change.password.notok'));
 
         return $this->redirect('password:index', ['j_user_login' => $login]);
     }

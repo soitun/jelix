@@ -8,13 +8,16 @@
  * @contributor Julien Issler, Olivier Demah, Adrien Lagroy de Croutte
  *
  * @copyright   2020 Adrien Lagroy de Croutte
- * @copyright   2008-2022 Laurent Jouanneau
+ * @copyright   2008-2025 Laurent Jouanneau
  * @copyright   2009 Julien Issler
  * @copyright   2010 Olivier Demah
  *
  * @see        http://jelix.org
  * @licence     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public Licence, see LICENCE file
  */
+
+use Jelix\Locale\Locale;
+
 class groupsCtrl extends jController
 {
     public $pluginParams = array(
@@ -35,11 +38,11 @@ class groupsCtrl extends jController
     protected function getExceptionMessage(jAcl2DbAdminUIException $e, $category)
     {
         if ($e->getCode() == 1) {
-            return jLocale::get('acl2.error.invalid.user');
+            return Locale::get('acl2.error.invalid.user');
         } elseif ($e->getCode() == 2) {
-            return jLocale::get('acl2.message.' . $category . '.error.noacl.anybody');
+            return Locale::get('acl2.message.' . $category . '.error.noacl.anybody');
         } elseif ($e->getCode() == 3) {
-            return jLocale::get('acl2.message.' . $category . '.error.noacl.yourself');
+            return Locale::get('acl2.message.' . $category . '.error.noacl.yourself');
         }
         return '';
     }
@@ -123,7 +126,7 @@ class groupsCtrl extends jController
                     "id_aclgrp" => $group->id_aclgrp
                 ],
                 'id' => $group->id_aclgrp,
-                'name' => $group->id_aclgrp != '__anonymous' ? $group->name : jLocale::get('jacl2db_admin~acl2.anonymous.group.name'),
+                'name' => $group->id_aclgrp != '__anonymous' ? $group->name : Locale::get('jacl2db_admin~acl2.anonymous.group.name'),
                 'nb_users' => $group->nb_users,
                 'grouptype' => $group->grouptype,
                 'links' => [
@@ -164,7 +167,7 @@ class groupsCtrl extends jController
 
         $rep->body->assign('MAIN', $tpl->fetch('groups_right'));
         $rep->body->assign('selectedMenuItem', 'rights');
-        $rep->title = jLocale::get('acl2.groups.rights.title');
+        $rep->title = Locale::get('acl2.groups.rights.title');
 
         return $rep;
     }
@@ -202,7 +205,7 @@ class groupsCtrl extends jController
 
         $rep->body->assign('MAIN', $tpl->fetch($tplName));
         $rep->body->assign('selectedMenuItem', 'rights');
-        $rep->title = jLocale::get('acl2.groups.rights.title');
+        $rep->title = Locale::get('acl2.groups.rights.title');
 
         return $rep;
     }
@@ -227,7 +230,7 @@ class groupsCtrl extends jController
             }
             $manager = new jAcl2DbAdminUIManager();
             $manager->setRightsOnGroup($rights, $grpId, $login);
-            jMessage::add(jLocale::get('acl2.message.group.rights.ok'), 'ok');
+            jMessage::add(Locale::get('acl2.message.group.rights.ok'), 'ok');
         } catch (jAcl2DbAdminUIException $e) {
             $this->checkException($e, 'savegrouprights');
         }
@@ -266,7 +269,7 @@ class groupsCtrl extends jController
             }
             $groupname = $group->name;
         } else {
-            $groupname = jLocale::get('jacl2db_admin~acl2.anonymous.group.name');
+            $groupname = Locale::get('jacl2db_admin~acl2.anonymous.group.name');
         }
 
         $manager = new jAcl2DbAdminUIManager();
@@ -314,7 +317,7 @@ class groupsCtrl extends jController
         $manager = new jAcl2DbAdminUIManager();
         $manager->removeGroupRightsWithResources($groupid, $subjects);
 
-        jMessage::add(jLocale::get('jacl2db_admin~acl2.message.group.rights.ok'), 'ok');
+        jMessage::add(Locale::get('jacl2db_admin~acl2.message.group.rights.ok'), 'ok');
 
         return $this->redirect('jacl2db_admin~groups:rightres', array('group' => $groupid));
     }
@@ -333,7 +336,7 @@ class groupsCtrl extends jController
             jAcl2DbUserGroup::setDefaultGroup($id, $default);
             $rep->data = [
                 'result' => 'ok',
-                'message' => jLocale::get('acl2.message.group.setdefault.ok')
+                'message' => Locale::get('acl2.message.group.setdefault.ok')
             ];
         } else {
             $rep->data = [
@@ -357,13 +360,13 @@ class groupsCtrl extends jController
         $copyGroup = $this->param('rights-copy');
 
         if ($name == '') {
-            jMessage::add(jLocale::get('acl2.error.groupname.is.missing'), 'error');
+            jMessage::add(Locale::get('acl2.error.groupname.is.missing'), 'error');
             return $this->redirect('jacl2db_admin~groups:create');
         }
 
         $id = trim($id);
         if ($id == '__anonymous') {
-            jMessage::add(jLocale::get('acl2.error.groupid.invalid'), 'error');
+            jMessage::add(Locale::get('acl2.error.groupid.invalid'), 'error');
             return $this->redirect('jacl2db_admin~groups:create', array('name' => $name));
         }
 
@@ -384,7 +387,7 @@ class groupsCtrl extends jController
             }
             jAcl2DbManager::setRightsOnGroup($grpId, $rights);
         }
-        jMessage::add(jLocale::get('acl2.message.group.create.ok'), 'ok');
+        jMessage::add(Locale::get('acl2.message.group.create.ok'), 'ok');
         return $this->redirect('jacl2db_admin~groups:rights', array('group' => $grpId));
     }
 
@@ -420,12 +423,12 @@ class groupsCtrl extends jController
             jAcl2DbUserGroup::updateGroup($id, $name);
             $rep->data = [
                 'result' => 'ok',
-                'message' => jLocale::get('acl2.message.group.rename.ok')
+                'message' => Locale::get('acl2.message.group.rename.ok')
             ];
         } else {
             $rep->data = [
                 'result' => 'ok',
-                'message' => jLocale::get('acl2.message.group.rename.ok')
+                'message' => Locale::get('acl2.message.group.rename.ok')
             ];
         }
 
@@ -450,7 +453,7 @@ class groupsCtrl extends jController
 
             $rep->data = [
                 'result' => 'ok',
-                'message' => jLocale::get('acl2.message.group.delete.ok')
+                'message' => Locale::get('acl2.message.group.delete.ok')
             ];
         } catch (jAcl2DbAdminUIException $e) {
             $msg = $this->getExceptionMessage($e, 'group.delete');

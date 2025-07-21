@@ -1,13 +1,14 @@
 <?php
 /**
  * @author      Laurent Jouanneau
- * @copyright   2017-2024 Laurent Jouanneau
+ * @copyright   2017-2025 Laurent Jouanneau
  *
  * @see        http://www.jelix.org
  * @licence     http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
 
 namespace Jelix\Forms\Captcha;
+use Jelix\Locale\Locale;
 
 use Jelix\Locale\Locale;
 

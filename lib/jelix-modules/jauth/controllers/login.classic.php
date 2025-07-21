@@ -7,12 +7,14 @@
  * @author      Laurent Jouanneau
  * @contributor Antoine Detante, Bastien Jaillot, Loic Mathaud, Vincent Viaud, Julien Issler
  *
- * @copyright   2005-2022 Laurent Jouanneau, 2007 Antoine Detante, 2008 Bastien Jaillot
+ * @copyright   2005-2025 Laurent Jouanneau, 2007 Antoine Detante, 2008 Bastien Jaillot
  * @copyright   2008 Loic Mathaud, 2011 Vincent Viaud, 2015 Julien Issler
  *
  * @see        http://www.jelix.org
  * @licence  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
+use Jelix\Locale\Locale;
+
 class loginCtrl extends jController
 {
     public $sensitiveParameters = array('password');
@@ -119,7 +121,7 @@ class loginCtrl extends jController
         }
 
         $rep = $this->getResponse('htmlauth');
-        $rep->title = jLocale::get('auth.titlePage.login');
+        $rep->title = Locale::get('auth.titlePage.login');
         $rep->bodyTpl = 'jauth~index';
 
         $zp = array(
