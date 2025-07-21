@@ -34,7 +34,6 @@ class ActionSelector extends FastActionSelector
      * @param bool   $enableRequestPart true if the selector can contain the request part
      * @param bool   $toRetrieveUrl     true if the goal to have this selector is to generate an url
      *
-     * @throws Exception
      */
     public function __construct($sel, $enableRequestPart = false, $toRetrieveUrl = false)
     {

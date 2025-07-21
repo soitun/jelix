@@ -30,7 +30,6 @@ class SelectorUrlXmlMap extends \jSelectorSimpleFile
      * @param string $selInApp
      * @param string $selInVar
      *
-     * @throws \jExceptionSelector
      */
     public function __construct($selInApp, $selInVar = '')
     {
@@ -43,7 +42,7 @@ class SelectorUrlXmlMap extends \jSelectorSimpleFile
             $this->localFile = $m[1];
             $this->_localPath = $this->_localBasePath.$m[1];
         } elseif ($selInVar != '') {
-            throw new \jExceptionSelector(
+            throw new \Jelix\Core\Selector\Exception(
                 'jelix~errors.selector.invalid.syntax',
                 array($selInVar, $this->type)
             );
