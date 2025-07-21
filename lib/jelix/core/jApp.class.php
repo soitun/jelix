@@ -151,6 +151,11 @@ class jApp
         return self::$_currentApp->configPath.$file;
     }
 
+    public static function varLibPath($file = '')
+    {
+        return self::$_currentApp->varLibPath.$file;
+    }
+
     public static function wwwPath($file = '')
     {
         return self::$_currentApp->wwwPath.$file;

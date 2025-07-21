@@ -1,7 +1,5 @@
 <?php
 /**
- * see jISelector.iface.php for documentation about selectors.
- *
  * @package     jelix
  * @subpackage  core_selector
  *
@@ -31,7 +29,7 @@ class jSelectorDaoRecord extends jSelectorModule implements CustomRecordClassFil
 
     public function __construct($sel)
     {
-        if (jelix_scan_module_sel($sel, $this)) {
+        if ($this->_scan_sel($sel, $this)) {
             if ($this->module == '') {
                 $this->module = jApp::getCurrentModule();
             }

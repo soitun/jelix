@@ -18,6 +18,7 @@ use Jelix\PropertiesFile\Properties;
  *
  * @package  jelix
  * @subpackage core
+ * @deprecated use Jelix\Locale\Bundle instead
  */
 class jBundle
 {

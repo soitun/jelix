@@ -123,6 +123,8 @@ cd testapp/tests-jelix/jelix/installer/app1/var/log
   .dummy
 cd testapp/tests-jelix/jelix/kvdb/
   __ALL__
+cd testapp/tests-jelix/jelix/locales/
+  __ALL__
 cd testapp/tests-jelix/jelix/prefs/
   __ALL__
 cd testapp/tests-jelix/jelix/routing/

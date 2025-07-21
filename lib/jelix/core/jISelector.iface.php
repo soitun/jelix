@@ -18,38 +18,16 @@
  * @licence    GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 
+use Jelix\Core\Selector\SelectorInterface;
+
 /**
  * interface of selector classes.
  *
  * @package    jelix
  * @subpackage core_selector
+ * @deprecated use Jelix\Core\Selector\SelectorInterface instead
  */
-interface jISelector
+interface jISelector extends SelectorInterface
 {
-    /**
-     * @return string file path corresponding to the resource pointing by the selector
-     */
-    public function getPath();
 
-    /**
-     * @return string file path of the compiled file (if the main file should be compiled by jelix)
-     */
-    public function getCompiledFilePath();
-
-    /**
-     * @return null|object the compiler used to compile file
-     */
-    public function getCompiler();
-
-    /**
-     * @return bool true if the compiler compile many file at one time
-     */
-    public function useMultiSourceCompiler();
-
-    /**
-     * @param bool $full true if you want a full selector ("type:...")
-     *
-     * @return string the selector
-     */
-    public function toString($full = false);
 }

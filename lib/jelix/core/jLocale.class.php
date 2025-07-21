@@ -14,12 +14,14 @@
  * @see        https://www.jelix.org
  * @licence    GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
+use Jelix\Locale\Locale;
 
 /**
  * static class to get a localized string.
  *
  * @package  jelix
  * @subpackage core
+ * @deprecated use Jelix\Locale\Locale instead
  */
 class jLocale
 {
@@ -126,7 +128,7 @@ class jLocale
      * @param $key
      * @param $locale
      * @param $charset
-     * @return jBundle
+     * @return array jBundle and selector object
      * @throws jExceptionSelector
      */
     public static function getBundle($key, $locale = null, $charset = null)
@@ -219,28 +221,11 @@ class jLocale
      * @param mixed  $l
      *
      * @return string the corresponding locale
+     * @deprecated use Jelix\Locale\Locale::getCorrespondingLocale() instead
      */
     public static function getCorrespondingLocale($l, $strictCorrespondance = false)
     {
-        if (strpos($l, '_') === false) {
-            $l = self::langToLocale($l);
-        }
-
-        if ($l != '') {
-            $avLoc = &jApp::config()->availableLocales;
-            if (in_array($l, $avLoc)) {
-                return $l;
-            }
-            if ($strictCorrespondance) {
-                return '';
-            }
-            $l2 = self::langToLocale(substr($l, 0, strpos($l, '_')));
-            if ($l2 != $l && in_array($l2, $avLoc)) {
-                return $l2;
-            }
-        }
-
-        return '';
+        return Locale::getCorrespondingLocale($l, $strictCorrespondance);
     }
 
     /**
@@ -248,35 +233,12 @@ class jLocale
      * by the browser, and which is available in the application.
      *
      * @return string the locale. empty if not found.
+     * @deprecated use Jelix\Locale\Locale::getPreferedLocaleFromRequest() instead
      */
     public static function getPreferedLocaleFromRequest()
     {
-        if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-            return '';
-        }
-
-        $languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-        foreach ($languages as $bl) {
-            if (!preg_match('/^([a-zA-Z]{2,3})(?:[-_]([a-zA-Z]{2,3}))?(;q=[0-9]\\.[0-9])?$/', $bl, $match)) {
-                continue;
-            }
-            $l = strtolower($match[1]);
-            if (isset($match[2])) {
-                $l .= '_'.strtoupper($match[2]);
-            }
-            $lang = self::getCorrespondingLocale($l);
-            if ($lang != '') {
-                return $lang;
-            }
-        }
-
-        return '';
+       return Locale::getPreferedLocaleFromRequest();
     }
-
-    /**
-     * @var array content of the lang_to_locale.ini.php
-     */
-    protected static $langToLocale;
 
     /**
      * returns the locale corresponding to a lang.
@@ -287,54 +249,21 @@ class jLocale
      * @param string $lang a lang code (xx)
      *
      * @return string the corresponding locale (xx_YY)
+     * @deprecated use Jelix\Locale\Locale::langToLocale() instead
      */
     public static function langToLocale($lang)
     {
-        $conf = jApp::config();
-        if (isset($conf->langToLocale['locale'][$lang])) {
-            return $conf->langToLocale['locale'][$lang];
-        }
-        if (is_null(self::$langToLocale)) {
-            $content = @parse_ini_file(JELIX_LIB_CORE_PATH.'lang_to_locale.ini.php');
-            self::$langToLocale = $content['locale'];
-        }
-        if (isset(self::$langToLocale[$lang])) {
-            return self::$langToLocale[$lang];
-        }
-
-        return '';
+        return Locale::langToLocale($lang);
     }
-
-    /**
-     * @var string[][] first key is lang code of translation of names, second key is lang code
-     */
-    protected static $langNames = array();
 
     /**
      * @param string $lang       the lang for which we want the name
      * @param string $langOfName if empty, return the name in its own language
-     *
+     * @deprecated use Jelix\Locale\Locale::getLangName() instead
      * @since 1.7.0
      */
     public static function getLangName($lang, $langOfName = '')
     {
-        if ($langOfName == '') {
-            $langOfName = '_';
-        }
-
-        if (!isset(self::$langNames[$langOfName])) {
-            $fileName = 'lang_names_'.$langOfName.'.ini';
-            if (!file_exists(__DIR__.'/'.$fileName)) {
-                $fileName = 'lang_names_en.ini';
-            }
-            $names = parse_ini_file($fileName, false, INI_SCANNER_RAW);
-            self::$langNames[$langOfName] = $names['names'];
-        }
-
-        if (isset(self::$langNames[$langOfName][$lang])) {
-            return self::$langNames[$langOfName][$lang];
-        }
-
-        return $lang;
+        return Locale::getLangName($lang, $langOfName);
     }
 }

@@ -16,11 +16,14 @@
     <testsuite name="Jelix Events">
       <directory>jelix/events/</directory>
     </testsuite>
-    <testsuite name="Jelix KVDb">
-      <directory>jelix/kvdb/</directory>
-    </testsuite>
     <testsuite name="Jelix Installer">
       <directory>jelix/installer/</directory>
+    </testsuite>
+    <testsuite name="Jelix locales">
+      <directory>jelix/locales</directory>
+    </testsuite>
+    <testsuite name="Jelix KVDb">
+      <directory>jelix/kvdb/</directory>
     </testsuite>
     <testsuite name="Jelix Utils">
       <directory>jelix/utils/</directory>

@@ -310,6 +310,7 @@ Default option value: "'.$this->defaultRuleForComposerJson.'"
         $this->createDir($varPath.'sessions/');
         $this->createDir($varPath.'mails/');
         $this->createDir($varPath.'db/sqlite3/');
+        $this->createDir($varPath.'lib/');
 
         $this->createDir($appPath.'install/uninstall/');
         $this->createDir($appPath.'modules');
@@ -387,6 +388,7 @@ Default option value: "'.$this->defaultRuleForComposerJson.'"
         $this->createFile(\jApp::appPath().'app/overloads/.dummy', 'dummy.tpl', array());
         $this->createFile(\jApp::appPath().'app/themes/default/.dummy', 'dummy.tpl', array());
         $this->createFile(\jApp::varPath().'uploads/.dummy', 'dummy.tpl', array());
+        $this->createFile(\jApp::varPath().'lib/.dummy', 'dummy.tpl', array());
         $this->createFile($appPath.'plugins/.dummy', 'dummy.tpl', array());
         $this->createFile(\jApp::tempBasePath().'.dummy', 'dummy.tpl', array());
 

@@ -33,6 +33,12 @@ function jelix_read_ini($fileName, $config = null, $ignoredSection = array())
     );
 }
 
+/**
+ * @param string $selStr
+ * @param object $selObj selector to fill
+ * @return bool true if filled
+ * @deprecated
+ */
 function jelix_scan_module_sel($selStr, $selObj)
 {
     if (preg_match('/^(([a-zA-Z0-9_\\.]+)~)?([a-zA-Z0-9_\\.]+)$/', $selStr, $m)) {

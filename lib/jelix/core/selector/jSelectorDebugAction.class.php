@@ -1,7 +1,5 @@
 <?php
 /**
- * see jISelector.iface.php for documentation about selectors.
- *
  * @package     jelix
  * @subpackage  core_selector
  *
@@ -20,6 +18,7 @@
  *
  * @package    jelix
  * @subpackage core_selector
+ * @deprecated
  */
 class jSelectorDebugAction extends jSelectorActFast
 {

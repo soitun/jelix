@@ -21,6 +21,8 @@ class jAppInstance
 
     public $wwwPath = '';
 
+    public $varLibPath = '';
+
     /**
      * @var string
      *
@@ -103,6 +105,7 @@ class jAppInstance
         $this->configPath = (is_null($configPath) ? $this->varPath.'config/' : $configPath);
         $this->scriptPath = (is_null($scriptPath) ? $appPath.'scripts/' : $scriptPath);
         $this->applicationInitFile = $appPath.'application.init.php';
+        $this->varLibPath = $this->varPath.'lib/';
     }
 
     public function __destruct()

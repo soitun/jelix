@@ -37,6 +37,8 @@ class Migration
         // Migration objects should be idempotent
         $jelix17 = new Migrator\Jelix17($this->reporter);
         $jelix17->migrate();
+        $jelix19 = new Migrator\Jelix19($this->reporter);
+        $jelix19->migrate();
 
         $this->reporter->end();
     }
@@ -52,6 +54,8 @@ class Migration
         // Migration objects should be idempotent
         $jelix17 = new Migrator\Jelix17($this->reporter);
         $jelix17->localMigrate();
+        $jelix19 = new Migrator\Jelix19($this->reporter);
+        $jelix19->localMigrate();
 
         $this->reporter->end();
     }
