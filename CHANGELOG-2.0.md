@@ -114,8 +114,9 @@ class TestAttrEventsListener
   `jDbUtils`, `jDbWidget`
 - `jDaoFactoryBase`, `jDaoRecordBase`, `jDaoConditions`, `jDaoCondition`,
   `jDaoXmlException`, `jDaoDbMapper`
+- `jLocale`, `jBundle`, `jExceptionSelector`
 
-Internal classes and methods, you did not supposed to use, except for complex plugins:
+Internal classes and methods, you did not suppose to use, except for complex plugins:
 
 - `jIUrlSignificantHandler`
 - `jEventCompiler`
