@@ -1,6 +1,5 @@
 <?php
 /**
- * see Jelix/Core/Selector/SelectorInterface.php for documentation about selectors.
  *
  * @author      Laurent Jouanneau
  * @copyright   2005-2023 Laurent Jouanneau

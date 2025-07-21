@@ -52,12 +52,12 @@ class SelectorUrlXmlMap extends \jSelectorSimpleFile
 
     public function getCompiledFilePath()
     {
-        return App::buildPath('router/'.$this->file.'.creationinfos_20.php');
+        return App::varLibPath('router/'.$this->file.'.creationinfos_20.php');
     }
 
     public function getCompiledEntrypointFilePath($entryPointName)
     {
-        return App::buildPath('router/'.$this->file.'.'.rawurlencode($entryPointName).'.entrypoint.php');
+        return App::varLibPath('router/'.$this->file.'.'.rawurlencode($entryPointName).'.entrypoint.php');
     }
 
     public function getLocalPath()

@@ -94,7 +94,7 @@ class ListenerProvider implements \Psr\EventDispatcher\ListenerProviderInterface
     {
         if ($this->listenersList === null) {
 
-            $compiledFile = App::buildPath('listeners.php');
+            $compiledFile = App::varLibPath('listeners.php');
             if (!file_exists($compiledFile)) {
                 trigger_error('Compilation of event listeners list failed?', E_USER_WARNING);
                 return;

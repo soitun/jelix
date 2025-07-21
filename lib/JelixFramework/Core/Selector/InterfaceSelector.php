@@ -1,6 +1,5 @@
 <?php
 /**
- * see Jelix/Core/Selector/SelectorInterface.php for documentation about selectors.
  *
  * @author      Laurent Jouanneau
  * @contributor Christophe Thiriot
@@ -21,7 +20,6 @@ namespace Jelix\Core\Selector;
  * or one of its subdirectory.
  * syntax : "iface:module~ifacename" or "module~ifacename.
  *
- * @since 1.0.3
  */
 class InterfaceSelector extends ClassSelector
 {

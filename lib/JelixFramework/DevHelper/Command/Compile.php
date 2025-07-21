@@ -1,7 +1,7 @@
 <?php
 /**
  * @author      Laurent Jouanneau
- * @copyright   2024 Laurent Jouanneau
+ * @copyright   2024-2025 Laurent Jouanneau
  *
  * @see        https://jelix.org
  * @licence    GNU General Public Licence see LICENCE file or http://www.gnu.org/licenses/gpl.html

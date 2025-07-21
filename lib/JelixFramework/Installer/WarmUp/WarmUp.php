@@ -1,7 +1,7 @@
 <?php
 /**
  * @author      Laurent Jouanneau
- * @copyright   2023-2024 Laurent Jouanneau
+ * @copyright   2023-2025 Laurent Jouanneau
  *
  * @see         https://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
@@ -41,7 +41,7 @@ class WarmUp
     {
         $this->app = $app;
 
-        $buildPath = $app->buildPath;
+        $buildPath = $app->varLibPath;
         if (!file_exists($buildPath)) {
             Directory::create($buildPath);
         }

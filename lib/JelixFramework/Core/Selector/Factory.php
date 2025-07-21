@@ -11,7 +11,7 @@
  * @author      Laurent Jouanneau
  * @contributor Christophe Thiriot
  *
- * @copyright   2005-2014 Laurent Jouanneau
+ * @copyright   2005-2025 Laurent Jouanneau
  * @copyright   2008 Christophe Thiriot
  *
  * @see        http://www.jelix.org

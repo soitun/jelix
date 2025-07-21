@@ -2,7 +2,7 @@
 /**
  * @author     Laurent Jouanneau
  * @author     Gerald Croes
- * @copyright  2001-2005 CopixTeam, 2005-2024 Laurent Jouanneau
+ * @copyright  2001-2005 CopixTeam, 2005-2025 Laurent Jouanneau
  * Some parts of this file are took from Copix Framework v2.3dev20050901, CopixI18N.class.php, http://www.copix.org.
  * copyrighted by CopixTeam and released under GNU Lesser General Public Licence.
  * initial authors : Gerald Croes, Laurent Jouanneau.
@@ -37,8 +37,6 @@ class Locale
      * gets the current locale (xx_YY).
      *
      * @return string
-     *
-     * @since 1.7.0
      */
     public static function getCurrentLocale()
     {
@@ -73,7 +71,7 @@ class Locale
      * gets the correct string, for a given language.
      *   if it can't get the correct language, it will try to gets the string
      *   from the default language.
-     *   if both fails, it will raise an exception.
+     *   if both fail, it will raise an exception.
      *
      * @param string $key             the key of the localized string
      * @param array  $args            arguments to apply to the localized string with sprintf
@@ -170,7 +168,7 @@ class Locale
      *
      * @return array
      */
-    public static function getAlternativeLocales($locale, $config)
+    public static function getAlternativeLocales($locale, object $config)
     {
         $otherLocales = array();
         $similarLocale = self::langToLocale(substr($locale, 0, strpos($locale, '_')));
@@ -273,7 +271,7 @@ class Locale
      * returns the locale corresponding to a lang.
      *
      * The file lang_to_locale gives corresponding locales, but you can override these
-     * association into the langToLocale section of the main configuration
+     * associations into the langToLocale section of the main configuration
      *
      * @param string $lang a lang code (xx)
      *

@@ -1,12 +1,9 @@
 <?php
 /**
  * @author      Laurent Jouanneau
- * @contributor Christophe Thiriot
+ * @copyright   2025 Laurent Jouanneau
  *
- * @copyright   2005-2014 Laurent Jouanneau
- * @copyright   2008 Christophe Thiriot
- *
- * @see        http://www.jelix.org
+ * @see        https://www.jelix.org
  * @licence    GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 

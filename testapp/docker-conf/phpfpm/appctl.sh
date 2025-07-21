@@ -35,7 +35,7 @@ function resetApp() {
         rm -f $appdir/var/config/CLOSED
     fi
 
-    for vardir in log db/sqlite3 mails uploads; do
+    for vardir in log db/sqlite3 mails uploads lib; do
       if [ ! -d $appdir/var/$vardir ]; then
           mkdir $appdir/var/$vardir
       else

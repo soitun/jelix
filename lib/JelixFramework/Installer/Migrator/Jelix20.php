@@ -101,8 +101,8 @@ class Jelix20
 
         $this->modifyConfigurationsFile($localConfigIni, false);
 
-        Directory::create(App::buildPath());
-        file_put_contents(App::buildPath('.dummy'), '');
+        Directory::create(App::varLibPath());
+        file_put_contents(App::varLibPath('.dummy'), '');
 
         $this->reporter->message('Migration of local configuration to Jelix 2.0.0 is done', 'notice');
     }

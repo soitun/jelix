@@ -25,7 +25,8 @@ use Jelix\Core\App;
  *
  * Localization strings are stored in file properties.
  * Syntax: "module~prefixFile.keyString".
- * Corresponding file: locales/xx_XX/prefixFile.UTF-8.properties.
+ * Corresponding file: locales/xx_XX/prefixFile.properties.
+ * or locales/xx_XX/prefixFile.UTF-8.properties for deprecated properties files.
  * xx_XX is lang code set in the configuration
  */
 class LocaleSelector extends \Jelix\Core\Selector\ModuleSelector
@@ -109,7 +110,7 @@ class LocaleSelector extends \Jelix\Core\Selector\ModuleSelector
 
     protected function findPath($locale)
     {
-        $this->_cachePath = LocaleCompiler::getCacheFileName($this->module, $locale, $this->resource.$this->_suffix, App::buildPath());
+        $this->_cachePath = LocaleCompiler::getCacheFileName($this->module, $locale, $this->resource.$this->_suffix, App::varLibPath());
         return (is_readable($this->_cachePath));
     }
 

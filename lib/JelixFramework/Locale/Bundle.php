@@ -2,7 +2,7 @@
 /**
  * @author     Laurent Jouanneau
  * @author     Gerald Croes
- * @copyright  2001-2005 CopixTeam, 2005-2024 Laurent Jouanneau
+ * @copyright  2001-2005 CopixTeam, 2005-2025 Laurent Jouanneau
  *
  * @see        https://www.jelix.org
  * @licence    GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
@@ -12,6 +12,8 @@ namespace Jelix\Locale;
 
 /**
  * a bundle contains all readed properties in a given language.
+ *
+ * Only UTF-8 Support.
  */
 class Bundle
 {
@@ -66,6 +68,10 @@ class Bundle
      */
     public function getAllKeys()
     {
+        if ($this->_strings === null) {
+            $cache = $this->_file->getCompiledFilePath();
+            $this->_strings = include $cache;
+        }
         return $this->_strings;
     }
 }

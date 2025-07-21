@@ -39,7 +39,7 @@ class FormsWarmup implements WarmUpLauncherInterface
         $compiler = new \Jelix\Forms\Compiler\FormCompiler(
             $this->app->appPath,
             $this->app->varPath,
-            $this->app->buildPath,
+            $this->app->varLibPath,
         );
 
         foreach($modulesList as $name => $path) {
@@ -60,7 +60,7 @@ class FormsWarmup implements WarmUpLauncherInterface
         $compiler = new \Jelix\Forms\Compiler\FormCompiler(
             $this->app->appPath,
             $this->app->varPath,
-            $this->app->buildPath,
+            $this->app->varLibPath,
         );
         $compiler->compileFile($file->module, $file->filePath, str_replace('forms/', '', $file->subPath));
     }

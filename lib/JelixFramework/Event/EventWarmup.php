@@ -41,7 +41,7 @@ class EventWarmup implements WarmUpLauncherInterface
         foreach($modulesList as $name => $path) {
             $compiler->compileListenersFile($path, 'events.xml', $name);
         }
-        $compiler->save($this->app->buildPath.'listeners.php');
+        $compiler->save($this->app->varLibPath.'listeners.php');
     }
 
     public function doesItSupportFile(FilePlace $file) : bool

@@ -44,11 +44,11 @@ class ConfigurationWarmUp implements WarmUpLauncherInterface
      */
     public function launch(array $modulesList, int $step): void
     {
-        \jFile::createDir($this->app->buildPath.'config/');
+        \jFile::createDir($this->app->varLibPath.'config/');
         
         foreach($this->app->getFrameworkInfo()->getEntryPoints() as $ep)
         {
-            $staticConfigFile = $this->app->buildPath.AppConfig::getStaticBuildFilename($ep->getConfigFile());
+            $staticConfigFile = $this->app->varLibPath.AppConfig::getStaticBuildFilename($ep->getConfigFile());
             $compiler = new Compiler($ep->getConfigFile());
 
             $config = $compiler->readStaticConfiguration(false);

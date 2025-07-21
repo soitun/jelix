@@ -313,6 +313,7 @@ Default option value: "'.$this->defaultRuleForComposerJson.'"
         $this->createDir($varPath.'mails/');
         $this->createDir($varPath.'build/');
         $this->createDir($varPath.'db/sqlite3/');
+        $this->createDir($varPath.'lib/');
 
         $this->createDir($appPath.'install/uninstall/');
         $this->createDir($appPath.'modules');
@@ -382,6 +383,7 @@ Default option value: "'.$this->defaultRuleForComposerJson.'"
         $this->createFile($appPath.'dev.php', 'dev.php.tpl', $param, 'Script for developer commands');
         $this->createFile($appPath.'console.php', 'console.php.tpl', $param, 'Script for module commands');
 
+<<<<<<< HEAD
         $this->createFile(App::logPath().'.dummy', 'dummy.tpl', array());
         $this->createFile(App::varPath().'mails/.dummy', 'dummy.tpl', array());
         $this->createFile(App::varPath().'sessions/.dummy', 'dummy.tpl', array());
@@ -389,6 +391,15 @@ Default option value: "'.$this->defaultRuleForComposerJson.'"
         $this->createFile(App::appPath().'app/themes/default/.dummy', 'dummy.tpl', array());
         $this->createFile(App::varPath().'uploads/.dummy', 'dummy.tpl', array());
         $this->createFile(App::varPath().'build/.dummy', 'dummy.tpl', array());
+=======
+        $this->createFile(\jApp::logPath().'.dummy', 'dummy.tpl', array());
+        $this->createFile(\jApp::varPath().'mails/.dummy', 'dummy.tpl', array());
+        $this->createFile(\jApp::varPath().'sessions/.dummy', 'dummy.tpl', array());
+        $this->createFile(\jApp::appPath().'app/overloads/.dummy', 'dummy.tpl', array());
+        $this->createFile(\jApp::appPath().'app/themes/default/.dummy', 'dummy.tpl', array());
+        $this->createFile(\jApp::varPath().'uploads/.dummy', 'dummy.tpl', array());
+        $this->createFile(\jApp::varPath().'lib/.dummy', 'dummy.tpl', array());
+>>>>>>> github/jelix-1.9.x
         $this->createFile($appPath.'plugins/.dummy', 'dummy.tpl', array());
         $this->createFile(App::tempBasePath().'.dummy', 'dummy.tpl', array());
 

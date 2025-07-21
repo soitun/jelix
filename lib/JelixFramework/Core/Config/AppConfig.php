@@ -82,7 +82,7 @@ class AppConfig
         $config = array();
         $cacheFile = self::getCacheFilename($configFile);
 
-        $staticConfigFile = App::buildPath(self::getStaticBuildFilename($configFile));
+        $staticConfigFile = App::varLibPath(self::getStaticBuildFilename($configFile));
 
         if (!file_exists($staticConfigFile)) {
             throw new Exception('Error while reading configuration file: static cache is missing -- run the installer to create it '.$staticConfigFile);
@@ -143,7 +143,7 @@ class AppConfig
         $config = array();
         $cacheFile = self::getCacheFilename($configFile);
 
-        $staticConfigFile = App::buildPath(self::getStaticBuildFilename($configFile));
+        $staticConfigFile = App::varLibPath(self::getStaticBuildFilename($configFile));
 
         if (!file_exists($staticConfigFile)) {
             $compiler = new Compiler($configFile);

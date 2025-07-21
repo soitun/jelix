@@ -129,9 +129,9 @@ class App
         return self::$_currentApp->configPath.$file;
     }
 
-    public static function buildPath($file = '')
+    public static function varLibPath($file = '')
     {
-        return self::$_currentApp->buildPath.$file;
+        return self::$_currentApp->varLibPath.$file;
     }
 
     public static function wwwPath($file = '')
