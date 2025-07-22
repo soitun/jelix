@@ -56,23 +56,8 @@ class jConfigCompiler
      */
     public static function read($configFile, $allModuleInfo = false, $isCli = false, $pseudoScriptName = '')
     {
-        $tempPath = jApp::tempBasePath();
         $appSystemPath = jApp::appSystemPath();
         $varConfigPath = jApp::varConfigPath();
-
-        if ($tempPath == '/') {
-            // if it equals to '/', this is because realpath has returned false in the application.init.php
-            // so this is because the path doesn't exist.
-            throw new Exception('Application temp directory doesn\'t exist !', 3);
-        }
-
-        if (!is_writable($tempPath)) {
-            throw new Exception('Application temp base directory is not writable -- ('.$tempPath.')', 4);
-        }
-
-        if (!is_writable(jApp::logPath())) {
-            throw new Exception('Application log directory is not writable -- ('.jApp::logPath().')', 4);
-        }
 
         // this is the defaultconfig file of JELIX itself
         $config = \jFile::mergeIniFile(__DIR__.'/defaultconfig.ini.php');
