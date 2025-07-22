@@ -1,7 +1,7 @@
 <?php
 /**
  * @author      Laurent Jouanneau
- * @copyright   2008-2018 Laurent Jouanneau
+ * @copyright   2008-2025 Laurent Jouanneau
  *
  * @see        http://jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
@@ -192,7 +192,8 @@ class DatabaseHelpers
             $dataToInsert = array($dataToInsert);
         }
         $cnt = \jDb::getConnection($this->dbProfile);
-        $daoMapper = new DbMapper(new \jDaoContext($this->dbProfile, $cnt));
+        $context = new \jDaoContext($this->dbProfile, $cnt);
+        $daoMapper = new DbMapper($context);
         $count = 0;
         foreach ($dataToInsert as $daoData) {
             if (!isset($daoData['dao'])
@@ -201,8 +202,9 @@ class DatabaseHelpers
             ) {
                 throw new \Exception('Bad format for dao data file.');
             }
+            $daoFile = $context->resolveDaoPath($daoData['dao']);
             $count += $daoMapper->insertDaoData(
-                $daoData['dao'],
+                $daoFile,
                 $daoData['properties'],
                 $daoData['data'],
                 $option

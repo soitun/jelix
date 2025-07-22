@@ -10,8 +10,6 @@
 namespace Jelix\Forms\Captcha;
 use Jelix\Locale\Locale;
 
-use Jelix\Locale\Locale;
-
 class SimpleCaptchaValidator implements CaptchaValidatorInterface
 {
     /**
