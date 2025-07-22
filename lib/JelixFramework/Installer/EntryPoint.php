@@ -114,7 +114,7 @@ class EntryPoint
         $this->appEpConfigIni = new IniModifier($appSystemPath, ';<'.'?php die(\'\');?'.'>');
         $this->localEpConfigIni = new IniModifier($varConfigPath, ';<'.'?php die(\'\');?'.'>');
 
-        $this->config = \jConfigCompiler::read(
+        $this->config = \Jelix\Core\Config\Compiler::read(
             $configFile,
             true,
             $this->_isCliScript,

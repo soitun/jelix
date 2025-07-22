@@ -8,7 +8,9 @@
 * @link        http://www.jelix.org
 * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
 */
-require_once(JELIX_LIB_CORE_PATH.'jConfigCompiler.class.php');
+
+use Jelix\Core\Config\Compiler;
+
 
 class requestsTest extends \Jelix\UnitTests\UnitTestCase {
 
@@ -40,7 +42,7 @@ class requestsTest extends \Jelix\UnitTests\UnitTestCase {
         $this->fServer = $server;
         $this->fServer->setHttpRequest($url);
 
-        $config = jConfigCompiler::read('index/config.ini.php',
+        $config = Compiler::read('index/config.ini.php',
                                           true,
                                           false,
                                           $scriptPath);

@@ -29,7 +29,7 @@ class ModulesCommands
         $fmkInfos = \Jelix\Core\Infos\FrameworkInfos::load();
         $ep = $fmkInfos->getDefaultEntryPointInfo();
 
-        \jApp::setConfig(\jConfigCompiler::read($ep->getConfigFile(), true, true, 'console.php'));
+        \jApp::setConfig(\Jelix\Core\Config\Compiler::read($ep->getConfigFile(), true, true, 'console.php'));
         \jApp::setCoord(new \jCoordinator());
         \jFile::createDir(\jApp::tempPath(), \jApp::config()->chmodDir);
 

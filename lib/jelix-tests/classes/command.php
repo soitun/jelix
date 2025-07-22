@@ -14,6 +14,7 @@ require_once(__DIR__.'/JelixTestSuite.class.php');
 require_once(__DIR__.'/junittestcase.class.php');
 require_once(__DIR__.'/junittestcasedb.class.php');
 
+use Jelix\Core\Config\Compiler;
 use PHPUnit\TextUI\TestRunner;
 
 /**
@@ -109,7 +110,7 @@ class jelix_TextUI_Command extends PHPUnit\TextUI\Command {
 
         // let's load configuration now, and coordinator. it could be needed by tests
         // (during load of their php files or during execution)
-        jApp::setConfig(jConfigCompiler::readAndCache($epInfo->getConfigFileName(), null, $this->entryPoint));
+        jApp::setConfig(Compiler::readAndCache($epInfo->getConfigFileName(), null, $this->entryPoint));
         jApp::setCoord(new jCoordinator('', false));
 
         if ($modulesTests == 0) {

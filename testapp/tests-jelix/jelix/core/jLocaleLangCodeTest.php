@@ -54,7 +54,7 @@ class jLocaleLangCodeTest extends \Jelix\UnitTests\UnitTestCase {
         $this->assertEquals('en_US', Locale::getCorrespondingLocale('en_US'));
         $this->assertEquals('en_US', Locale::getCorrespondingLocale('en_GB'));
         jApp::config()->availableLocales = array('en_US', 'fr_CA');
-        jApp::config()->langToLocale = array('locale'=>array('fr'=>'fr_CA')); // simulate jConfigCompiler
+        jApp::config()->langToLocale = array('locale'=>array('fr'=>'fr_CA')); // simulate Config\Compiler
         $this->assertEquals('en_US', Locale::getCorrespondingLocale('en'));
         $this->assertEquals('fr_CA', Locale::getCorrespondingLocale('fr'));
         $this->assertEquals('fr_CA', Locale::getCorrespondingLocale('fr_FR'));
@@ -66,7 +66,7 @@ class jLocaleLangCodeTest extends \Jelix\UnitTests\UnitTestCase {
         $this->assertEquals('en_US', Locale::getPreferedLocaleFromRequest());
         
         jApp::config()->availableLocales = array('en_US', 'fr_CA');
-        jApp::config()->langToLocale = array('locale'=>array('fr'=>'fr_CA')); // simulate jConfigCompiler
+        jApp::config()->langToLocale = array('locale'=>array('fr'=>'fr_CA')); // simulate Config\Compiler
         $this->assertEquals('en_US', Locale::getPreferedLocaleFromRequest());
 
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'fr_CA,en_GB';

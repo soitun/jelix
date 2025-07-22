@@ -49,7 +49,7 @@ abstract class UnitTestCase extends TestCase {
      * @param string $entryPoint the entrypoint name as indicated into project.xml
      */
     protected static function initJelixConfig($config = 'index/config.ini.php', $entryPoint = 'index.php') {
-        $config = \jConfigCompiler::read($config, true, true, $entryPoint);
+        $config = \Jelix\Core\Config\Compiler::read($config, true, true, $entryPoint);
         \jApp::setConfig($config);
         \jApp::setCoord(null);
     }
@@ -71,7 +71,7 @@ abstract class UnitTestCase extends TestCase {
         self::$fakeServer = new \Jelix\FakeServerConf\ApacheMod(\jApp::wwwPath(), '/'.$entryPoint);
         self::$fakeServer->setHttpRequest($url);
 
-        $config = \jConfigCompiler::read($config, true, false, '/'.$entryPoint);
+        $config = \Jelix\Core\Config\Compiler::read($config, true, false, '/'.$entryPoint);
         $coord = new CoordinatorForTest($config, false);
         \jApp::setCoord($coord);
         $request = new \jClassicRequest();

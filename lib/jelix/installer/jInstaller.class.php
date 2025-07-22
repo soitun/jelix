@@ -23,8 +23,6 @@ require_once JELIX_LIB_PATH.'installer/jInstallerModule.class.php';
 
 require_once JELIX_LIB_PATH.'installer/jInstallerEntryPoint.class.php';
 
-require_once JELIX_LIB_PATH.'core/jConfigCompiler.class.php';
-
 require_once JELIX_LIB_PATH.'installer/jInstallerMessageProvider.class.php';
 
 /**

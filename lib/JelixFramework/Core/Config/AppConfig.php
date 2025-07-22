@@ -10,6 +10,10 @@
  * @licence  GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 
+namespace Jelix\Core\Config;
+
+use jApp;
+
 /**
  * static class which loads the configuration.
  *
@@ -17,7 +21,7 @@
  * @subpackage core
  * @static
  */
-class jConfig
+class AppConfig
 {
     /**
      * indicate if the configuration was loading from the cache (true) or
@@ -42,21 +46,21 @@ class jConfig
      * load and read the configuration of the application
      * The combination of all configuration files (the given file
      * and the mainconfig.ini.php) is stored
-     * in a single temporary file. So it calls the jConfigCompiler
+     * in a single temporary file. So it calls the Config\Compiler
      * class if needed.
      *
      * @param string $configFile the config file name
      *
      * @return object it contains all configuration options
      *
-     * @see jConfigCompiler
+     * @see \Jelix\Core\Config\Compiler
      */
     public static function load($configFile)
     {
         self::checkEnvironment();
 
         $config = array();
-        $file = jConfigCompiler::getCacheFilename($configFile);
+        $file = Compiler::getCacheFilename($configFile);
 
         self::$fromCache = true;
         if (!file_exists($file)) {
@@ -82,7 +86,7 @@ class jConfig
                 // let's read the cache file
                 if (BYTECODE_CACHE_EXISTS) {
                     include $file;
-                    $config = (object) $config;
+                    $config = (object)$config;
                 } else {
                     $config = \jFile::mergeIniFile($file);
                 }
@@ -100,7 +104,7 @@ class jConfig
             }
         }
         if (!self::$fromCache) {
-            return jConfigCompiler::readAndCache($configFile);
+            return Compiler::readAndCache($configFile);
         }
 
         return $config;
@@ -117,16 +121,16 @@ class jConfig
         }
 
         if (!is_writable($tempPath)) {
-            throw new Exception('Application temp base directory is not writable -- ('.$tempPath.')', 4);
+            throw new Exception('Application temp base directory is not writable -- (' . $tempPath . ')', 4);
         }
 
         if (!is_writable(jApp::logPath())) {
-            throw new Exception('Application log directory is not writable -- ('.jApp::logPath().')', 4);
+            throw new Exception('Application log directory is not writable -- (' . jApp::logPath() . ')', 4);
         }
     }
 
     public static function getDefaultConfigFile()
     {
-        return __DIR__.'/defaultconfig.ini.php';
+        return __DIR__ . '/defaultconfig.ini.php';
     }
 }

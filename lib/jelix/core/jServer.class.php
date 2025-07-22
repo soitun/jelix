@@ -62,8 +62,8 @@ class jServer
      */
     public static function getDomainName()
     {
-        // domainName should not be empty, as it is filled by jConfigCompiler
-        // but let's check it anyway, jConfigCompiler cache may not be valid anymore
+        // domainName should not be empty, as it is filled by Config\Compiler
+        // but let's check it anyway, Config\Compiler cache may not be valid anymore
         if (jApp::config()->domainName != '') {
             return jApp::config()->domainName;
         }

@@ -11,7 +11,6 @@ namespace Jelix\Installer;
 
 use Jelix\Core\Profiles;
 use Jelix\Dependencies\ItemException;
-
 use Jelix\IniFile\IniModifierInterface;
 use Jelix\Installer\Module\API\ConfigurationHelpers;
 use Jelix\Installer\Module\API\LocalConfigurationHelpers;
@@ -840,7 +839,7 @@ class Configurator
             // we re-load configuration file for each module because
             // previous module configurator could have modify it.
             $entryPoint->setConfigObj(
-                \jConfigCompiler::read(
+                \Jelix\Core\Config\Compiler::read(
                     $entryPoint->getConfigFileName(),
                     true,
                     $entryPoint->isCliScript(),

@@ -100,7 +100,7 @@ class InitAdmin extends \Jelix\DevHelper\AbstractCommandForApp
             }
         }
 
-        \jApp::setConfig(\jConfigCompiler::read(
+        \jApp::setConfig(\Jelix\Core\Config\Compiler::read(
             $ep->getConfigFile(),
             true,
             true,
@@ -111,7 +111,7 @@ class InitAdmin extends \Jelix\DevHelper\AbstractCommandForApp
         $installConfig = new \Jelix\IniFile\IniModifier(\jApp::varConfigPath('installer.ini.php'));
 
         $mainIniFile = new \Jelix\IniFile\MultiIniModifier(
-            \jConfig::getDefaultConfigFile(),
+            \Jelix\Core\Config\AppConfig::getDefaultConfigFile(),
             \jApp::mainConfigFile()
         );
         $inifile = new \Jelix\IniFile\MultiIniModifier(

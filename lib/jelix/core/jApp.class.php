@@ -10,6 +10,8 @@
  * @licence    http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
 
+use Jelix\Core\Config\AppConfig;
+
 /**
  * @method static void setConfig($config)
  * @method static void declareModulesDir($basePath, $modules = null)
@@ -244,7 +246,7 @@ class jApp
         if (is_object($configFile)) {
             self::setConfig($configFile);
         } else {
-            self::setConfig(jConfig::load($configFile));
+            self::setConfig(AppConfig::load($configFile));
         }
         self::$_currentApp->config->enableErrorHandler = $enableErrorHandler;
     }

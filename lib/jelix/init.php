@@ -23,6 +23,9 @@
  * @deprecated
  * @see jFramework::version()
  */
+
+use Jelix\Core\Config\Compiler;
+
 define('JELIX_VERSION', '1.9.0-pre');
 
 /*
@@ -59,8 +62,6 @@ require JELIX_LIB_CORE_PATH.'jBasicErrorHandler.class.php';
 require JELIX_LIB_CORE_PATH.'jException.class.php';
 
 require JELIX_LIB_CORE_PATH.'jHttpErrorException.class.php';
-
-require JELIX_LIB_CORE_PATH.'jConfig.class.php';
 
 require JELIX_LIB_CORE_PATH.'jSelector.class.php';
 
@@ -211,7 +212,7 @@ function checkAppOpened()
         $basePath = jApp::urlBasePath();
         if ($basePath == null) {
             try {
-                $urlScript = $_SERVER[jConfigCompiler::findServerName()];
+                $urlScript = $_SERVER[Compiler::findServerName()];
                 $basePath = substr($urlScript, 0, strrpos($urlScript, '/')) . '/';
             } catch (Exception $e) {
                 $basePath = '/';
