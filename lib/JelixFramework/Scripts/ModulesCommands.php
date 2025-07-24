@@ -1,14 +1,15 @@
 <?php
 /**
  * @author      Laurent Jouanneau
- * @copyright   2018 Laurent Jouanneau
+ * @copyright   2018-2025 Laurent Jouanneau
  *
- * @see        http://www.jelix.org
+ * @see         https://www.jelix.org
  * @licence     MIT
  */
 
 namespace Jelix\Scripts;
 
+use Jelix\Core\Config\AppConfig;
 use Symfony\Component\Console\Application;
 
 /**
@@ -29,7 +30,8 @@ class ModulesCommands
         $fmkInfos = \Jelix\Core\Infos\FrameworkInfos::load();
         $ep = $fmkInfos->getDefaultEntryPointInfo();
 
-        \jApp::setConfig(\Jelix\Core\Config\Compiler::read($ep->getConfigFile(), true, true, 'console.php'));
+        $config = AppConfig::loadForCli($ep->getConfigFile(), 'console.php');
+        \jApp::setConfig($config);
         \jApp::setCoord(new \jCoordinator());
         \jFile::createDir(\jApp::tempPath(), \jApp::config()->chmodDir);
 

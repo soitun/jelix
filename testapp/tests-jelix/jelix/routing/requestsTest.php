@@ -4,8 +4,8 @@
 * @subpackage  jelix_tests module
 * @author      Laurent Jouanneau
 * @contributor
-* @copyright   2007-2013 Laurent Jouanneau
-* @link        http://www.jelix.org
+* @copyright   2007-2025 Laurent Jouanneau
+* @link        https://www.jelix.org
 * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
 */
 
@@ -42,10 +42,8 @@ class requestsTest extends \Jelix\UnitTests\UnitTestCase {
         $this->fServer = $server;
         $this->fServer->setHttpRequest($url);
 
-        $config = Compiler::read('index/config.ini.php',
-                                          true,
-                                          false,
-                                          $scriptPath);
+        $compiler = new Compiler('index/config.ini.php', $scriptPath);
+        $config = $compiler->read(true);
         if ($scriptNameServerVariable) {
             $config->urlengine['scriptNameServerVariable'] = $scriptNameServerVariable;
         }

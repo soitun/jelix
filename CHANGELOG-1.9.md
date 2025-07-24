@@ -27,7 +27,9 @@ New features
   that will call `php dev.php compile $FULLPATH_OF_FILE`, to compile a single
   file without calling the installer before each test into your browser.
   Files that are compiled during installers:
+  - configuration
   - properties files for locales
+
 
 - The `charset` configuration property is deprecated. You should keep the default value
   to UTF-8. If not, convert your locales and other data to UTF-8 as the support

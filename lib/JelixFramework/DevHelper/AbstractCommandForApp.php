@@ -1,14 +1,15 @@
 <?php
 /**
  * @author      Laurent Jouanneau
- * @copyright   2016 Laurent Jouanneau
+ * @copyright   2016-2025 Laurent Jouanneau
  *
- * @see        http://www.jelix.org
+ * @see         https://www.jelix.org
  * @licence     MIT
  */
 
 namespace Jelix\DevHelper;
 
+use Jelix\Core\Config\AppConfig;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -128,12 +129,7 @@ abstract class AbstractCommandForApp extends AbstractCommand
 
         $configFile = $entrypoint->getConfigFile();
 
-        \jApp::setConfig(\Jelix\Core\Config\Compiler::read(
-            $configFile,
-            true,
-            true,
-            $entrypoint->getFile()
-        ));
+        \jApp::setConfig(AppConfig::loadForCli($configFile, $entrypoint->getFile()));
         \jFile::createDir(\jApp::tempPath(), \jApp::config()->chmodDir);
     }
 
