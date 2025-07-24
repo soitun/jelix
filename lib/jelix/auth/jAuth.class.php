@@ -15,6 +15,8 @@
  * @licence  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
 use Jelix\Locale\Locale;
+use Jelix\Event\Event;
+
 
 require JELIX_LIB_PATH.'auth/jIAuthDriver.iface.php';
 
@@ -338,7 +340,7 @@ class jAuth
     {
         $dr = self::getDriver();
         if ($dr->saveNewUser($user)) {
-            $eventResp = jEvent::notify('AuthNewUser', array('user' => $user));
+            $eventResp = Event::notify('AuthNewUser', array('user' => $user));
             $allResponses = array();
             if ($eventResp->inResponse('doUpdate', true, $allResponses)) {
                 $dr->updateUser($user);
@@ -379,7 +381,7 @@ class jAuth
             $config = self::loadConfig();
             $_SESSION[$config['session_name']] = $user;
         }
-        jEvent::notify('AuthUpdateUser', array('user' => $user));
+        Event::notify('AuthUpdateUser', array('user' => $user));
 
         return true;
     }
@@ -396,7 +398,7 @@ class jAuth
     public static function removeUser($login)
     {
         $dr = self::getDriver();
-        $eventresp = jEvent::notify('AuthCanRemoveUser', array('login' => $login));
+        $eventresp = Event::notify('AuthCanRemoveUser', array('login' => $login));
         foreach ($eventresp->getResponse() as $rep) {
             if (!isset($rep['canremove']) || $rep['canremove'] === false) {
                 return false;
@@ -406,7 +408,7 @@ class jAuth
         if ($dr->removeUser($login) === false) {
             return false;
         }
-        jEvent::notify('AuthRemoveUser', array('login' => $login, 'user' => $user));
+        Event::notify('AuthRemoveUser', array('login' => $login, 'user' => $user));
         if (self::isConnected() && self::getUserSession()->login === $login) {
             self::logout();
         }
@@ -482,7 +484,7 @@ class jAuth
         if ($dr->changePassword($login, $newpassword) === false) {
             return false;
         }
-        jEvent::notify('AuthChangePassword', array('login' => $login, 'password' => $newpassword));
+        Event::notify('AuthChangePassword', array('login' => $login, 'password' => $newpassword));
         if (self::isConnected() && self::getUserSession()->login === $login) {
             $config = self::loadConfig();
             $_SESSION[$config['session_name']] = self::getUser($login);
@@ -534,7 +536,7 @@ class jAuth
         $dr = self::getDriver();
         $config = self::loadConfig();
 
-        $eventresp = jEvent::notify('AuthBeforeLogin', array('login' => $login));
+        $eventresp = Event::notify('AuthBeforeLogin', array('login' => $login));
         foreach ($eventresp->getResponse() as $rep) {
             if (isset($rep['processlogin']) && $rep['processlogin'] === false) {
                 return false;
@@ -544,7 +546,7 @@ class jAuth
         if ($user = $dr->verifyPassword($login, $password)) {
             // the given login may be another property like email, so get the real login
             $login = $user->login;
-            $eventresp = jEvent::notify('AuthCanLogin', array('login' => $login, 'user' => $user));
+            $eventresp = Event::notify('AuthCanLogin', array('login' => $login, 'user' => $user));
             foreach ($eventresp->getResponse() as $rep) {
                 if (!isset($rep['canlogin']) || $rep['canlogin'] === false) {
                     return false;
@@ -559,11 +561,11 @@ class jAuth
                 $persistence = 0;
             }
 
-            jEvent::notify('AuthLogin', array('login' => $login, 'persistence' => $persistence));
+            Event::notify('AuthLogin', array('login' => $login, 'persistence' => $persistence));
 
             return true;
         }
-        jEvent::notify('AuthErrorLogin', array('login' => $login));
+        Event::notify('AuthErrorLogin', array('login' => $login));
 
         return false;
     }
@@ -591,7 +593,7 @@ class jAuth
     public static function logout()
     {
         $config = self::loadConfig();
-        jEvent::notify('AuthLogout', array('login' => $_SESSION[$config['session_name']]->login));
+        Event::notify('AuthLogout', array('login' => $_SESSION[$config['session_name']]->login));
         $_SESSION[$config['session_name']] = new jAuthDummyUser();
 
         if (isset($config['session_destroy']) && $config['session_destroy']) {

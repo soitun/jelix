@@ -11,6 +11,8 @@
  *
  * @since 1.1
  */
+use Jelix\Event\EventListener;
+use Jelix\Event\Event;
 
 /**
  * @package     jelix-modules
@@ -18,12 +20,12 @@
  *
  * @since 1.1
  */
-class jacl2dbListener extends jEventListener
+class jacl2dbListener extends EventListener
 {
     /**
      * Called when a user is created : set up default rights on this user.
      *
-     * @param jEvent $event the event
+     * @param Event $event the event
      */
     public function onAuthNewUser($event)
     {
@@ -36,7 +38,7 @@ class jacl2dbListener extends jEventListener
     /**
      * Called when a user has been removed : delete rights about this user.
      *
-     * @param jEvent $event the event
+     * @param Event $event the event
      */
     public function onAuthRemoveUser($event)
     {

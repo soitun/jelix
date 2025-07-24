@@ -284,7 +284,7 @@ class Event implements \Jelix\Event\EventInterface
     /**
      * Send a notification to all modules.
      *
-     * Possibility to use your own event object, derived from jEvent, and having
+     * Possibility to use your own event object, derived from Event, and having
      * its own methods and properties. It allows listeners to give returned data
      * in a better way than using the `add` method.
      *

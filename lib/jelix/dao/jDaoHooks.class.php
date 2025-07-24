@@ -13,6 +13,7 @@
 
 use Jelix\Dao\DaoConditions;
 use Jelix\Dao\DaoRecordInterface;
+use Jelix\Event\Event;
 
 /**
  * Hook on JelixDao factory
@@ -30,10 +31,10 @@ class jDaoHooks implements \Jelix\Dao\DaoHookInterface
     public function onInsert(string $daoName, DaoRecordInterface $record, $when)
     {
         if ($when == self::EVENT_BEFORE) {
-            jEvent::notify("daoInsertBefore", array('dao'=>$daoName, 'record'=>$record));
+            Event::notify("daoInsertBefore", array('dao'=>$daoName, 'record'=>$record));
         }
         else {
-            jEvent::notify("daoInsertAfter", array('dao'=>$daoName, 'record'=>$record));
+            Event::notify("daoInsertAfter", array('dao'=>$daoName, 'record'=>$record));
         }
     }
 
@@ -48,10 +49,10 @@ class jDaoHooks implements \Jelix\Dao\DaoHookInterface
     public function onUpdate(string $daoName, DaoRecordInterface $record, $when)
     {
         if ($when == self::EVENT_BEFORE) {
-            jEvent::notify("daoUpdateBefore", array('dao'=>$daoName, 'record'=>$record));
+            Event::notify("daoUpdateBefore", array('dao'=>$daoName, 'record'=>$record));
         }
         else {
-            jEvent::notify("daoUpdateAfter", array('dao'=>$daoName, 'record'=>$record));
+            Event::notify("daoUpdateAfter", array('dao'=>$daoName, 'record'=>$record));
         }
     }
 
@@ -67,10 +68,10 @@ class jDaoHooks implements \Jelix\Dao\DaoHookInterface
     public function onDelete(string $daoName, $keys, $when, $result = null)
     {
         if ($when == self::EVENT_BEFORE) {
-            jEvent::notify('daoDeleteBefore', array('dao' => $daoName, 'keys' => $keys));
+            Event::notify('daoDeleteBefore', array('dao' => $daoName, 'keys' => $keys));
         }
         else {
-            jEvent::notify('daoDeleteAfter', array('dao' => $daoName, 'keys' => $keys, 'result' => $result));
+            Event::notify('daoDeleteAfter', array('dao' => $daoName, 'keys' => $keys, 'result' => $result));
         }
     }
 
@@ -86,10 +87,10 @@ class jDaoHooks implements \Jelix\Dao\DaoHookInterface
     public function onDeleteBy(string $daoName, DaoConditions $searchCond, $when, $result = null)
     {
         if ($when == self::EVENT_BEFORE) {
-            jEvent::notify('daoDeleteByBefore', array('dao' => $daoName, 'criterias' => $searchCond));
+            Event::notify('daoDeleteByBefore', array('dao' => $daoName, 'criterias' => $searchCond));
         }
         else {
-            jEvent::notify('daoDeleteByAfter', array('dao' => $daoName, 'criterias' => $searchCond, 'result' => $result));
+            Event::notify('daoDeleteByAfter', array('dao' => $daoName, 'criterias' => $searchCond, 'result' => $result));
         }
     }
 
@@ -107,14 +108,14 @@ class jDaoHooks implements \Jelix\Dao\DaoHookInterface
     {
         $methname = ($methodType == 'update' ? 'Update' : 'Delete');
         if ($when == self::EVENT_BEFORE) {
-            jEvent::notify("daoSpecific'.$methname.'Before", array(
+            Event::notify("daoSpecific'.$methname.'Before", array(
                 'dao'=>$daoName,
                 'method'=> $methodName,
                 'params' => $parameters
             ));
         }
         else {
-            jEvent::notify("daoSpecific'.$methname.'After", array(
+            Event::notify("daoSpecific'.$methname.'After", array(
                 'dao'=>$daoName,
                 'method'=> $methodName,
                 'params' => $parameters

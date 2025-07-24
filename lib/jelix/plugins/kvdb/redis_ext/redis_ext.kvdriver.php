@@ -13,6 +13,7 @@
  */
 
 use function Jelix\Core\Utilities\is_resource;
+use Jelix\Event\Event;
 
 class redis_extKVDriver extends jKVDriver implements jIKVSet, jIKVttl
 {
@@ -27,7 +28,7 @@ class redis_extKVDriver extends jKVDriver implements jIKVSet, jIKVttl
      *     You can use a script to launch a worker which pops from this list
      *     prefix of keys to delete, and delete them with SCAN/DEL redis commands.
      *     See the redisworker controller in the jelix module.
-     * event: send a jEvent. It's up to your application to respond to this event
+     * event: send an Event. It's up to your application to respond to this event
      *     and to implement your prefered method to delete all keys.
      */
     protected $key_prefix_flush_method = 'direct';
@@ -186,7 +187,7 @@ class redis_extKVDriver extends jKVDriver implements jIKVSet, jIKVttl
                 return true;
 
             case 'event':
-                jEvent::notify('jKvDbRedisFlushKeyPrefix', array('prefix' => $this->key_prefix,
+                Event::notify('jKvDbRedisFlushKeyPrefix', array('prefix' => $this->key_prefix,
                     'profile' => $this->_profile['_name'], ));
 
                 return true;

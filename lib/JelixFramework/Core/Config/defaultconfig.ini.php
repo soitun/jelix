@@ -569,7 +569,7 @@ jelix.cache="cache/"
 ; overrides of lang_to_locale.ini.php. set properties as : locale[XX]=YY
 
 [disabledListeners]
-; list of jEvent listener to not call
+; list of Event listener to not call
 ; eventname[]="module~listenerName"
 
 [mimeTypes]

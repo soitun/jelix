@@ -1,8 +1,4 @@
 <?php
-
-use Jelix\Event\Event;
-use Testapp\Tests\EventForTest;
-
 /**
  * @package     testapp
  * @subpackage  jelix_tests module
@@ -12,6 +8,8 @@ use Testapp\Tests\EventForTest;
  * @link        http://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
+use Jelix\Event\Event;
+use Testapp\Tests\EventForTest;
 
 class eventResponseToReturn
 {
@@ -131,7 +129,7 @@ class eventsTest extends \Jelix\UnitTests\UnitTestCase
     {
         jApp::config()->disabledListeners['TestEvent'] = '\JelixTests\Tests\Listener\TestEventsListener';
 
-        $response = jEvent::notify('TestEvent');
+        $response = Event::notify('TestEvent');
         $response = $response->getResponse();
         $expected = [
             array('module' => 'jelix_tests2', 'ok' => true)

@@ -4,7 +4,8 @@
  * @subpackage  jtpl_plugin
  *
  * @author      Olivier Demah
- * @copyright   2009 Olivier Demah
+ * @contributor Laurent Jouanneau
+ * @copyright   2009 Olivier Demah, 2019-2025 Laurent Jouanneau
  *
  * @see        http://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
@@ -13,6 +14,7 @@
  * @param mixed $event
  * @param mixed $params
  */
+use Jelix\Event\Event;
 
 /**
  * hook plugin.
@@ -54,7 +56,7 @@ function jtpl_function_html_hook($tpl, $event, $params = array())
         return;
     }
 
-    $events = jEvent::notify($event, $params)->getResponse();
+    $events = Event::notify($event, $params)->getResponse();
 
     foreach ($events as $event) {
         echo $event;
