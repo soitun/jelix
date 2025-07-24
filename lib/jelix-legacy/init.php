@@ -109,7 +109,7 @@ LegacyJelixAutoloader::$filePath = array(
     'jIFormsDynamicDatasource' => JELIX_LIB_PATH.'forms/jIFormsDynamicDatasource.iface.php',
     'jConfig' => JELIX_LIB_PATH.'legacy/jConfig.php',
     'jConfigCompiler' => JELIX_LIB_PATH.'legacy/jConfigCompiler.php',
-    'jConfigAutoloader' => JELIX_LIB_PATH.'core/jConfigAutoloader.class.php',
+    'jConfigAutoloader' => JELIX_LIB_PATH.'legacy/jConfigAutoloader.class.php',
 );
 
 spl_autoload_register('LegacyJelixAutoloader::loadClass');

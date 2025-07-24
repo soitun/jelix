@@ -1,6 +1,6 @@
 <?php
 
-class fakeConfigAutoloader extends jConfigAutoloader {
+class fakeConfigAutoloader extends \Jelix\Core\Config\Autoloader {
 
     function test_get_path($className) {
         return $this->getPath($className);

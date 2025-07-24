@@ -28,7 +28,6 @@ class Compiler
 
     protected $configFileName = '';
 
-
     protected $pseudoScriptName = '';
 
     /**
@@ -128,7 +127,6 @@ class Compiler
      *
      * @return \StdClass an object which contains configuration values
      * @throws Exception
-     *
      */
     public function read($installationMode = false)
     {
@@ -149,7 +147,6 @@ class Compiler
      *
      * @return \StdClass an object which contains configuration values
      * @throws Exception
-     *
      */
     public function readForCli($installationMode)
     {

@@ -1,9 +1,9 @@
 <?php
 /**
  * @author     Laurent Jouanneau
- * @copyright  2012-2020 Laurent Jouanneau
+ * @copyright  2012-2025 Laurent Jouanneau
  *
- * @see       http://jelix.org
+ * @see        https://jelix.org
  * @licence    http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
 
@@ -37,14 +37,13 @@ class Autoloader
         if ($path === false) {
             return false;
         }
-        require $path;
+        require($path);
+        return true;
     }
 
     /**
-     * @param mixed $className
-     *
      * @return string the full path of the file declaring the given class
-     *                or false if file not found
+     *              or false if file not found
      */
     protected function getPath($className)
     {
@@ -69,7 +68,7 @@ class Autoloader
             $namespace = substr($className, 0, $lastNsPos);
             $class = substr($className, $lastNsPos + 1);
             if ($namespace) {
-                $path = str_replace('\\', DIRECTORY_SEPARATOR, $namespace).DIRECTORY_SEPARATOR;
+                $path = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
             }
         } else {
             $namespace = '';
