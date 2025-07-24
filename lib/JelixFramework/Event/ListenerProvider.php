@@ -2,9 +2,9 @@
 /**
  * @author   Gérald Croes, Patrice Ferlet, Laurent Jouanneau, Dominique Papin, Steven Jehannet
  *
- * @copyright 2001-2005 CopixTeam, 2005-2024 Laurent Jouanneau, 2009 Dominique Papin
+ * @copyright 2001-2005 CopixTeam, 2005-2025 Laurent Jouanneau, 2009 Dominique Papin
  *
- * @see      http://www.jelix.org
+ * @see      https://www.jelix.org
  * @licence  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
 namespace Jelix\Event;

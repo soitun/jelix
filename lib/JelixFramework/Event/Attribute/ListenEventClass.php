@@ -27,7 +27,7 @@ class ListenEventClass
 {
     protected $className;
 
-    public function __construct(string $className = null)
+    public function __construct(?string $className = null)
     {
         $this->className = $className;
     }

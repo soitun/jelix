@@ -1,12 +1,12 @@
 <?php
 
 /**
- * @author      Gérald Croes, Patrice Ferlet, Laurent Jouanneau
+ * @author    Gérald Croes, Patrice Ferlet, Laurent Jouanneau
  *
- * @copyright 2001-2005 CopixTeam, 2005-2023 Laurent Jouanneau
+ * @copyright 2001-2005 CopixTeam, 2005-2025 Laurent Jouanneau
  *
- * @see        http://www.jelix.org
- * @licence  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
+ * @see       https://www.jelix.org
+ * @licence   http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
 
 namespace Jelix\Event;
@@ -218,7 +218,7 @@ class Event implements \Jelix\Event\EventInterface
                 is_array($listenerResponse)
                 && isset($listenerResponse[$responseKey])
             ) {
-                $value = (bool) $listenerResponse[$responseKey];
+                $value = (bool)$listenerResponse[$responseKey];
                 if ($response === null) {
                     $response = $value;
                 } elseif ($operator === self::RESPONSE_AND_OPERATOR) {
@@ -280,14 +280,14 @@ class Event implements \Jelix\Event\EventInterface
 
     /**
      * Send a notification to all modules.
-     * 
+     *
      * Possibility to use your own event object, derived from jEvent, and having
-     * its own methods and properties. It allows to listeners to give returned data
+     * its own methods and properties. It allows listeners to give returned data
      * in a better way than using the `add` method.
      *
      * Prefer to use `App::services()->eventDispatcher()->dispatch($event)` for event objects.
      * @param string|Event $eventName     the event name or an event object
-     * @param mixed  $params
+     * @param mixed        $params
      *
      * @return Event|object
      */
@@ -297,7 +297,6 @@ class Event implements \Jelix\Event\EventInterface
             $event = $eventName;
         } else {
             $event = new Event($eventName, $params);
-
         }
 
         return App::services()->eventDispatcher()->dispatch($event);

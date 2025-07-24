@@ -2,7 +2,7 @@
 
 namespace Testapp\Tests;
 
-class EventForTest extends \jEvent
+class EventForTest extends \Jelix\Event\Event
 {
     protected $dummy = '';
     protected $dummy2 = '';

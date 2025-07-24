@@ -53,7 +53,7 @@ class LegacyJelixAutoloader
     {
         if (strpos($class, 'jelix') === 0) {
             $f = LIB_PATH.$class.'.php';
-        } elseif (preg_match('/^j(Dao|Selector|Tpl|Event|Db|Controller|Forms(?:Control)?|Auth|Installer|KV).*/i', $class, $m)) {
+        } elseif (preg_match('/^j(Dao|Selector|Tpl|Db|Controller|Forms(?:Control)?|Auth|Installer|KV).*/i', $class, $m)) {
             $f = self::$libPath[$m[1]].$class.'.class.php';
         } elseif (preg_match('/^cDao(?:Record)?_(.+)_Jx_(.+)_Jx_(.+)$/', $class, $m)) {
             // for DAO which are stored in sessions for example
@@ -96,7 +96,6 @@ LegacyJelixAutoloader::$libPath = array(
     'Dao' => JELIX_LIB_PATH.'dao/',
     'FormsControl' => JELIX_LIB_PATH.'forms/controls/',
     'Forms' => JELIX_LIB_PATH.'forms/',
-    'Event' => JELIX_LIB_PATH.'events/',
     'Controller' => JELIX_LIB_PATH.'controllers/',
     'Auth' => JELIX_LIB_PATH.'auth/',
     'Installer' => JELIX_LIB_PATH.'installer/',
@@ -107,6 +106,8 @@ LegacyJelixAutoloader::$filePath = array(
     'jIFormsDatasource' => JELIX_LIB_PATH.'forms/jIFormsDatasource.iface.php',
     'jIFormsDatasource2' => JELIX_LIB_PATH.'forms/jIFormsDatasource2.iface.php',
     'jIFormsDynamicDatasource' => JELIX_LIB_PATH.'forms/jIFormsDynamicDatasource.iface.php',
+    'jEvent' => JELIX_LIB_PATH.'legacy/jEvent.php',
+    'jEventListener' => JELIX_LIB_PATH.'legacy/jEventListener.php',
 );
 
 spl_autoload_register('LegacyJelixAutoloader::loadClass');
