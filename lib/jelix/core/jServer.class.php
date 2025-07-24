@@ -4,9 +4,9 @@
  * @subpackage core
  *
  * @author     Laurent Jouanneau
- * @copyright  2012-2020 Laurent Jouanneau
+ * @copyright  2012-2025 Laurent Jouanneau
  *
- * @see       http://jelix.org
+ * @see        https://jelix.org
  * @licence    http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
 
@@ -222,5 +222,25 @@ class jServer
     public static function isHttpsFromServer()
     {
         return isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && $_SERVER['HTTPS'] != 'off';
+    }
+
+    public static function findServerName($ext = '.php')
+    {
+        $extlen = strlen($ext);
+
+        if (strrpos($_SERVER['SCRIPT_NAME'], $ext) === (strlen($_SERVER['SCRIPT_NAME']) - $extlen)) {
+            return 'SCRIPT_NAME';
+        }
+        if (isset($_SERVER['REDIRECT_URL'])
+            && strrpos($_SERVER['REDIRECT_URL'], $ext) === (strlen($_SERVER['REDIRECT_URL']) - $extlen)) {
+            return 'REDIRECT_URL';
+        }
+        if (isset($_SERVER['ORIG_SCRIPT_NAME'])
+            && strrpos($_SERVER['ORIG_SCRIPT_NAME'], $ext) === (strlen($_SERVER['ORIG_SCRIPT_NAME']) - $extlen)) {
+            return 'ORIG_SCRIPT_NAME';
+        }
+
+        throw new \Exception('Error in main configuration on URL engine parameters -- In config file the parameter urlengine:scriptNameServerVariable is empty and Jelix doesn\'t find
+            the variable in $_SERVER which contains the script name. You must see phpinfo and setup this parameter in your config file.', 11);
     }
 }

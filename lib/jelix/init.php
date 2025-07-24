@@ -8,7 +8,7 @@
  * @author   Laurent Jouanneau
  * @contributor Loic Mathaud, Julien Issler
  *
- * @copyright 2005-2023 Laurent Jouanneau
+ * @copyright 2005-2025 Laurent Jouanneau
  * @copyright 2007 Julien Issler
  *
  * @see     http://www.jelix.org
@@ -212,7 +212,7 @@ function checkAppOpened()
         $basePath = jApp::urlBasePath();
         if ($basePath == null) {
             try {
-                $urlScript = $_SERVER[Compiler::findServerName()];
+                $urlScript = $_SERVER[jServer::findServerName()];
                 $basePath = substr($urlScript, 0, strrpos($urlScript, '/')) . '/';
             } catch (Exception $e) {
                 $basePath = '/';

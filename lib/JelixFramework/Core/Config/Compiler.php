@@ -15,6 +15,11 @@
 
 namespace Jelix\Core\Config;
 
+use jApp as App;
+use Jelix\Core\Infos\AppInfos;
+use Jelix\IniFile\Util as IniFileMgr;
+use jServer as Server;
+
 use jApp;
 use jFile;
 use jServer;
@@ -484,7 +489,12 @@ class Compiler
             $urlconf['urlScript'] = $pseudoScriptName;
         } else {
             if ($urlconf['scriptNameServerVariable'] == '') {
-                $urlconf['scriptNameServerVariable'] = self::findServerName('.php', $isCli);
+                if ($isCli) {
+                    $urlconf['scriptNameServerVariable'] = 'SCRIPT_NAME';
+                }
+                else {
+                    $urlconf['scriptNameServerVariable'] = Server::findServerName('.php');
+                }
             }
             $urlconf['urlScript'] = $_SERVER[$urlconf['scriptNameServerVariable']];
         }
@@ -593,26 +603,5 @@ class Compiler
         if (isset($urlconf['notfoundAct'])) {
             $urlconf['notFoundAct'] = $urlconf['notfoundAct'];
         }
-    }
-
-    public static function findServerName($ext = '.php', $isCli = false)
-    {
-        $extlen = strlen($ext);
-
-        if (strrpos($_SERVER['SCRIPT_NAME'], $ext) === (strlen($_SERVER['SCRIPT_NAME']) - $extlen)
-            || $isCli) {
-            return 'SCRIPT_NAME';
-        }
-        if (isset($_SERVER['REDIRECT_URL'])
-            && strrpos($_SERVER['REDIRECT_URL'], $ext) === (strlen($_SERVER['REDIRECT_URL']) - $extlen)) {
-            return 'REDIRECT_URL';
-        }
-        if (isset($_SERVER['ORIG_SCRIPT_NAME'])
-            && strrpos($_SERVER['ORIG_SCRIPT_NAME'], $ext) === (strlen($_SERVER['ORIG_SCRIPT_NAME']) - $extlen)) {
-            return 'ORIG_SCRIPT_NAME';
-        }
-
-        throw new Exception('Error in main configuration on URL engine parameters -- In config file the parameter urlengine:scriptNameServerVariable is empty and Jelix doesn\'t find
-            the variable in $_SERVER which contains the script name. You must see phpinfo and setup this parameter in your config file.', 11);
     }
 }

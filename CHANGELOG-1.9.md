@@ -142,6 +142,7 @@ Deprecated API and features
 * `jelix_scan_module_sel`
 * classes `jLocale` and `jBundle` are deprecated, and replaced by `Jelix\Locale\Locale`
   and `Jelix\Locale\Bundle`.
+* The method `jConfigCompiler::findServerName()` has been moved to `jServer` 
 
 About jDb:
 
