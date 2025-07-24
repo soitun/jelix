@@ -9,7 +9,7 @@
 */
 
 
-class admin%%module%%Listener extends jEventListener{
+class admin%%module%%Listener extends \Jelix\Event\EventListener{
 
     /**
     *

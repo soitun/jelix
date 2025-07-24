@@ -18,6 +18,7 @@
  * Prefer to use \Jelix\Event\EventListener
  * @package     jelix
  * @subpackage  events
+ * @deprecated
  */
 class jEventListener extends \Jelix\Event\EventListener
 {

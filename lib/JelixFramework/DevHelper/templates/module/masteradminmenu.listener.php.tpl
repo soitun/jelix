@@ -8,7 +8,7 @@
 * @license   %%default_license_url%% %%default_license%%
 */
 
-class %%name%%menuListener extends jEventListener {
+class %%name%%menuListener extends \Jelix\Event\EventListener {
 
     /**
     *

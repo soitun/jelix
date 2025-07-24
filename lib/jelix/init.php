@@ -114,7 +114,6 @@ $GLOBALS['gLibPath'] = array(
     'Dao' => JELIX_LIB_PATH.'dao/',
     'FormsControl' => JELIX_LIB_PATH.'forms/controls/',
     'Forms' => JELIX_LIB_PATH.'forms/',
-    'Event' => JELIX_LIB_PATH.'events/',
     'Tpl' => JELIX_LIB_PATH.'tpl/',
     'Controller' => JELIX_LIB_PATH.'controllers/',
     'Auth' => JELIX_LIB_PATH.'auth/',
@@ -129,7 +128,9 @@ $GLOBALS['gLibClassPath'] = array(
     'jIFormsDynamicDatasource' => JELIX_LIB_PATH.'forms/jIFormsDynamicDatasource.iface.php',
     'jConfig' => JELIX_LIB_PATH.'legacy/jConfig.php',
     'jConfigCompiler' => JELIX_LIB_PATH.'legacy/jConfigCompiler.php',
-    'jConfigAutoloader' => JELIX_LIB_PATH.'legacy/jConfigAutoloader.class.php',
+    'jConfigAutoloader' => JELIX_LIB_PATH.'legacy/jConfigAutoloader.php',
+    'jEvent' => JELIX_LIB_PATH.'legacy/jEvent.php',
+    'jEventListener' => JELIX_LIB_PATH.'legacy/jEventListener.php',
 );
 
 /**
@@ -141,7 +142,7 @@ function jelix_autoload($class)
 {
     if (strpos($class, 'jelix') === 0) {
         $f = LIB_PATH.$class.'.php';
-    } elseif (preg_match('/^j(Dao|Selector|Tpl|Event|Db|Controller|Forms(?:Control)?|Auth|Installer|KV).*/i', $class, $m)) {
+    } elseif (preg_match('/^j(Dao|Selector|Tpl|Db|Controller|Forms(?:Control)?|Auth|Installer|KV).*/i', $class, $m)) {
         $f = $GLOBALS['gLibPath'][$m[1]].$class.'.class.php';
     } elseif (preg_match('/^cDao(?:Record)?_(.+)_Jx_(.+)_Jx_(.+)$/', $class, $m)) {
         // for DAO which are stored in sessions for example

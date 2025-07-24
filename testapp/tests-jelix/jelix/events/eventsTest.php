@@ -1,5 +1,6 @@
 <?php
 
+use Jelix\Event\Event;
 use Testapp\Tests\EventForTest;
 
 /**
@@ -26,22 +27,28 @@ class eventsTest extends \Jelix\UnitTests\UnitTestCase
     {
         self::initJelixConfig();
         jFile::removeDir(jApp::tempPath(), false);
+
+        $warmup = new \Jelix\Event\EventWarmup(jApp::app());
+        $warmup->launch(jApp::getEnabledModulesPaths(), 0);
+        jApp::reloadServices();
         parent::setUp();
     }
 
     function testBasics()
     {
-        $response = jEvent::notify('TestEvent');
-        $response = $response->getResponse();
-        $response = serialize($response[0]);
-        $temoin = serialize(array('module' => 'jelix_tests', 'ok' => true));
-
-        $this->assertEquals($temoin, $response, 'simple event');
+        $response = Event::notify('TestEvent');
+        $response = serialize($response->getResponse());
+        $expected = serialize([
+            array('module' => 'jelix_tests', 'ok' => true),
+            array('module' => 'jelix_tests2', 'ok' => true)
+        ]);
+        $this->assertEquals($expected, $response, 'simple event');
 
         $temoin = array('hello' => 'world');
-        $response = jEvent::notify('TestEventWithParams', $temoin);
+        $response = Event::notify('TestEventWithParams', $temoin);
         $response = $response->getResponse();
         $this->assertEquals('world', $response[0]['params'], 'event with parameters');
+        $this->assertEquals('world', $response[1]['params2'], 'event with parameters');
     }
 
     function testResponseItem()
@@ -50,7 +57,7 @@ class eventsTest extends \Jelix\UnitTests\UnitTestCase
             'testapp' => array('foo' => 'bar'),
             'jelix_tests' => array('foo' => '123'),
         );
-        $response = jEvent::notify('TestEventResponse');
+        $response = Event::notify('TestEventResponse');
         $response = $response->getResponseByKey('foo');
         $this->assertNotNull($response);
         sort($response);
@@ -60,7 +67,7 @@ class eventsTest extends \Jelix\UnitTests\UnitTestCase
     function testNoResponseItem()
     {
         eventResponseToReturn::$responses = array();
-        $response = jEvent::notify('TestEventResponse');
+        $response = Event::notify('TestEventResponse');
         $response = $response->getResponseByKey('foo');
         $this->assertNull($response);
     }
@@ -72,7 +79,7 @@ class eventsTest extends \Jelix\UnitTests\UnitTestCase
             'testapp' => array('foo' => true),
             'jelix_tests' => array('foo' => true),
         );
-        $response = jEvent::notify('TestEventResponse');
+        $response = Event::notify('TestEventResponse');
         $this->assertTrue($response->allResponsesByKeyAreTrue('foo'));
         $this->assertFalse($response->allResponsesByKeyAreFalse('foo'));
     }
@@ -83,7 +90,7 @@ class eventsTest extends \Jelix\UnitTests\UnitTestCase
             'testapp' => array('foo' => false),
             'jelix_tests' => array('foo' => true),
         );
-        $response = jEvent::notify('TestEventResponse');
+        $response = Event::notify('TestEventResponse');
         $this->assertFalse($response->allResponsesByKeyAreTrue('foo'));
         $this->assertFalse($response->allResponsesByKeyAreFalse('foo'));
     }
@@ -94,7 +101,7 @@ class eventsTest extends \Jelix\UnitTests\UnitTestCase
             'testapp' => array('foo' => false),
             'jelix_tests' => array('foo' => false),
         );
-        $response = jEvent::notify('TestEventResponse');
+        $response = Event::notify('TestEventResponse');
         $this->assertFalse($response->allResponsesByKeyAreTrue('foo'));
         $this->assertTrue($response->allResponsesByKeyAreFalse('foo'));
     }
@@ -102,43 +109,48 @@ class eventsTest extends \Jelix\UnitTests\UnitTestCase
     function testBoolItemNoValues()
     {
         eventResponseToReturn::$responses = array();
-        $response = jEvent::notify('TestEventResponse');
+        $response = Event::notify('TestEventResponse');
         $this->assertNull($response->allResponsesByKeyAreTrue('foo'));
         $this->assertNull($response->allResponsesByKeyAreFalse('foo'));
     }
 
     function testDisabledListener()
     {
-        jIncluder::clear();
         jApp::config()->disabledListeners['TestEvent'] = array('\JelixTests\Tests\Listener\TestEventsListener');
 
-        $response = jEvent::notify('TestEvent');
-        $response = $response->getResponse();
-        $this->assertEquals(array(), $response);
-        jIncluder::clear();
+        $response = Event::notify('TestEvent');
+        $response = serialize($response->getResponse());
+        $expected = serialize([
+            array('module' => 'jelix_tests2', 'ok' => true)
+        ]);
+
+        $this->assertEquals($expected, $response);
     }
 
     function testSingleDisabledListener()
     {
-        jIncluder::clear();
         jApp::config()->disabledListeners['TestEvent'] = '\JelixTests\Tests\Listener\TestEventsListener';
 
         $response = jEvent::notify('TestEvent');
         $response = $response->getResponse();
-        $this->assertEquals(array(), $response);
-        jIncluder::clear();
+        $expected = [
+            array('module' => 'jelix_tests2', 'ok' => true)
+        ];
+
+        $this->assertEquals($expected, $response);
     }
 
     function testEventObject()
     {
         $event = new EventForTest();
-        jEvent::notify($event);
+        Event::notify($event);
         $this->assertEquals('onTestEventObject called', $event->getDummyValue());
+        $this->assertEquals('TestAttrEventsListener called', $event->getDummy2Value());
     }
 
     function testEventHavingNoListener()
     {
-        $response = jEvent::notify('eventhavingnolistener');
+        $response = Event::notify('eventhavingnolistener');
         $this->assertEquals(array(), $response->getResponse());
     }
 

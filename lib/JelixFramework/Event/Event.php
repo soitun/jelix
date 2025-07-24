@@ -1,17 +1,17 @@
 <?php
 
 /**
- * @package     jelix
- * @subpackage  events
+ * @author    Gérald Croes, Patrice Ferlet, Laurent Jouanneau
  *
- * @author      Gérald Croes, Patrice Ferlet, Laurent Jouanneau
+ * @copyright 2001-2005 CopixTeam, 2005-2025 Laurent Jouanneau
  *
- * @copyright 2001-2005 CopixTeam, 2005-2022 Laurent Jouanneau
- *
- * @see        http://www.jelix.org
- * @licence  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
+ * @see       https://www.jelix.org
+ * @licence   http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
-require_once JELIX_LIB_PATH . 'events/jEventListener.class.php';
+
+namespace Jelix\Event;
+
+use jApp as App;
 
 /**
  * Class which represents an event in the event system.
@@ -19,7 +19,7 @@ require_once JELIX_LIB_PATH . 'events/jEventListener.class.php';
  * @package     jelix
  * @subpackage  events
  */
-class jEvent implements \Jelix\Event\EventInterface
+class Event implements \Jelix\Event\EventInterface
 {
     /**
      * The name of the event.
@@ -41,8 +41,8 @@ class jEvent implements \Jelix\Event\EventInterface
     /**
      * New event.
      *
-     * @param string $name   the event name
-     * @param array  $params an associative array which contains parameters for the listeners
+     * @param string $name the event name
+     * @param array $params an associative array which contains parameters for the listeners
      * @author Copix Team
      */
     public function __construct($name, $params = array())
@@ -66,8 +66,8 @@ class jEvent implements \Jelix\Event\EventInterface
     /**
      * set a user param.
      *
-     * @param string $name  the parameter name
-     * @param mixed  $value the value
+     * @param string $name the parameter name
+     * @param mixed $value the value
      *
      * @return mixed
      */
@@ -140,9 +140,9 @@ class jEvent implements \Jelix\Event\EventInterface
      * inResponse('failed', true, $results), and we have into $results all
      * responses that have an item 'failed' equals to true.
      *
-     * @param string  $responseKey the response item we're looking for
-     * @param mixed   $value       the value we're looking for
-     * @param mixed[] $response    returned array : all full responses arrays that have
+     * @param string $responseKey the response item we're looking for
+     * @param mixed $value the value we're looking for
+     * @param mixed[] $response returned array : all full responses arrays that have
      *                             the given value
      *
      * @return bool whether or not we have founded the response value
@@ -206,7 +206,7 @@ class jEvent implements \Jelix\Event\EventInterface
      * is made between all of response values.
      *
      * @param string $responseKey
-     * @param int    $operator    const RESPONSE_AND_OPERATOR or RESPONSE_OR_OPERATOR
+     * @param int $operator const RESPONSE_AND_OPERATOR or RESPONSE_OR_OPERATOR
      *
      * @return null|bool
      *
@@ -221,7 +221,7 @@ class jEvent implements \Jelix\Event\EventInterface
                 is_array($listenerResponse)
                 && isset($listenerResponse[$responseKey])
             ) {
-                $value = (bool) $listenerResponse[$responseKey];
+                $value = (bool)$listenerResponse[$responseKey];
                 if ($response === null) {
                     $response = $value;
                 } elseif ($operator === self::RESPONSE_AND_OPERATOR) {
@@ -283,36 +283,27 @@ class jEvent implements \Jelix\Event\EventInterface
 
     /**
      * Send a notification to all modules.
-     * 
+     *
      * Possibility to use your own event object, derived from jEvent, and having
-     * its own methods and properties. It allows to listeners to give returned data
+     * its own methods and properties. It allows listeners to give returned data
      * in a better way than using the `add` method.
      *
      * Prefer to use `\jApp::services()->eventDispatcher()->dispatch($event)` for event objects.
      *
-     * @param string|jEvent $eventName     the event name or an event object
-     * @param mixed  $params
+     * @param string|Event $eventName the event name or an event object
+     * @param mixed $params
      *
-     * @return object|jEvent
+     * @return Event|object
      */
     public static function notify($eventName, $params = array())
     {
         if (is_object($eventName)) {
             $event = $eventName;
         } else {
-            $event = new jEvent($eventName, $params);
+            $event = new Event($eventName, $params);
         }
 
-        return \jApp::services()->eventDispatcher()->dispatch($event);
-    }
-
-    /**
-     * do nothing. Use \jApp::reloadServices() instead
-     *
-     * @deprecated
-     */
-    public static function clearCache()
-    {
+        return App::services()->eventDispatcher()->dispatch($event);
     }
 
 }

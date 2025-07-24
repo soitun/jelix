@@ -29,6 +29,7 @@ New features
   Files that are compiled during installers:
   - configuration
   - properties files for locales
+  - event listeners list
 
 
 - The `charset` configuration property is deprecated. You should keep the default value
@@ -53,6 +54,33 @@ New features
 - New methods `Locale::getBundle()` and `Bundle::getAllKeys()`
 - Locales can be in a directory outside an application, like into a Composer package.
   The directory should be declared with the new API `jApp::declareLocalesDir()`.
+
+** Events **
+
+- classe `jEvent` and `jEventListener` are deprecated and replaced by `\Jelix\Event\Event`
+  and `\Jelix\Event\EventListener`.
+- Declaration of event listener can now be done into the listener class with PHP attributes
+  In this case, the listener class can be any classes, not only classes inheriting
+  from \Jelix\Event\EventListener. However, the listener class should be still
+  declared into the event.xml files.
+
+```xml
+<events xmlns="http://jelix.org/ns/events/1.0">
+   <listener name="\JelixTests\Tests\Listener\TestAttrEventsListener"/>
+</events>
+```
+
+```php
+class TestAttrEventsListener
+{
+    #[ListenEvent('TestEvent')]
+    function onTestEvent ($event) { }
+
+    #[ListenEventClass]
+    function testEventObject(EventForTest $event) { }
+}
+```
+
 
 **jForms**
 
