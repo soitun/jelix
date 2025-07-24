@@ -3,10 +3,12 @@
  * @author     Laurent Jouanneau
  * @copyright  2015-2025 Laurent Jouanneau
  *
- * @see       http://jelix.org
+ * @see        https://jelix.org
  * @licence    http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
+
 use Jelix\Core\Infos\FrameworkInfos;
+use Jelix\Core\Config;
 
 
 class jAppInstance
@@ -132,7 +134,7 @@ class jAppInstance
     {
         if ($this->config) {
             date_default_timezone_set($this->config->timeZone);
-            $this->configAutoloader = new jConfigAutoloader($this->config);
+            $this->configAutoloader = new Config\Autoloader($this->config);
             spl_autoload_register(array($this->configAutoloader, 'loadClass'));
             foreach ($this->config->_autoload_autoloader as $autoloader) {
                 require_once $autoloader;

@@ -4,19 +4,19 @@
  * @subpackage core
  *
  * @author     Laurent Jouanneau
- * @copyright  2012-2020 Laurent Jouanneau
+ * @copyright  2012-2025 Laurent Jouanneau
  *
  * @see       http://jelix.org
  * @licence    http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
 
-use Jelix\Core\Config\AppConfig;
+namespace Jelix\Core\Config;
 
 /**
  * @package    jelix
  * @subpackage core
  */
-class jConfigAutoloader
+class Autoloader
 {
     public function __construct($config)
     {
