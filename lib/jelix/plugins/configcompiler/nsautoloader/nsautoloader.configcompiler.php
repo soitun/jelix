@@ -4,9 +4,9 @@
  * @subpackage   core_config_plugin
  *
  * @author       Laurent Jouanneau
- * @copyright    2012 Laurent Jouanneau
+ * @copyright    2012-2025 Laurent Jouanneau
  *
- * @see         http://jelix.org
+ * @see          https://jelix.org
  * @licence      GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 class nsautoloaderConfigCompilerPlugin implements \Jelix\Core\Config\CompilerPluginInterface
@@ -19,12 +19,13 @@ class nsautoloaderConfigCompilerPlugin implements \Jelix\Core\Config\CompilerPlu
     public function atStart($config)
     {
         $config->_autoload_class = array();
-        $config->_autoload_namespace = array();
+        $config->_autoload_namespace = array(); // psr0
         $config->_autoload_classpattern = array();
         $config->_autoload_includepathmap = array();
         $config->_autoload_includepath = array();
-        $config->_autoload_namespacepathmap = array();
+        $config->_autoload_namespacepathmap = array(); // psr4
         $config->_autoload_autoloader = array();
+        $config->_autoload_fallback = array('psr4'=>array(), 'psr0'=>array());
     }
 
     public function onModule($config, $moduleName, $path, $xml)
@@ -75,7 +76,12 @@ class nsautoloaderConfigCompilerPlugin implements \Jelix\Core\Config\CompilerPlu
                         // deprecated attribute
                         $namespace = trim((string) $element['name'], '\\');
                     }
-                    $config->_autoload_namespace[$namespace] = $p.$suffix;
+                    if ($namespace == '') {
+                        $config->_autoload_fallback['psr0'][] = $p.$suffix;
+                    }
+                    else {
+                        $config->_autoload_namespace[$namespace] = $p.$suffix;
+                    }
 
                     break;
 
@@ -91,8 +97,12 @@ class nsautoloaderConfigCompilerPlugin implements \Jelix\Core\Config\CompilerPlu
                         // deprecated attribute
                         $namespace = trim((string) $element['name'], '\\');
                     }
-                    $config->_autoload_namespacepathmap[$namespace] = $p.$suffix;
-
+                    if ($namespace == '') {
+                        $config->_autoload_fallback['psr4'][] = $p.$suffix;
+                    }
+                    else {
+                        $config->_autoload_namespacepathmap[$namespace] = $p.$suffix;
+                    }
                     break;
 
                 case 'includePath':

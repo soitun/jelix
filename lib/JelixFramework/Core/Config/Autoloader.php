@@ -1,12 +1,9 @@
 <?php
 /**
- * @package    jelix
- * @subpackage core
- *
  * @author     Laurent Jouanneau
  * @copyright  2012-2025 Laurent Jouanneau
  *
- * @see       http://jelix.org
+ * @see        https://jelix.org
  * @licence    http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
 
@@ -107,6 +104,32 @@ class Autoloader
                     return $file;
             }
         }
+        /*
+       [_autoload_fallback]
+       psr4[] = "/path|.ext"
+       */
+        if (isset($this->config->_autoload_fallback['psr4']))
+            foreach($this->config->_autoload_fallback['psr4'] as $info) {
+                list($incPath, $ext) = explode('|', $info);
+                $file = $incPath.DIRECTORY_SEPARATOR.$path.$fileName.$ext;
+                if (file_exists($file)) {
+                    return $file;
+                }
+            }
+
+        /*
+        [_autoload_fallback]
+        psr0[] = "/path|.ext"
+        */
+        if (isset($this->config->_autoload_fallback['psr0']))
+            foreach($this->config->_autoload_fallback['psr0'] as $info) {
+                list($incPath, $ext) = explode('|', $info);
+                $file = $incPath.DIRECTORY_SEPARATOR.$path.$fileName.$ext;
+                if (file_exists($file)) {
+                    return $file;
+                }
+            }
+
 
         /*
         [_autoload_classpattern]

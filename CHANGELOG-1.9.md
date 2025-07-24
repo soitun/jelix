@@ -35,6 +35,10 @@ New features
   to UTF-8. If not, convert your locales and other data to UTF-8 as the support
   of other charset will be gone in the next major version.
 
+- Autoload in module.xml: allow psr fallback directories like in composer.json.
+  You can set a directory without a namespace. This directory will be a root
+  for namespaces that are not matched by other rules.
+
 
 **Locales**
 
