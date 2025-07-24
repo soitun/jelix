@@ -405,7 +405,6 @@ Default option value: "'.$this->defaultRuleForComposerJson.'"
         $this->createFile($appPath.'install/installer.php', 'installer/installer.php.tpl', $param, 'Installer script');
         $this->createFile($appPath.'install/configurator.php', 'installer/configurator.php.tpl', $param, 'Installer script');
         $this->createFile($appPath.'install/uninstall/uninstaller.ini.php', 'installer/uninstall/uninstaller.ini.php', $param, 'uninstaller.ini.php file');
-        //$this->createFile($appPath.'tests/runtests.php', 'tests/runtests.php', $param, 'Tests script');
 
         $this->createFile($wwwpath.'index.php', 'www/index.php.tpl', $param, 'Main entry point');
         $this->createFile($wwwpath.'.htaccess', 'htaccess_allow', $param, 'Configuration file for Apache');

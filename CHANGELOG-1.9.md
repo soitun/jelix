@@ -109,6 +109,8 @@ Removes
   But you should consider it as an archive. You should develop an alternative to these modules.
 * Plugins for jDb and jDao don't exist anymore.
 * All error messages are now only in english. No more `jelix~db.*`, `jelix~daoxml.*` and `jelix~dao.*` locales.
+* No more support of phpunit tests into modules. `tests/runtests.php` into application
+  does not work anymore.
 
 
 Broken API
