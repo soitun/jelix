@@ -19,11 +19,11 @@ class nsautoloaderConfigCompilerPlugin implements \Jelix\Core\Config\CompilerPlu
     public function atStart($config)
     {
         $config->_autoload_class = array();
-        $config->_autoload_namespace = array(); // psr0
+        $config->_autoload_namespacepsr0 = array();
         $config->_autoload_classpattern = array();
         $config->_autoload_includepathmap = array();
         $config->_autoload_includepath = array();
-        $config->_autoload_namespacepathmap = array(); // psr4
+        $config->_autoload_namespacepsr4 = array();
         $config->_autoload_autoloader = array();
         $config->_autoload_fallback = array('psr4'=>array(), 'psr0'=>array());
     }
@@ -80,7 +80,7 @@ class nsautoloaderConfigCompilerPlugin implements \Jelix\Core\Config\CompilerPlu
                         $config->_autoload_fallback['psr0'][] = $p.$suffix;
                     }
                     else {
-                        $config->_autoload_namespace[$namespace] = $p.$suffix;
+                        $config->_autoload_namespacepsr0[$namespace] = $p.$suffix;
                     }
 
                     break;
@@ -101,7 +101,7 @@ class nsautoloaderConfigCompilerPlugin implements \Jelix\Core\Config\CompilerPlu
                         $config->_autoload_fallback['psr4'][] = $p.$suffix;
                     }
                     else {
-                        $config->_autoload_namespacepathmap[$namespace] = $p.$suffix;
+                        $config->_autoload_namespacepsr4[$namespace] = $p.$suffix;
                     }
                     break;
 

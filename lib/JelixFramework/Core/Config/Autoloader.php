@@ -80,10 +80,10 @@ class Autoloader
         $fileName = str_replace('_', DIRECTORY_SEPARATOR, $class);
 
         /*
-        [_autoload_namespace]
+        [_autoload_namespacepsr0]
         namespace = "/path|.ext"
         */
-        foreach($this->config->_autoload_namespace as $ns=>$info) {
+        foreach($this->config->_autoload_namespacepsr0 as $ns=>$info) {
             if ($className == $ns || strpos($className, $ns.'\\') === 0) {
                 list($incPath, $ext) = explode('|', $info);
                 $file = $incPath.DIRECTORY_SEPARATOR.$path.$fileName.$ext;
@@ -93,10 +93,10 @@ class Autoloader
         }
 
         /*
-        [_autoload_namespacepathmap]
+        [_autoload_namespacepsr4]
         namespace = "/path|.ext"
         */
-        foreach($this->config->_autoload_namespacepathmap as $ns=>$info) {
+        foreach($this->config->_autoload_namespacepsr4 as $ns=>$info) {
             if (strpos($className, $ns.'\\') === 0) {
                 list($incPath, $ext) = explode('|', $info);
                 $file = $incPath.DIRECTORY_SEPARATOR.substr($path, strlen($ns)+1).$fileName.$ext;
