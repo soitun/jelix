@@ -86,7 +86,6 @@ class TestAttrEventsListener
 - `App::initPaths()` and `jApp::initPaths()`: the `$scriptPath` parameter is deprecated and not used anymore
 - `\Jelix\Installer\EntryPoint::isCliScript()` (it returns always false from now)
 - constant `JELIX_SCRIPTS_PATH`. Its value is now `<vendor path>/lib/JelixFramework/DevHelper/`. However this constant is now deprecated.
-- `jConfigCompiler::findServerName()` has been moved to `Jelix\Core\Server::findServerName()`
 
 
 ## removed classes and methods
@@ -115,6 +114,7 @@ class TestAttrEventsListener
 - `jDaoFactoryBase`, `jDaoRecordBase`, `jDaoConditions`, `jDaoCondition`,
   `jDaoXmlException`, `jDaoDbMapper`
 - `jLocale`, `jBundle`, `jExceptionSelector`
+- `jConfig`, `jConfigCompiler`, `jConfigAutoloader`
 
 Internal classes and methods, you did not suppose to use, except for complex plugins:
 
