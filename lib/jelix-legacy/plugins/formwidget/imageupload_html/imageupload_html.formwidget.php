@@ -218,8 +218,8 @@ class imageupload_htmlFormWidget extends upload2_htmlFormWidget
                 'ref' => $this->ctrl->ref,
                 'readOnly' => $this->ctrl->isReadOnly(),
                 'required' => $this->ctrl->required,
-                'alertRequired' => ($this->ctrl->alertRequired ?: \Locale::get('jelix~formserr.js.err.required', $this->ctrl->label)),
-                'alertInvalid' => ($this->ctrl->alertInvalid ?: \Locale::get('jelix~formserr.js.err.invalid', $this->ctrl->label)),
+                'alertRequired' => ($this->ctrl->alertRequired ?: Locale::get('jelix~formserr.js.err.required', $this->ctrl->label)),
+                'alertInvalid' => ($this->ctrl->alertInvalid ?: Locale::get('jelix~formserr.js.err.invalid', $this->ctrl->label)),
             );
 
             $attr['data-jforms-input-props'] = json_encode($inputProp);
@@ -242,8 +242,8 @@ class imageupload_htmlFormWidget extends upload2_htmlFormWidget
             'ref' => $this->ctrl->ref,
             'required' => $this->ctrl->required,
             'currentAction' => $action,
-            'alertRequired' => ($this->ctrl->alertRequired ?: \Locale::get('jelix~formserr.js.err.required', $this->ctrl->label)),
-            'alertInvalid' => ($this->ctrl->alertInvalid ?: \Locale::get('jelix~formserr.js.err.invalid', $this->ctrl->label)),
+            'alertRequired' => ($this->ctrl->alertRequired ?: Locale::get('jelix~formserr.js.err.required', $this->ctrl->label)),
+            'alertInvalid' => ($this->ctrl->alertInvalid ?: Locale::get('jelix~formserr.js.err.invalid', $this->ctrl->label)),
         );
 
         $this->displayStartChoice(

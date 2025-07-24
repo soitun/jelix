@@ -1,20 +1,18 @@
 <?php
 /**
  * @author      Laurent Jouanneau
- * @copyright   2008-2023 Laurent Jouanneau
+ * @copyright   2008-2025 Laurent Jouanneau
  *
- * @see        http://www.jelix.org
+ * @see         https://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 
 namespace Jelix\Installer;
 
-use Jelix\Core\Config\AppConfig;
 use Jelix\Core\Infos\ModuleStatusDeclaration;
+use Jelix\Core\Config\Compiler;
 use Jelix\Core\Profiles;
-use Jelix\Dependencies\Item;
 use Jelix\Dependencies\ItemException;
-use Jelix\Dependencies\Resolver;
 use Jelix\Core\App;
 
 use Jelix\IniFile\IniModifierInterface;
@@ -825,8 +823,9 @@ class Configurator
 
             // we re-load configuration file for each module because
             // previous module configurator could have modify it.
-            $entryPoint->setConfigObj(
-                AppConfig::loadForInstaller($entryPoint->getConfigFileName(), $entryPoint->getScriptName())
+            $compiler = new Compiler($entryPoint->getConfigFileName(), $entryPoint->getScriptName());
+            $entryPoint->setConfigObj($entryPoint->isCliScript() ?
+                $compiler->readForCli(true) : $compiler->read(true)
             );
             App::setConfig($entryPoint->getConfigObj());
         }

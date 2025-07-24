@@ -1,9 +1,9 @@
 <?php
 /**
  * @author     Laurent Jouanneau
- * @copyright  2012-2023 Laurent Jouanneau
+ * @copyright  2012-2025 Laurent Jouanneau
  *
- * @see       http://jelix.org
+ * @see        https://jelix.org
  * @licence    http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
 namespace Jelix\Core;
@@ -55,8 +55,8 @@ class Server
      */
     public static function getDomainName()
     {
-        // domainName should not be empty, as it is filled by jConfigCompiler
-        // but let's check it anyway, jConfigCompiler cache may not be valid anymore
+        // domainName should not be empty, as it is filled by Config\Compiler
+        // but let's check it anyway, Config\Compiler cache may not be valid anymore
         if (App::config()->domainName != '') {
             return App::config()->domainName;
         }

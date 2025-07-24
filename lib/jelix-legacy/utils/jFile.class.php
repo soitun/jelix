@@ -19,6 +19,7 @@
 use Jelix\FileUtilities\Directory;
 use Jelix\FileUtilities\File;
 use Jelix\FileUtilities\Path;
+use Jelix\IniFile\Util as IniUtil;
 
 /**
  * A class helper to read or create files.
@@ -225,5 +226,46 @@ class jFile
         }
 
         return $path;
+    }
+
+    /**
+     * Read an ini file, and put its properties into the given object
+     *
+     * @param string $fileName the ini file to read
+     * @param object|null $object the object that will contain properties readed from the ini file
+     * @param array $ignoredSection list of ini section that must not be merged
+     * @return object the updated given object or a new object if $object was null
+     * @since 1.9.0
+     */
+    public static function mergeIniFile($fileName, $object = null, $ignoredSection = array())
+    {
+        if ($object === null) {
+            $object = new stdClass();
+        }
+        return IniUtil::readAndMergeObject(
+            $fileName,
+            $object,
+            IniUtil::NOT_MERGE_PROTECTED_DIRECTIVE | IniUtil::NORMAL_MERGE_ARRAY_VALUES_WITH_INTEGER_KEYS,
+            $ignoredSection
+        );
+    }
+
+    /**
+     * Read an ini content, and put its properties into the given object
+     *
+     * @param array $iniContent the ini content
+     * @param object|null $object the object that will contain properties readed from the ini file
+     * @param array $ignoredSection list of ini section that must not be merged
+     * @return object the updated given object or a new object if $object was null
+     * @since 1.9.0
+     */
+    public static function mergeIniContent($contentToImport, $baseContent = null, $ignoredSection = array())
+    {
+        return IniUtil::mergeIniObjectContents(
+            $baseContent,
+            (object) $contentToImport,
+            IniUtil::NOT_MERGE_PROTECTED_DIRECTIVE | IniUtil::NORMAL_MERGE_ARRAY_VALUES_WITH_INTEGER_KEYS,
+            $ignoredSection
+        );
     }
 }

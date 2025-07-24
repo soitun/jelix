@@ -1,9 +1,9 @@
 <?php
 /**
  * @author      Laurent Jouanneau
- * @copyright   2009-2023 Laurent Jouanneau
+ * @copyright   2009-2025 Laurent Jouanneau
  *
- * @see        http://jelix.org
+ * @see         https://jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 
@@ -105,7 +105,13 @@ class EntryPoint
         $this->appEpConfigIni = new IniModifier($appSystemPath, ';<'.'?php die(\'\');?'.'>');
         $this->localEpConfigIni = new IniModifier($varConfigPath, ';<'.'?php die(\'\');?'.'>');
 
-        $this->config = AppConfig::loadForInstaller($configFile, $this->scriptName);
+        $compiler = new Compiler($configFile, $this->scriptName);
+        if ($this->_isCliScript) {
+            $this->config = $compiler->readForCli(true);
+        }
+        else {
+            $this->config = $compiler->read(true);
+        }
     }
 
     /**

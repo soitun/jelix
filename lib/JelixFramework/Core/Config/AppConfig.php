@@ -1,10 +1,10 @@
 <?php
 /**
- * @author   Laurent Jouanneau
- * @copyright 2005-2024 Laurent Jouanneau
+ * @author     Laurent Jouanneau
+ * @copyright  2005-2025 Laurent Jouanneau
  *
- * @see      https://www.jelix.org
- * @licence  GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
+ * @see        https://www.jelix.org
+ * @licence    GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 
 namespace Jelix\Core\Config;
@@ -32,7 +32,6 @@ class AppConfig
     private function __construct()
     {
     }
-
 
     /**
      * return the path of file where to store the cache of the configuration.
@@ -66,19 +65,23 @@ class AppConfig
         return $filename;
     }
 
-
     /**
-     * Loads the configuration by optimizing it and hardening values, and use a cache to avoid reading all
-     * configuration files at each call.
+     * load and read the configuration of the application
+     * The combination of all configuration files (the given file
+     * and the mainconfig.ini.php) is stored
+     * in a single temporary file. So it calls the Config\Compiler
+     * class if needed.
      *
-     * To be used only for web runtime.
+     * @param string $configFile the config file name
      *
-     * @param string $configFile the configuration file name of the entrypoint
+     * @return object it contains all configuration options
      *
-     * @return object it contains all configuration parameters
+     * @see \Jelix\Core\Config\Compiler
      */
     public static function load($configFile)
     {
+        self::checkEnvironment();
+
         $config = array();
         $cacheFile = self::getCacheFilename($configFile);
 
@@ -91,6 +94,7 @@ class AppConfig
         if (file_exists($cacheFile)) {
             $t = filemtime($cacheFile);
             $lvc = App::varConfigPath('liveconfig.ini.php');
+
             if ( filemtime($staticConfigFile) < $t
                 && (file_exists($lvc) && filemtime($lvc) < $t)
             ) {
@@ -105,8 +109,6 @@ class AppConfig
             }
         }
 
-        self::checkEnvironment();
-
         if (BYTECODE_CACHE_EXISTS) {
             $config = include $staticConfigFile;
             $config = (object) $config;
@@ -116,7 +118,7 @@ class AppConfig
 
         $compiler = new Compiler($configFile);
 
-        $config = $compiler->readLiveConfiguration($config);
+        $config = $compiler->readLiveConfiguration($config, Server::isCLI());
         \jFile::createDir(App::tempPath(), $config->chmodDir);
 
         // if bytecode cache is enabled, it's better to store configuration
@@ -163,7 +165,7 @@ class AppConfig
     /**
      * Loads the configuration by optimizing it and hardening values, without using a cache.
      *
-     * To be used for web runtime and users cli commands.
+     * To be used for web runtime.
      *
      * @param string $configFile the configuration file name of the entrypoint
      * @param string $scriptName the entrypoint script name
@@ -177,10 +179,10 @@ class AppConfig
     }
 
     /**
-     * Loads the configuration as is, for component that needs to manipulate the configuration content, without
-     * configuration values hardened
+     * Loads the configuration as is, in a CLI context without
+     * configuration values hardened.
      *
-     * Do not call it for web runtime.
+     * Do not call it for web runtime. Only for CLI commands.
      *
      * @internal
      * @param string $configFile  the entrypoint configuration file
@@ -188,10 +190,10 @@ class AppConfig
      * @return object
      * @throws Exception
      */
-    public static function loadForInstaller($configFile, $scriptName = '')
+    public static function loadForCli($configFile, $scriptName = '')
     {
         $compiler = new Compiler($configFile, $scriptName);
-        return $compiler->read(true);
+        return $compiler->readForCli(true);
     }
 
     public static function checkEnvironment()
@@ -205,16 +207,16 @@ class AppConfig
         }
 
         if (!is_writable($tempPath)) {
-            throw new Exception('Application temp base directory is not writable -- ('.$tempPath.')', 4);
+            throw new Exception('Application temp base directory is not writable -- (' . $tempPath . ')', 4);
         }
 
         if (!is_writable(App::logPath())) {
-            throw new Exception('Application log directory is not writable -- ('.App::logPath().')', 4);
+            throw new Exception('Application log directory is not writable -- (' . App::logPath() . ')', 4);
         }
     }
 
     public static function getDefaultConfigFile()
     {
-        return __DIR__.'/defaultconfig.ini.php';
+        return __DIR__ . '/defaultconfig.ini.php';
     }
 }

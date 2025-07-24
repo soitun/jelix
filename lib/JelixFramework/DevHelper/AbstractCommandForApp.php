@@ -1,9 +1,9 @@
 <?php
 /**
  * @author      Laurent Jouanneau
- * @copyright   2016-2023 Laurent Jouanneau
+ * @copyright   2016-2025 Laurent Jouanneau
  *
- * @see        http://www.jelix.org
+ * @see         https://www.jelix.org
  * @licence     MIT
  */
 
@@ -131,7 +131,7 @@ abstract class AbstractCommandForApp extends AbstractCommand
 
         $configFile = $entrypoint->getConfigFile();
 
-        \Jelix\Core\App::setConfig(AppConfig::loadForInstaller($configFile, $entrypoint->getFile()));
+        App::setConfig(AppConfig::loadForCli($configFile, $entrypoint->getFile()));
         \jFile::createDir(App::tempPath(), App::config()->chmodDir);
     }
 

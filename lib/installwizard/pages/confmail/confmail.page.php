@@ -10,6 +10,8 @@
 * @link        http://jelix.org
 * @licence     GNU General Public Licence see LICENCE file or http://www.gnu.org/licenses/gpl.html
 */
+use Jelix\Core\Config\AppConfig;
+
 
 class confmailWizPage extends installWizardPage {
     
@@ -132,7 +134,7 @@ class confmailWizPage extends installWizardPage {
 
     protected function loadconf() {
         $ini = new  \Jelix\IniFile\IniModifierArray( array(
-                'default' => jConfig::getDefaultConfigFile(),
+                'default' => AppConfig::getDefaultConfigFile(),
                 'main' => jApp::mainConfigFile(),
                 'local' => jApp::varConfigPath('localconfig.ini.php')
             )
