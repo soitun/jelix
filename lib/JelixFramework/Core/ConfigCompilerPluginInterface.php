@@ -13,7 +13,7 @@
 namespace Jelix\Core;
 
 /**
- * interface for plugins of jConfigCompiler.
+ * interface for plugins of Config\Compiler.
  * @deprecated use \Jelix\Core\Config\CompilerPluginInterface instead
  */
 interface ConfigCompilerPluginInterface extends \Jelix\Core\Config\CompilerPluginInterface

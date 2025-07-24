@@ -10,6 +10,8 @@
  * @licence    http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
 
+use Jelix\Core\Config\AppConfig;
+
 /**
  * @package    jelix
  * @subpackage core
@@ -24,7 +26,7 @@ class jConfigAutoloader
     /**
      * @var object a configuration object readed from an ini file
      *
-     * @see jConfig
+     * @see AppConfig
      */
     protected $config;
 

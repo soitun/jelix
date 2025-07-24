@@ -10,12 +10,17 @@
  * @licence  GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 
+use Jelix\Core\Config\AppConfig;
+
 /**
  * static class which loads the configuration.
+ *
+ * It does not use the cache generated during the warmup.
  *
  * @package  jelix
  * @subpackage core
  * @static
+ * @deprecated use Jelix\Core\Config\AppConfig instead
  */
 class jConfig
 {
@@ -53,7 +58,7 @@ class jConfig
      */
     public static function load($configFile)
     {
-        self::checkEnvironment();
+        AppConfig::checkEnvironment();
 
         $config = array();
         $file = jConfigCompiler::getCacheFilename($configFile);
@@ -106,27 +111,21 @@ class jConfig
         return $config;
     }
 
+    /**
+     * @deprecated use AppConfig::checkEnvironment() instead
+     * @return void
+     */
     public static function checkEnvironment()
     {
-        $tempPath = jApp::tempBasePath();
-
-        if ($tempPath == '/') {
-            // if it equals to '/', this is because realpath has returned false in the application.init.php
-            // so this is because the path doesn't exist.
-            throw new Exception('Application temp directory doesn\'t exist !', 3);
-        }
-
-        if (!is_writable($tempPath)) {
-            throw new Exception('Application temp base directory is not writable -- ('.$tempPath.')', 4);
-        }
-
-        if (!is_writable(jApp::logPath())) {
-            throw new Exception('Application log directory is not writable -- ('.jApp::logPath().')', 4);
-        }
+        AppConfig::checkEnvironment();
     }
 
+    /**
+     * @deprecated use AppConfig::getDefaultConfigFile() instead
+     * @return string
+     */
     public static function getDefaultConfigFile()
     {
-        return __DIR__.'/defaultconfig.ini.php';
+        return AppConfig::getDefaultConfigFile();
     }
 }

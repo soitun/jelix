@@ -163,7 +163,7 @@ class CreateModule extends \Jelix\DevHelper\AbstractCommandForApp
             $this->createFile($path.'urls.xml', 'module/urls.xml.tpl', array());
         }
 
-        $iniDefault = new \Jelix\IniFile\MultiIniModifier(\jConfig::getDefaultConfigFile(), \jApp::mainConfigFile());
+        $iniDefault = new \Jelix\IniFile\MultiIniModifier(\Jelix\Core\Config\AppConfig::getDefaultConfigFile(), \jApp::mainConfigFile());
         $urlsFile = \jApp::appSystemPath($iniDefault->getValue('significantFile', 'urlengine'));
         $xmlMap = new \Jelix\Routing\UrlMapping\XmlMapModifier($urlsFile, true);
 

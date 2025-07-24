@@ -188,7 +188,7 @@ class GlobalSetup
             file_put_contents($liveConfigFileName, ';<'.'?php die(\'\');?'.'> live local configuration');
         }
 
-        $this->defaultConfigIni = new IniReader(\jConfig::getDefaultConfigFile());
+        $this->defaultConfigIni = new IniReader(\Jelix\Core\Config\AppConfig::getDefaultConfigFile());
 
         $this->mainConfigIni = new IniModifier($mainConfigFileName);
 

@@ -1,38 +1,64 @@
 <?php
 /**
- * @package      jelix
- * @subpackage   core
- *
  * @author       Laurent Jouanneau
  * @contributor  Thibault Piront (nuKs), Christophe Thiriot, Philippe Schelté
  *
- * @copyright    2006-2024 Laurent Jouanneau
+ * @copyright    2006-2025 Laurent Jouanneau
  * @copyright    2007 Thibault Piront, 2008 Christophe Thiriot, 2008 Philippe Schelté
  *
- * @see         http://www.jelix.org
+ * @see          https://www.jelix.org
  * @licence      GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 
+namespace Jelix\Core\Config;
+
+use jApp as App;
+use Jelix\Core\Infos\AppInfos;
+use Jelix\IniFile\Util as IniFileMgr;
+use jServer as Server;
+
 /**
- * jConfigCompiler merge two ini file in a single array and store it in a temporary file
+ * It merges two ini file in a single array and store it in a temporary file.
  * This is a static class.
  *
  * @package  jelix
  * @subpackage core
  * @static
  */
-class jConfigCompiler
+class Compiler
 {
-    private function __construct()
-    {
-    }
+
+    protected $commonConfig;
+
+    protected $configFileName = '';
+
+
+    protected $pseudoScriptName = '';
 
     /**
-     * read the given ini file, for the current entry point, or for the entrypoint given
-     * in $pseudoScriptName. Merge it with the content of other config files
-     * It also calculates some options.
-     * If you are in a CLI script but you want to load a configuration file for a web entry point
-     * or vice-versa, you need to indicate the $pseudoScriptName parameter with the name of the entry point.
+     * @var \StdClass
+     */
+    protected $config;
+
+    /**
+     *
+     * If you are in a CLI script but you want to load a configuration file for a web
+     * entry point or vice-versa, you need to indicate the $pseudoScriptName parameter
+     * with the name of the entry point
+     *
+     * @param string $configFile       the name and path of the config file related to config dir of the app
+     * @param string $pseudoScriptName the name of the entry point, relative to the base path,
+     *                                 corresponding to the readed configuration. It should start with a leading /.
+     */
+    public function __construct($configFile = '', $pseudoScriptName = '')
+    {
+        $this->pseudoScriptName = $pseudoScriptName;
+        $this->configFileName = $configFile;
+    }
+
+
+    /**
+     * Read and merge all configuration files.
      *
      * Merge of configuration files are made in this order:
      * - core/defaultconfig.ini.php
@@ -40,30 +66,26 @@ class jConfigCompiler
      * - app/system/$configFile
      * - var/config/localconfig.ini.php
      * - var/config/$configFile
-     * - var/config/liveconfig.ini.php
      *
-     * @param string $configFile       the config file name
-     * @param bool   $allModuleInfo    may be true for the installer, which needs all informations
-     *                                 else should be false, these extra informations are
-     *                                 not needed to run the application
-     * @param bool   $isCli            indicate if the configuration to read is for a CLI script or no
-     * @param string $pseudoScriptName the name of the entry point, relative to the base path,
-     *                                 corresponding to the readed configuration
+     * @param string $configFile
      *
      * @throws Exception
      *
-     * @return object an object which contains configuration values
+     * @return object the object containing content of all configuration files
+     * OK
      */
-    public static function read($configFile, $allModuleInfo = false, $isCli = false, $pseudoScriptName = '')
+    protected function readStaticConfigFiles($configFile)
     {
-        $appSystemPath = jApp::appSystemPath();
-        $varConfigPath = jApp::varConfigPath();
+        $appSystemPath = App::appSystemPath();
+        $varConfigPath = App::varConfigPath();
 
         // this is the defaultconfig file of JELIX itself
-        $config = \jFile::mergeIniFile(__DIR__.'/defaultconfig.ini.php');
+        $config = \jFile::mergeIniFile(__DIR__ . '/defaultconfig.ini.php');
 
         // read the main configuration of the app
-        \jFile::mergeIniFile(jApp::mainConfigFile(), $config);
+        $mcf = App::mainConfigFile();
+        \jFile::mergeIniFile($mcf, $config);
+        $this->commonConfig = clone $config;
 
         if (!file_exists($appSystemPath.$configFile) && !file_exists($varConfigPath.$configFile)) {
             throw new Exception("Configuration file of the entrypoint is missing -- {$configFile}", 5);
@@ -76,7 +98,7 @@ class jConfigCompiler
 
         // read the configuration of the entry point
         if (file_exists($appSystemPath.$configFile)) {
-            if (\jFile::mergeIniFile($appSystemPath.$configFile, $config, jConfig::sectionsToIgnoreForEp) === false) {
+            if (\jFile::mergeIniFile($appSystemPath . $configFile, $config, AppConfig::sectionsToIgnoreForEp) === false) {
                 throw new Exception("Syntax error in the configuration file -- {$configFile}", 6);
             }
         }
@@ -88,118 +110,124 @@ class jConfigCompiler
 
         // read the local configuration of the entry point
         if (file_exists($varConfigPath.$configFile)) {
-            if (\jFile::mergeIniFile($varConfigPath.$configFile, $config, jConfig::sectionsToIgnoreForEp) === false) {
+            if (\jFile::mergeIniFile($varConfigPath.$configFile, $config, AppConfig::sectionsToIgnoreForEp) === false) {
                 throw new Exception("Syntax error in the configuration file -- {$configFile}", 6);
             }
         }
 
-        if (file_exists($varConfigPath.'liveconfig.ini.php')) {
-            \jFile::mergeIniFile($varConfigPath.'liveconfig.ini.php', $config);
-        }
-
-        self::prepareConfig($config, $allModuleInfo, $isCli, $pseudoScriptName);
-
         return $config;
     }
 
+
     /**
-     * Identical to read(), but also stores the result in a temporary file.
+     * Read the ini file given to the constructor. It Merges it with the content of
+     * mainconfig.ini.php and other configuration files. It also calculates some options.
      *
-     * @param string $configFile       the config file name
-     * @param bool   $isCli
-     * @param string $pseudoScriptName
+     * @param bool $installationMode must be true for the installer, which needs extra information
+     *                                and need config values as they are into the files.
+     *                                It must be false for runtime to harden some configuration values.
      *
+     * @return \StdClass an object which contains configuration values
      * @throws Exception
      *
-     * @return object an object which contains configuration values
      */
-    public static function readAndCache($configFile, $isCli = null, $pseudoScriptName = '')
+    public function read($installationMode = false)
     {
-        if ($isCli === null) {
-            $isCli = jServer::isCLI();
+        $this->readStaticConfiguration($installationMode);
+
+        return $this->readLiveConfiguration($this->config, false);
+    }
+
+    /**
+     * Read the ini file given to the constructor, in CLI mode.
+     *
+     * It Merges it with the content of mainconfig.ini.php and other
+     * configuration files. It also calculates some options.
+     *
+     * @param bool $installationMode must be true for the installer, which needs extra information
+     *                                and need config values as they are into the files.
+     *                                It must be false for runtime to harden some configuration values.
+     *
+     * @return \StdClass an object which contains configuration values
+     * @throws Exception
+     *
+     */
+    public function readForCli($installationMode)
+    {
+        $this->readStaticConfiguration($installationMode);
+
+        return $this->readLiveConfiguration($this->config, true);
+    }
+
+    /**
+     * Read the liveconfig.ini php file and merge it with the given configuration object
+     *
+     * @param object $config
+     * @return \StdClass
+     */
+    public function readLiveConfiguration(object $config, $isCli)
+    {
+        $varConfigPath = App::varConfigPath();
+        if (file_exists($varConfigPath.'liveconfig.ini.php')) {
+            IniFileMgr::readAndMergeObject($varConfigPath.'liveconfig.ini.php', $config);
         }
-
-        $config = self::read($configFile, false, $isCli, $pseudoScriptName);
-        jFile::createDir(jApp::tempPath(), $config->chmodDir);
-        $filename = self::getCacheFilename($configFile);
-
-        // if bytecode cache is enabled, it's better to store configuration
-        // as PHP code, reading performance are much better than reading
-        // an ini file (266 times less). However, if bytecode cache is disabled,
-        // reading performance are better with ini : 32% better. Json is only 22% better.
-        if (BYTECODE_CACHE_EXISTS) {
-            if ($f = @fopen($filename, 'wb')) {
-                fwrite($f, '<?php $config = '.var_export(get_object_vars($config), true).";\n?>");
-                fclose($f);
-                chmod($filename, $config->chmodFile);
-            } else {
-                throw new Exception('Error while writing configuration cache file -- '.$filename);
-            }
-        } else {
-            \Jelix\IniFile\Util::write(get_object_vars($config), $filename.'.resultini.php', ";<?php die('');?>\n", $config->chmodFile);
-        }
-
+        $this->prepareLiveConfig($config, $isCli);
         return $config;
     }
 
     /**
-     * return the path of file where to store the cache of the configuration.
+     * Read all configuration files except the liveconfig.ini.php, and merge them
      *
-     * @param string $configFile the name of the configuration file of the entry
-     *                           point into var/config/
+     * It also calculates some options.
      *
-     * @return string the full path of the cache
+     * Used to create a cache file, to be merged with liveconfig at runtime.
      *
-     * @since 1.6.26
+     * @param $installationMode
+     * @return \StdClass
+     * @throws Exception
      */
-    public static function getCacheFilename($configFile)
+    public function readStaticConfiguration($installationMode = false)
     {
-        $filename = jApp::tempPath().str_replace('/', '~', $configFile);
-        list($domain, $port) = jServer::getDomainPortFromServer();
-        if ($domain) {
-            $filename .= '.'.$domain.'-'.$port;
-        }
-        if (BYTECODE_CACHE_EXISTS) {
-            $filename .= '.conf.php';
-        } else {
-            $filename .= '.resultini.php';
-        }
+        $this->config = $this->readStaticConfigFiles($this->configFileName);
+        $this->prepareConfig($installationMode);
 
-        return $filename;
+        return $this->config;
+    }
+
+
+
+    /**
+     * fill some static config properties with calculated values.
+     *
+     * @param bool $installationMode must be true for the installer, which needs extra information
+     *                               and need config values as they are into the files.
+     *                               It must be false for runtime to harden some configuration values.
+     */
+    protected function prepareConfig($installationMode)
+    {
+        $this->checkMiscParameters($this->config);
+        $this->_loadModulesInfo($this->config, $installationMode);
+        $this->_loadPluginsPathList($this->config);
+        $this->checkCoordPluginsPath($this->config);
+        $this->runConfigCompilerPlugins($this->config);
     }
 
     /**
-     * fill some config properties with calculated values.
+     * fill some config properties with calculated values available only in a web context.
      *
-     * @param object $config           the config object
-     * @param bool   $allModuleInfo    may be true for the installer, which needs all informations
-     *                                 else should be false, these extra informations are
-     *                                 not needed to run the application
-     * @param bool   $isCli            indicate if the configuration to read is for a CLI script or no
-     * @param string $pseudoScriptName the name of the entry point, relative to the base path,
-     *                                 corresponding to the readed configuration
+     * @param object $config
+     * @return void
+     * @throws Exception
      */
-    protected static function prepareConfig($config, $allModuleInfo, $isCli, $pseudoScriptName)
+    protected function prepareLiveConfig($config, $isCli)
     {
-        self::checkMiscParameters($config);
-        self::getPaths($config->urlengine, $pseudoScriptName, $isCli);
-        self::_loadModuleInfo($config, $allModuleInfo);
-        self::_loadPluginsPathList($config);
-        self::checkCoordPluginsPath($config);
-        self::runConfigCompilerPlugins($config);
-    }
-
-    protected static function checkMiscParameters($config)
-    {
-        $config->isWindows = (DIRECTORY_SEPARATOR === '\\');
-
         if ($config->domainName == '') {
             // as each compiled config is stored in a file based on the domain
             // name/port, we can store the guessed domain name into the configuration
-            list($domain, $port) = jServer::getDomainPortFromServer();
+            list($domain, $port) = Server::getDomainPortFromServer();
             if ($domain) {
                 $config->domainName = $domain;
-                $isHttps = jServer::isHttpsFromServer();
+                $isHttps = Server::isHttpsFromServer();
                 if ($config->forceHTTPPort == '' && !$isHttps && $port != '80') {
                     $config->forceHTTPPort = $port;
                 } elseif ($config->forceHTTPSPort == '' && $isHttps && $port != '443') {
@@ -208,12 +236,19 @@ class jConfigCompiler
             }
         }
 
+        $this->getPaths($config->urlengine, $this->pseudoScriptName, $isCli);
+    }
+
+    protected function checkMiscParameters($config)
+    {
+        $config->isWindows = (DIRECTORY_SEPARATOR === '\\');
+
         if (!is_string($config->chmodFile)) {
-            $config->chmodFile = (string) $config->chmodFile;
+            $config->chmodFile = (string)$config->chmodFile;
         }
         $config->chmodFile = octdec($config->chmodFile);
         if (!is_string($config->chmodDir)) {
-            $config->chmodDir = (string) $config->chmodDir;
+            $config->chmodDir = (string)$config->chmodDir;
         }
         $config->chmodDir = octdec($config->chmodDir);
         if (!is_array($config->error_handling['sensitiveParameters'])) {
@@ -221,15 +256,11 @@ class jConfigCompiler
         }
 
         if ($config->appVersion == '') {
-            $xmlPath = jApp::appPath('project.xml');
-            $xmlLoad = simplexml_load_file($xmlPath);
-            if (isset($xmlLoad->info->version)) {
-                $config->appVersion = (string) $xmlLoad->info->version;
-            }
+            $config->appVersion = AppInfos::load()->version;
         }
     }
 
-    protected static function checkCoordPluginsPath($config)
+    protected function checkCoordPluginsPath($config)
     {
         $coordplugins = array();
         foreach ($config->coordplugins as $name => $conf) {
@@ -243,31 +274,31 @@ class jConfigCompiler
                 throw new Exception("Error in the main configuration. A plugin doesn't exist -- The coord plugin {$name} is unknown.", 7);
             }
             if ($conf) {
-                $coordplugins[$name] = self::getCoordPluginConfValue($name, $conf);
+                $coordplugins[$name] = $this->getCoordPluginConfValue($name, $conf);
             }
         }
         $config->coordplugins = $coordplugins;
     }
 
-    protected static function getCoordPluginConfValue($name, $conf)
+    protected function getCoordPluginConfValue($name, $conf)
     {
         if ($conf != '1' && strlen($conf) > 1) {
             // the configuration value is a filename
-            $confFile = jApp::varConfigPath($conf);
+            $confFile = App::varConfigPath($conf);
             if (!file_exists($confFile)) {
-                $confFile = jApp::appSystemPath($conf);
+                $confFile = App::appSystemPath($conf);
                 if (!file_exists($confFile)) {
                     throw new Exception("Error in the configuration. A plugin configuration file doesn't exist -- Configuration file for the coord plugin {$name} doesn't exist: '{$confFile}'", 8);
                 }
             }
             // let's get relative path to the app
-            $conf = \Jelix\FileUtilities\Path::shortestPath(jApp::appPath(), $confFile);
+            $conf = \Jelix\FileUtilities\Path::shortestPath(App::appPath(), $confFile);
         }
 
         return $conf;
     }
 
-    protected static function runConfigCompilerPlugins($config)
+    protected function runConfigCompilerPlugins($config)
     {
         if (!isset($config->_pluginsPathList_configcompiler)) {
             return;
@@ -276,13 +307,13 @@ class jConfigCompiler
         // load plugins
         $plugins = array();
         foreach ($config->_pluginsPathList_configcompiler as $pluginName => $path) {
-            $file = $path.$pluginName.'.configcompiler.php';
+            $file = $path . $pluginName . '.configcompiler.php';
             if (!file_exists($file)) {
                 continue;
             }
 
             require_once $file;
-            $classname = $pluginName.'ConfigCompilerPlugin';
+            $classname = '\\'.$pluginName . 'ConfigCompilerPlugin';
             $plugins[] = new $classname();
         }
         if (!count($plugins)) {
@@ -304,7 +335,7 @@ class jConfigCompiler
         }
 
         foreach ($config->_modulesPathList as $moduleName => $modulePath) {
-            $moduleXml = simplexml_load_file($modulePath.'module.xml');
+            $moduleXml = simplexml_load_file($modulePath . 'module.xml');
             foreach ($plugins as $plugin) {
                 $plugin->onModule($config, $moduleName, $modulePath, $moduleXml);
             }
@@ -318,23 +349,23 @@ class jConfigCompiler
     /**
      * Analyse and check the "lib:" and "app:" path.
      *
-     * @param object $config        the config object
-     * @param bool   $allModuleInfo may be true for the installer, which needs all informations
+     * @param object $config the config object
+     * @param bool $installationMode may be true for the installer, which needs all informations
      *                              else should be false, these extra informations are
      *                              not needed to run the application
      *
      * @throws Exception
      */
-    protected static function _loadModuleInfo($config, $allModuleInfo)
+    protected function _loadModulesInfo($config, $installationMode)
     {
-        $installerFile = jApp::varConfigPath('installer.ini.php');
+        $installerFile = App::varConfigPath('installer.ini.php');
 
         if ($config->disableInstallers) {
             $installation = array();
         } elseif (file_exists($installerFile)) {
             $installation = parse_ini_file($installerFile, true, INI_SCANNER_TYPED);
         } else {
-            if ($allModuleInfo) {
+            if ($installationMode) {
                 $installation = array();
             } else {
                 throw new Exception("The application is not installed -- installer.ini.php doesn't exist!\n", 9);
@@ -345,21 +376,22 @@ class jConfigCompiler
             $installation['modules'] = array();
         }
 
-        jApp::declareModulesFromConfig($config);
+        App::declareModulesFromConfig($config);
 
+        // @deprecated
         if ($config->compilation['checkCacheFiletime']) {
-            $config->_allBasePath = jApp::getDeclaredModulesDir();
+            $config->_allBasePath = App::getDeclaredModulesDir();
         } else {
             $config->_allBasePath = array();
         }
 
-        $list = jApp::getAllModulesPath();
+        $list = App::getAllModulesPath();
 
         foreach ($list as $f => $path) {
             if ($config->disableInstallers) {
-                $installation['modules'][$f.'.installed'] = 1;
-            } elseif (!isset($installation['modules'][$f.'.installed'])) {
-                $installation['modules'][$f.'.installed'] = 0;
+                $installation['modules'][$f . '.installed'] = 1;
+            } elseif (!isset($installation['modules'][$f . '.installed'])) {
+                $installation['modules'][$f . '.installed'] = 0;
             }
 
             if ($f == 'jelix') {
@@ -367,52 +399,52 @@ class jConfigCompiler
             } else {
                 if ($config->enableAllModules) {
                     if ($config->disableInstallers
-                        || $installation['modules'][$f.'.installed']
-                        || $allModuleInfo) {
-                        $config->modules[$f.'.enabled'] = true;
+                        || $installation['modules'][$f . '.installed']
+                        || $installationMode) {
+                        $config->modules[$f . '.enabled'] = true;
                     } else {
-                        $config->modules[$f.'.enabled'] = false;
+                        $config->modules[$f . '.enabled'] = false;
                     }
-                } elseif (!isset($config->modules[$f.'.enabled'])) {
+                } elseif (!isset($config->modules[$f . '.enabled'])) {
                     // no given enabling status in mainconfig and ep config
-                    $config->modules[$f.'.enabled'] = false;
-                } elseif (!$installation['modules'][$f.'.installed']) {
+                    $config->modules[$f . '.enabled'] = false;
+                } elseif (!$installation['modules'][$f . '.installed']) {
                     // module is not installed.
                     // outside installation mode, we force the disabling
                     // so we are sure the module is unusable until it is installed
-                    if (!$allModuleInfo) {
-                        $config->modules[$f.'.enabled'] = false;
+                    if (!$installationMode) {
+                        $config->modules[$f . '.enabled'] = false;
                     }
                 }
             }
 
-            if (!isset($installation['modules'][$f.'.dbprofile'])) {
-                $config->modules[$f.'.dbprofile'] = 'default';
+            if (!isset($installation['modules'][$f . '.dbprofile'])) {
+                $config->modules[$f . '.dbprofile'] = 'default';
             } else {
-                $config->modules[$f.'.dbprofile'] = $installation['modules'][$f.'.dbprofile'];
+                $config->modules[$f . '.dbprofile'] = $installation['modules'][$f . '.dbprofile'];
             }
 
-            if ($allModuleInfo) {
-                if (!isset($installation['modules'][$f.'.version'])) {
-                    $installation['modules'][$f.'.version'] = '';
+            if ($installationMode) {
+                if (!isset($installation['modules'][$f . '.version'])) {
+                    $installation['modules'][$f . '.version'] = '';
                 }
 
-                if (!isset($installation['modules'][$f.'.dataversion'])) {
-                    $installation['modules'][$f.'.dataversion'] = '';
+                if (!isset($installation['modules'][$f . '.dataversion'])) {
+                    $installation['modules'][$f . '.dataversion'] = '';
                 }
 
-                if (!isset($installation['__modules_data'][$f.'.contexts'])) {
-                    $installation['__modules_data'][$f.'.contexts'] = '';
+                if (!isset($installation['__modules_data'][$f . '.contexts'])) {
+                    $installation['__modules_data'][$f . '.contexts'] = '';
                 }
 
-                $config->modules[$f.'.version'] = (string) $installation['modules'][$f.'.version'];
-                $config->modules[$f.'.dataversion'] = $installation['modules'][$f.'.dataversion'];
-                $config->modules[$f.'.installed'] = $installation['modules'][$f.'.installed'];
+                $config->modules[$f . '.version'] = (string)$installation['modules'][$f . '.version'];
+                $config->modules[$f . '.dataversion'] = $installation['modules'][$f . '.dataversion'];
+                $config->modules[$f . '.installed'] = $installation['modules'][$f . '.installed'];
 
                 $config->_allModulesPathList[$f] = $path;
             }
 
-            if ($config->modules[$f.'.enabled']) {
+            if ($config->modules[$f . '.enabled']) {
                 $config->_modulesPathList[$f] = $path;
             }
         }
@@ -423,28 +455,29 @@ class jConfigCompiler
      *
      * @param object $config the config container
      */
-    protected static function _loadPluginsPathList($config)
+    protected function _loadPluginsPathList($config)
     {
-        $list = jApp::getAllPluginsPath();
+        $list = App::getAllPluginsPath();
         foreach ($list as $k => $p) {
             if ($handle = opendir($p)) {
                 while (($f = readdir($handle)) !== false) {
-                    if ($f[0] != '.' && is_dir($p.$f)) {
-                        if ($subdir = opendir($p.$f)) {
+                    if ($f[0] != '.' && is_dir($p . $f)) {
+                        if ($subdir = opendir($p . $f)) {
+                            // @deprecated
                             if ($k != 0 && $config->compilation['checkCacheFiletime']) {
-                                $config->_allBasePath[] = $p.$f.'/';
+                                $config->_allBasePath[] = $p . $f . '/';
                             }
                             while (($subf = readdir($subdir)) !== false) {
-                                if ($subf[0] != '.' && is_dir($p.$f.'/'.$subf)) {
+                                if ($subf[0] != '.' && is_dir($p . $f . '/' . $subf)) {
                                     if ($f == 'tpl') {
-                                        $prop = '_tplpluginsPathList_'.$subf;
+                                        $prop = '_tplpluginsPathList_' . $subf;
                                         if (!isset($config->{$prop})) {
                                             $config->{$prop} = array();
                                         }
-                                        array_unshift($config->{$prop}, $p.$f.'/'.$subf.'/');
+                                        array_unshift($config->{$prop}, $p . $f . '/' . $subf . '/');
                                     } else {
-                                        $prop = '_pluginsPathList_'.$f;
-                                        $config->{$prop}[$subf] = $p.$f.'/'.$subf.'/';
+                                        $prop = '_pluginsPathList_' . $f;
+                                        $config->{$prop}[$subf] = $p . $f . '/' . $subf . '/';
                                     }
                                 }
                             }
@@ -461,14 +494,14 @@ class jConfigCompiler
      * calculate miscellaneous path, depending of the server configuration and other information
      * in the given array : script path, script name, documentRoot ..
      *
-     * @param array  $urlconf          urlengine configuration. scriptNameServerVariable, basePath,
+     * @param array $urlconf urlengine configuration. scriptNameServerVariable, basePath,
      *                                 jelixWWWPath and jqueryPath should be present
      * @param string $pseudoScriptName
-     * @param bool   $isCli
+     * @param bool $isCli
      *
      * @throws Exception
      */
-    public static function getPaths(&$urlconf, $pseudoScriptName = '', $isCli = false)
+    public function getPaths(&$urlconf, $pseudoScriptName = '', $isCli = false)
     {
         // retrieve the script path+name.
         // for cli, it will be the path from the directory were we execute the script (given to the php exec).
@@ -478,7 +511,12 @@ class jConfigCompiler
             $urlconf['urlScript'] = $pseudoScriptName;
         } else {
             if ($urlconf['scriptNameServerVariable'] == '') {
-                $urlconf['scriptNameServerVariable'] = self::findServerName('.php', $isCli);
+                if ($isCli) {
+                    $urlconf['scriptNameServerVariable'] = 'SCRIPT_NAME';
+                }
+                else {
+                    $urlconf['scriptNameServerVariable'] = Server::findServerName('.php');
+                }
             }
             $urlconf['urlScript'] = $_SERVER[$urlconf['scriptNameServerVariable']];
         }
@@ -487,15 +525,15 @@ class jConfigCompiler
         if ($isCli) {
             $lastslash = strrpos($urlconf['urlScript'], DIRECTORY_SEPARATOR);
             if ($lastslash === false) {
-                $urlconf['urlScriptPath'] = ($pseudoScriptName ? jApp::appPath('/scripts/') : getcwd().'/');
+                $urlconf['urlScriptPath'] = ($pseudoScriptName ? App::appPath('/scripts/') : getcwd() . '/');
                 $urlconf['urlScriptName'] = $urlconf['urlScript'];
             } else {
-                $urlconf['urlScriptPath'] = getcwd().'/'.substr($urlconf['urlScript'], 0, $lastslash).'/';
+                $urlconf['urlScriptPath'] = getcwd() . '/' . substr($urlconf['urlScript'], 0, $lastslash) . '/';
                 $urlconf['urlScriptName'] = substr($urlconf['urlScript'], $lastslash + 1);
             }
 
             $snp = $urlconf['urlScriptName'];
-            $urlconf['urlScript'] = $urlconf['urlScriptPath'].$snp;
+            $urlconf['urlScript'] = $urlconf['urlScriptPath'] . $snp;
 
             if ($urlconf['basePath'] == '') {
                 // we should have a basePath when generating url from a command line
@@ -504,7 +542,7 @@ class jConfigCompiler
             }
         } else {
             $lastslash = strrpos($urlconf['urlScript'], '/');
-            $urlconf['urlScriptPath'] = substr($urlconf['urlScript'], 0, $lastslash).'/';
+            $urlconf['urlScriptPath'] = substr($urlconf['urlScript'], 0, $lastslash) . '/';
             $urlconf['urlScriptName'] = substr($urlconf['urlScript'], $lastslash + 1);
 
             $basepath = $urlconf['basePath'];
@@ -514,7 +552,7 @@ class jConfigCompiler
             } else {
                 if ($basepath != '/') {
                     if ($basepath[0] != '/') {
-                        $basepath = '/'.$basepath;
+                        $basepath = '/' . $basepath;
                     }
                     if (substr($basepath, -1) != '/') {
                         $basepath .= '/';
@@ -525,8 +563,8 @@ class jConfigCompiler
                     // with pseudoScriptName, we aren't in a true context, we could be in a cli context
                     // (the installer), and we want the path like when we are in a web context.
                     // $pseudoScriptName is supposed to be relative to the basePath
-                    $urlconf['urlScriptPath'] = substr($basepath, 0, -1).$urlconf['urlScriptPath'];
-                    $urlconf['urlScript'] = $urlconf['urlScriptPath'].$urlconf['urlScriptName'];
+                    $urlconf['urlScriptPath'] = substr($basepath, 0, -1) . $urlconf['urlScriptPath'];
+                    $urlconf['urlScript'] = $urlconf['urlScriptPath'] . $urlconf['urlScriptName'];
                 }
                 $localBasePath = $basepath;
                 if ($urlconf['backendBasePath']) {
@@ -534,42 +572,42 @@ class jConfigCompiler
                     // we have to change urlScriptPath. it may contains the base path of the backend server
                     // we should replace this base path by the basePath of the frontend server
                     if (strpos($urlconf['urlScriptPath'], $urlconf['backendBasePath']) === 0) {
-                        $urlconf['urlScriptPath'] = $basepath.substr($urlconf['urlScriptPath'], strlen($urlconf['backendBasePath']));
+                        $urlconf['urlScriptPath'] = $basepath . substr($urlconf['urlScriptPath'], strlen($urlconf['backendBasePath']));
                     } else {
-                        $urlconf['urlScriptPath'] = $basepath.substr($urlconf['urlScriptPath'], 1);
+                        $urlconf['urlScriptPath'] = $basepath . substr($urlconf['urlScriptPath'], 1);
                     }
                 } elseif (strpos($urlconf['urlScriptPath'], $basepath) !== 0) {
-                    throw new Exception('Error in main configuration on basePath -- basePath ('.$basepath.') in config file doesn\'t correspond to current base path. You should setup it to '.$urlconf['urlScriptPath']);
+                    throw new Exception('Error in main configuration on basePath -- basePath (' . $basepath . ') in config file doesn\'t correspond to current base path. You should setup it to ' . $urlconf['urlScriptPath']);
                 }
             }
             $urlconf['basePath'] = $basepath;
 
             if ($urlconf['jelixWWWPath'][0] != '/') {
-                $urlconf['jelixWWWPath'] = $basepath.$urlconf['jelixWWWPath'];
+                $urlconf['jelixWWWPath'] = $basepath . $urlconf['jelixWWWPath'];
             }
-            $urlconf['jelixWWWPath'] = rtrim($urlconf['jelixWWWPath'], '/').'/';
+            $urlconf['jelixWWWPath'] = rtrim($urlconf['jelixWWWPath'], '/') . '/';
 
             if ($urlconf['jqueryPath'][0] != '/') {
-                $urlconf['jqueryPath'] = $basepath.rtrim($urlconf['jqueryPath'], '/').'/';
+                $urlconf['jqueryPath'] = $basepath . rtrim($urlconf['jqueryPath'], '/') . '/';
             }
-            $urlconf['jqueryPath'] = rtrim($urlconf['jqueryPath'], '/').'/';
+            $urlconf['jqueryPath'] = rtrim($urlconf['jqueryPath'], '/') . '/';
 
             $snp = substr($urlconf['urlScript'], strlen($localBasePath));
 
             if (isset($_SERVER['DOCUMENT_ROOT'])) {
                 $urlconf['documentRoot'] = $_SERVER['DOCUMENT_ROOT'];
             } else {
-                $urlconf['documentRoot'] = jApp::wwwPath();
+                $urlconf['documentRoot'] = App::wwwPath();
             }
 
             if ($localBasePath != '/') {
                 // if wwwPath ends with the base path, we remove the base path from the wwwPath to have
                 // the document root
-                $posBP = strpos(jApp::wwwPath(), $localBasePath);
+                $posBP = strpos(App::wwwPath(), $localBasePath);
                 if ($posBP !== false) {
-                    $lenWP = strlen(jApp::wwwPath()) - strlen($localBasePath);
+                    $lenWP = strlen(App::wwwPath()) - strlen($localBasePath);
                     if ($posBP == $lenWP) {
-                        $urlconf['documentRoot'] = substr(jApp::wwwPath(), 0, $lenWP);
+                        $urlconf['documentRoot'] = substr(App::wwwPath(), 0, $lenWP);
                     }
                 }
             }
@@ -587,26 +625,5 @@ class jConfigCompiler
         if (isset($urlconf['notfoundAct'])) {
             $urlconf['notFoundAct'] = $urlconf['notfoundAct'];
         }
-    }
-
-    public static function findServerName($ext = '.php', $isCli = false)
-    {
-        $extlen = strlen($ext);
-
-        if (strrpos($_SERVER['SCRIPT_NAME'], $ext) === (strlen($_SERVER['SCRIPT_NAME']) - $extlen)
-           || $isCli) {
-            return 'SCRIPT_NAME';
-        }
-        if (isset($_SERVER['REDIRECT_URL'])
-                  && strrpos($_SERVER['REDIRECT_URL'], $ext) === (strlen($_SERVER['REDIRECT_URL']) - $extlen)) {
-            return 'REDIRECT_URL';
-        }
-        if (isset($_SERVER['ORIG_SCRIPT_NAME'])
-                  && strrpos($_SERVER['ORIG_SCRIPT_NAME'], $ext) === (strlen($_SERVER['ORIG_SCRIPT_NAME']) - $extlen)) {
-            return 'ORIG_SCRIPT_NAME';
-        }
-
-        throw new Exception('Error in main configuration on URL engine parameters -- In config file the parameter urlengine:scriptNameServerVariable is empty and Jelix doesn\'t find
-            the variable in $_SERVER which contains the script name. You must see phpinfo and setup this parameter in your config file.', 11);
     }
 }

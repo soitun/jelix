@@ -8,10 +8,10 @@
  * @author   Laurent Jouanneau
  * @contributor Loic Mathaud, Julien Issler
  *
- * @copyright 2005-2023 Laurent Jouanneau
+ * @copyright 2005-2025 Laurent Jouanneau
  * @copyright 2007 Julien Issler
  *
- * @see     http://www.jelix.org
+ * @see      https://www.jelix.org
  * @licence  GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 
@@ -23,6 +23,9 @@
  * @deprecated
  * @see jFramework::version()
  */
+
+use Jelix\Core\Config\Compiler;
+
 define('JELIX_VERSION', '1.9.0-pre');
 
 /*
@@ -59,8 +62,6 @@ require JELIX_LIB_CORE_PATH.'jBasicErrorHandler.class.php';
 require JELIX_LIB_CORE_PATH.'jException.class.php';
 
 require JELIX_LIB_CORE_PATH.'jHttpErrorException.class.php';
-
-require JELIX_LIB_CORE_PATH.'jConfig.class.php';
 
 require JELIX_LIB_CORE_PATH.'jSelector.class.php';
 
@@ -110,7 +111,6 @@ interface jIUrlSignificantHandler
  * @see jelix_autoload()
  */
 $GLOBALS['gLibPath'] = array(
-    'Config' => JELIX_LIB_PATH.'core/',
     'Selector' => JELIX_LIB_PATH.'core/selector/',
     'Db' => JELIX_LIB_PATH.'db/',
     'Dao' => JELIX_LIB_PATH.'dao/',
@@ -129,6 +129,9 @@ $GLOBALS['gLibClassPath'] = array(
     'jIFormsDatasource' => JELIX_LIB_PATH.'forms/jIFormsDatasource.iface.php',
     'jIFormsDatasource2' => JELIX_LIB_PATH.'forms/jIFormsDatasource2.iface.php',
     'jIFormsDynamicDatasource' => JELIX_LIB_PATH.'forms/jIFormsDynamicDatasource.iface.php',
+    'jConfig' => JELIX_LIB_PATH.'legacy/jConfig.php',
+    'jConfigCompiler' => JELIX_LIB_PATH.'legacy/jConfigCompiler.php',
+    'jConfigAutoloader' => JELIX_LIB_PATH.'core/jConfigAutoloader.class.php',
 );
 
 /**
@@ -140,7 +143,7 @@ function jelix_autoload($class)
 {
     if (strpos($class, 'jelix') === 0) {
         $f = LIB_PATH.$class.'.php';
-    } elseif (preg_match('/^j(Dao|Selector|Tpl|Event|Db|Controller|Forms(?:Control)?|Auth|Config|Installer|KV).*/i', $class, $m)) {
+    } elseif (preg_match('/^j(Dao|Selector|Tpl|Event|Db|Controller|Forms(?:Control)?|Auth|Installer|KV).*/i', $class, $m)) {
         $f = $GLOBALS['gLibPath'][$m[1]].$class.'.class.php';
     } elseif (preg_match('/^cDao(?:Record)?_(.+)_Jx_(.+)_Jx_(.+)$/', $class, $m)) {
         // for DAO which are stored in sessions for example
@@ -211,7 +214,7 @@ function checkAppOpened()
         $basePath = jApp::urlBasePath();
         if ($basePath == null) {
             try {
-                $urlScript = $_SERVER[jConfigCompiler::findServerName()];
+                $urlScript = $_SERVER[jServer::findServerName()];
                 $basePath = substr($urlScript, 0, strrpos($urlScript, '/')) . '/';
             } catch (Exception $e) {
                 $basePath = '/';

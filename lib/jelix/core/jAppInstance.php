@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @author     Laurent Jouanneau
  * @copyright  2015-2025 Laurent Jouanneau
@@ -7,6 +6,9 @@
  * @see       http://jelix.org
  * @licence    http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
+use Jelix\Core\Infos\FrameworkInfos;
+
+
 class jAppInstance
 {
     public $tempBasePath = '';
@@ -63,6 +65,11 @@ class jAppInstance
      * @var \Jelix\Core\Services
      */
     protected $_services;
+
+    /**
+     * @var FrameworkInfos
+     */
+    protected $_framework;
 
     /**
      * initialize the application paths.
@@ -154,6 +161,17 @@ class jAppInstance
     public function onRestoringAsContext()
     {
         $this->registerAutoload();
+    }
+
+    /**
+     * @return FrameworkInfos
+     */
+    public function getFrameworkInfo()
+    {
+        if ($this->_framework === null) {
+            $this->_framework = FrameworkInfos::load();
+        }
+        return $this->_framework;
     }
 
     /**

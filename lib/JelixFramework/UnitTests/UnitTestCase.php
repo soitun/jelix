@@ -2,11 +2,12 @@
 /**
  * @author      Laurent Jouanneau
  * @contributor Christophe Thiriot
- * @copyright   2006-2019 Laurent Jouanneau
+ * @copyright   2006-2025 Laurent Jouanneau
  * @link        https://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 namespace Jelix\UnitTests;
+use Jelix\Core\Config\AppConfig;
 use PHPUnit\Framework\TestCase;
 
 require_once (JELIX_LIB_CORE_PATH.'request/jClassicRequest.class.php');
@@ -48,8 +49,9 @@ abstract class UnitTestCase extends TestCase {
      * @param string $config the configuration file to use, as if you were inside an entry point
      * @param string $entryPoint the entrypoint name as indicated into project.xml
      */
-    protected static function initJelixConfig($config = 'index/config.ini.php', $entryPoint = 'index.php') {
-        $config = \jConfigCompiler::read($config, true, true, $entryPoint);
+    protected static function initJelixConfig($config = 'index/config.ini.php', $entryPoint = 'index.php')
+    {
+        $config = AppConfig::loadForCli($config, $entryPoint);
         \jApp::setConfig($config);
         \jApp::setCoord(null);
     }
@@ -67,11 +69,12 @@ abstract class UnitTestCase extends TestCase {
      * @param string $config the configuration file to use, as if you were inside an entry point
      * @param string $entryPoint the entrypoint name as indicated into project.xml
      */
-    protected static function initClassicRequest($url, $config = 'index/config.ini.php', $entryPoint = 'index.php') {
+    protected static function initClassicRequest($url, $config = 'index/config.ini.php', $entryPoint = 'index.php')
+    {
         self::$fakeServer = new \Jelix\FakeServerConf\ApacheMod(\jApp::wwwPath(), '/'.$entryPoint);
         self::$fakeServer->setHttpRequest($url);
 
-        $config = \jConfigCompiler::read($config, true, false, '/'.$entryPoint);
+        $config = AppConfig::loadWithoutCache($config, '/'.$entryPoint);
         $coord = new CoordinatorForTest($config, false);
         \jApp::setCoord($coord);
         $request = new \jClassicRequest();

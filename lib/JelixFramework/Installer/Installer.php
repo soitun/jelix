@@ -18,8 +18,8 @@ require_once JELIX_LIB_PATH.'installer/textInstallReporter.class.php';
 
 require_once JELIX_LIB_PATH.'installer/ghostInstallReporter.class.php';
 
-require_once JELIX_LIB_PATH.'core/jConfigCompiler.class.php';
 
+use Jelix\Core\Config\Compiler;
 use Jelix\Core\Profiles;
 use Jelix\Dependencies\Item;
 use Jelix\Dependencies\ItemException;
@@ -648,13 +648,9 @@ class Installer
 
             // we re-load configuration file for each module because
             // previous module installer could have modify it.
-            $entryPoint->setConfigObj(
-                \jConfigCompiler::read(
-                    $entryPoint->getConfigFileName(),
-                    true,
-                    $entryPoint->isCliScript(),
-                    $entryPoint->getScriptName()
-                )
+            $compiler = new Compiler($entryPoint->getConfigFileName(), $entryPoint->getScriptName());
+            $entryPoint->setConfigObj($entryPoint->isCliScript() ?
+                $compiler->readForCli(true) : $compiler->read(true)
             );
             \jApp::setConfig($entryPoint->getConfigObj());
         }

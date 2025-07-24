@@ -27,7 +27,9 @@ New features
   that will call `php dev.php compile $FULLPATH_OF_FILE`, to compile a single
   file without calling the installer before each test into your browser.
   Files that are compiled during installers:
+  - configuration
   - properties files for locales
+
 
 - The `charset` configuration property is deprecated. You should keep the default value
   to UTF-8. If not, convert your locales and other data to UTF-8 as the support
@@ -109,6 +111,8 @@ Removes
   But you should consider it as an archive. You should develop an alternative to these modules.
 * Plugins for jDb and jDao don't exist anymore.
 * All error messages are now only in english. No more `jelix~db.*`, `jelix~daoxml.*` and `jelix~dao.*` locales.
+* No more support of phpunit tests into modules. `tests/runtests.php` into application
+  does not work anymore.
 
 
 Broken API
@@ -142,6 +146,7 @@ Deprecated API and features
 * `jelix_scan_module_sel`
 * classes `jLocale` and `jBundle` are deprecated, and replaced by `Jelix\Locale\Locale`
   and `Jelix\Locale\Bundle`.
+* The method `jConfigCompiler::findServerName()` has been moved to `jServer` 
 
 About jDb:
 

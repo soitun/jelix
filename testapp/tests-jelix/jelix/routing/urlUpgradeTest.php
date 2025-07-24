@@ -8,7 +8,9 @@
 * @link        http://www.jelix.org
 * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
 */
-use \Jelix\Installer\Migrator\UrlEngineUpgrader;
+
+use Jelix\Installer\Migrator\UrlEngineUpgrader;
+use Jelix\Core\Config\AppConfig;
 
 class urlUpgradeTest extends \Jelix\UnitTests\UnitTestCase {
 
@@ -22,7 +24,7 @@ class urlUpgradeTest extends \Jelix\UnitTests\UnitTestCase {
     }
 
     function testSimpleUpgrade() {
-        $defaultConfig = new \Jelix\IniFile\IniModifier(jConfig::getDefaultConfigFile());
+        $defaultConfig = new \Jelix\IniFile\IniModifier(AppConfig::getDefaultConfigFile());
         $mainConfig = new \Jelix\IniFile\IniModifier(__DIR__.'/app1/app/system/mainconfig.ini.php');
         $epConfig = new \Jelix\IniFile\IniModifier(jApp::tempPath('config.ini'));
         $config = new \Jelix\IniFile\IniModifierArray(array(
@@ -44,7 +46,7 @@ class urlUpgradeTest extends \Jelix\UnitTests\UnitTestCase {
     }
 
     function testSimple2Upgrade() {
-        $defaultConfig = new \Jelix\IniFile\IniModifier(jConfig::getDefaultConfigFile());
+        $defaultConfig = new \Jelix\IniFile\IniModifier(AppConfig::getDefaultConfigFile());
         $mainConfig = new \Jelix\IniFile\IniModifier(__DIR__.'/app1/app/system/mainconfig.ini.php');
         $epConfig = new \Jelix\IniFile\IniModifier(jApp::tempPath('config.ini'));
         $config = new \Jelix\IniFile\IniModifierArray(array(
@@ -91,7 +93,7 @@ class urlUpgradeTest extends \Jelix\UnitTests\UnitTestCase {
     }
 
     function testBasicSignificantUpgrade() {
-        $defaultConfig = new \Jelix\IniFile\IniModifier(jConfig::getDefaultConfigFile());
+        $defaultConfig = new \Jelix\IniFile\IniModifier(AppConfig::getDefaultConfigFile());
         $mainConfig = new \Jelix\IniFile\IniModifier(__DIR__.'/app1/app/system/mainconfig.ini.php');
         $epConfig = new \Jelix\IniFile\IniModifier(jApp::tempPath('config.ini'));
         $config = new \Jelix\IniFile\IniModifierArray(array(

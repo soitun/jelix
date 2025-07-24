@@ -3,7 +3,7 @@
  * @author      Laurent Jouanneau
  * @contributor Julien Issler
  *
- * @copyright   2008-2023 Laurent Jouanneau
+ * @copyright   2008-2025 Laurent Jouanneau
  * @copyright   2015 Julien Issler
  *
  * @see        http://jelix.org
@@ -12,6 +12,7 @@
 
 namespace Jelix\DevHelper\Command;
 
+use Jelix\Core\Config\AppConfig;
 use Jelix\DevHelper\AbstractCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -100,18 +101,13 @@ class InitAdmin extends \Jelix\DevHelper\AbstractCommandForApp
             }
         }
 
-        \jApp::setConfig(\jConfigCompiler::read(
-            $ep->getConfigFile(),
-            true,
-            true,
-            $ep->getFile()
-        ));
+        \jApp::setConfig(AppConfig::loadForCli($ep->getConfigFile(), $ep->getFile()));
         \jFile::createDir(\jApp::tempPath(), \jApp::config()->chmodDir);
 
         $installConfig = new \Jelix\IniFile\IniModifier(\jApp::varConfigPath('installer.ini.php'));
 
         $mainIniFile = new \Jelix\IniFile\MultiIniModifier(
-            \jConfig::getDefaultConfigFile(),
+            \Jelix\Core\Config\AppConfig::getDefaultConfigFile(),
             \jApp::mainConfigFile()
         );
         $inifile = new \Jelix\IniFile\MultiIniModifier(
