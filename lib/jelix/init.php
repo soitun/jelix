@@ -24,8 +24,6 @@
  * @see jFramework::version()
  */
 
-use Jelix\Core\Config\Compiler;
-
 define('JELIX_VERSION', '1.9.0-pre');
 
 /*

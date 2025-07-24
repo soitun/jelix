@@ -9,7 +9,17 @@ cd lib
   composer.json
 
 cd lib/JelixFramework/Core
-  __ALL_RECURSIVELY__
+  __ALL__
+
+cd lib/JelixFramework/Core/Config
+  __ALL__
+! defaultconfig.ini.php
+
+cd lib/JelixFramework/Core/Infos
+  __ALL__
+
+cd lib/JelixFramework/Core/Selector
+  __ALL__
 
 cd lib/JelixFramework/Dependencies
   __ALL_RECURSIVELY__
@@ -67,7 +77,6 @@ cd lib/jelix/controllers
 
 cd lib/jelix/core
   __ALL_RECURSIVELY__
-! defaultconfig.ini.php
 
 
 cd lib/jelix/core-modules/jelix
@@ -161,6 +170,9 @@ cd lib/jelix/installer
   __ALL_RECURSIVELY__
 
 cd lib/jelix/kvdb
+  __ALL__
+
+cd lib/jelix/legacy
   __ALL__
 
 cd lib/jelix/tpl/

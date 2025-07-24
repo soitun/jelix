@@ -18,12 +18,10 @@ use Jelix\IniFile\Util as IniFileMgr;
 use jServer as Server;
 
 /**
- * It merges two ini file in a single array and store it in a temporary file.
- * This is a static class.
+ * This class loads all configuration files and generate a single configuration file
+ * that is ready to be used by the application
  *
- * @package  jelix
- * @subpackage core
- * @static
+ * @internal
  */
 class Compiler
 {
@@ -31,7 +29,6 @@ class Compiler
     protected $commonConfig;
 
     protected $configFileName = '';
-
 
     protected $pseudoScriptName = '';
 
@@ -56,7 +53,6 @@ class Compiler
         $this->configFileName = $configFile;
     }
 
-
     /**
      * Read and merge all configuration files.
      *
@@ -72,7 +68,6 @@ class Compiler
      * @throws Exception
      *
      * @return object the object containing content of all configuration files
-     * OK
      */
     protected function readStaticConfigFiles($configFile)
     {
@@ -118,7 +113,6 @@ class Compiler
         return $config;
     }
 
-
     /**
      * Read the ini file given to the constructor. It Merges it with the content of
      * mainconfig.ini.php and other configuration files. It also calculates some options.
@@ -129,7 +123,6 @@ class Compiler
      *
      * @return \StdClass an object which contains configuration values
      * @throws Exception
-     *
      */
     public function read($installationMode = false)
     {
@@ -150,7 +143,6 @@ class Compiler
      *
      * @return \StdClass an object which contains configuration values
      * @throws Exception
-     *
      */
     public function readForCli($installationMode)
     {
@@ -193,8 +185,6 @@ class Compiler
 
         return $this->config;
     }
-
-
 
     /**
      * fill some static config properties with calculated values.
@@ -347,7 +337,7 @@ class Compiler
     }
 
     /**
-     * Analyse and check the "lib:" and "app:" path.
+     * Find all activated modules and check their status.
      *
      * @param object $config the config object
      * @param bool $installationMode may be true for the installer, which needs all informations
