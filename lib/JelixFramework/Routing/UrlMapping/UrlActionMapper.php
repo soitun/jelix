@@ -3,7 +3,7 @@
  * @author      Laurent Jouanneau
  * @copyright   2005-2025 Laurent Jouanneau
  *
- * @see        http://www.jelix.org
+ * @see         https://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 
@@ -11,11 +11,9 @@ namespace Jelix\Routing\UrlMapping;
 use Jelix\Locale\Locale;
 
 /**
- * an url engine to parse,analyse and create significant url
+ * An url engine to parse,analyse and create significant url
  * it needs an urls.xml file in the app/system directory (see documentation).
  *
- * @author      Laurent Jouanneau
- * @copyright   2005-2016 Laurent Jouanneau
  */
 class UrlActionMapper
 {
@@ -52,7 +50,7 @@ class UrlActionMapper
     {
         $this->config = $config;
         $this->xmlfileSelector = new SelectorUrlXmlMap($config->mapFile, $config->localMapFile);
-        \jIncluder::inc($this->xmlfileSelector);
+        require $this->xmlfileSelector->getCompiledFilePath();
         $this->dataCreateUrl = &$GLOBALS['SIGNIFICANT_CREATEURL'];
     }
 
@@ -81,7 +79,7 @@ class UrlActionMapper
     public function parseFromRequest(\jRequest $request, $params)
     {
         if ($this->config->enableParser) {
-            $file = \jApp::tempPath('compiled/urlsig/'.$this->xmlfileSelector->file.'.'.$this->config->entryPointName.'.entrypoint.php');
+            $file = $this->xmlfileSelector->getCompiledEntrypointFilePath($this->config->entryPointName);
             if (file_exists($file)) {
                 require $file;
                 $this->dataParseUrl = &$GLOBALS['SIGNIFICANT_PARSEURL'][$this->config->entryPointName];
@@ -118,8 +116,8 @@ class UrlActionMapper
             if ($pos !== false) {
                 $snp = substr($snp, 0, $pos);
             }
-            $snp = rawurlencode($snp);
-            $file = \jApp::tempPath('compiled/urlsig/'.$this->xmlfileSelector->file.'.'.$snp.'.entrypoint.php');
+            //$snp = rawurlencode($snp);
+            $file = $this->xmlfileSelector->getCompiledEntrypointFilePath($snp);
             if (file_exists($file)) {
                 require $file;
                 $this->dataParseUrl = &$GLOBALS['SIGNIFICANT_PARSEURL'][$snp];

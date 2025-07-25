@@ -10,6 +10,8 @@
 */
 
 use Jelix\Core\Config\Compiler;
+use jApp as App;
+use Jelix\Installer\WarmUp\WarmUpLauncherInterface;
 
 
 class requestsTest extends \Jelix\UnitTests\UnitTestCase {
@@ -38,7 +40,8 @@ class requestsTest extends \Jelix\UnitTests\UnitTestCase {
         jApp::restoreContext();
     }
 
-    protected function initRequest($url, $server, $scriptPath = '/foo/index.php', $scriptNameServerVariable = '') {
+    protected function initRequest($url, $server, $scriptPath = '/foo/index.php', $scriptNameServerVariable = '')
+    {
         $this->fServer = $server;
         $this->fServer->setHttpRequest($url);
 
@@ -47,8 +50,15 @@ class requestsTest extends \Jelix\UnitTests\UnitTestCase {
         if ($scriptNameServerVariable) {
             $config->urlengine['scriptNameServerVariable'] = $scriptNameServerVariable;
         }
+
+        App::setConfig($config);
+
+        $warmUp = new Jelix\Installer\WarmUp\WarmUp(App::app());
+        $warmUp->launch(App::getEnabledModulesPaths(), WarmUpLauncherInterface::STEP_ALL);
+
         $coord = new \Jelix\UnitTests\CoordinatorForTest($config, false);
         jApp::setCoord($coord);
+
         $request = new jClassicRequest();
         $coord->testSetRequest($request);
         return $request;

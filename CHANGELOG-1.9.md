@@ -30,6 +30,7 @@ New features
   - configuration
   - properties files for locales
   - event listeners list
+  - url mapping
 
 
 - The `charset` configuration property is deprecated. You should keep the default value

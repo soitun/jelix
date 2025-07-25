@@ -1,13 +1,15 @@
 <?php
 /**
  * @author      Laurent Jouanneau
- * @copyright   2005-2018 Laurent Jouanneau
+ * @copyright   2005-2025 Laurent Jouanneau
  *
  * @see        http://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 
 namespace Jelix\Routing\UrlMapping;
+
+use \jApp as App;
 
 /**
  * a specific selector for the xml files which contains the configuration of the UrlMapper.
@@ -47,15 +49,16 @@ class SelectorUrlXmlMap extends \jSelectorSimpleFile
         }
     }
 
-    public function getCompiler()
-    {
-        return new XmlMapParser();
-    }
-
     public function getCompiledFilePath()
     {
-        return \jApp::tempPath('compiled/urlsig/'.$this->file.'.creationinfos_15.php');
+        return App::varLibPath('router/'.$this->file.'.creationinfos_20.php');
     }
+
+    public function getCompiledEntrypointFilePath($entryPointName)
+    {
+        return App::varLibPath('router/'.$this->file.'.'.rawurlencode($entryPointName).'.entrypoint.php');
+    }
+
 
     public function getLocalPath()
     {
