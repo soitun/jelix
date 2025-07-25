@@ -1,16 +1,16 @@
 <?php
+
 /**
 * @package     testapp
 * @subpackage  unittest module
 * @author      Laurent Jouanneau
 * @contributor Loic Mathaud, Dominique Papin, Julien Issler
-* @copyright   2007-2024 Laurent Jouanneau
+* @copyright   2007-2025 Laurent Jouanneau
 * @copyright   2007 Loic Mathaud, 2008 Dominique Papin
 * @copyright   2008-2015 Julien Issler
 * @link        https://www.jelix.org
 * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
 */
-
 use Jelix\Forms\Compiler\XmlCompiler11;
 
 class testJFormsCompiler11 extends XmlCompiler11 {
@@ -1137,7 +1137,7 @@ array('','','myfile')
             }else{
                 try {
                     // getName() in simplexml doesn't exists in prior version of php 5.1.3, so we use a DOM
-                    $ct = $jfc->testPhpControl($dom->documentElement->localName, simplexml_import_dom($dom));
+                    $jfc->testPhpControl($dom->documentElement->localName, simplexml_import_dom($dom));
 
                     $this->fail("no exception during bad xml test content $k");
                 }catch(jException $e){
@@ -1176,6 +1176,7 @@ array( 'reset','myfile')
                 $this->fail("Can't load bad xml test content ($k)");
             }else{
                 try {
+                    // getName() in simplexml doesn't exists in prior version of php 5.1.3, so we use a DOM
                     $jfc->testPhpForm($dom);
                     $this->fail("no exception during bad xml test content $k");
                 }catch(jException $e){

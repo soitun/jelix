@@ -4,13 +4,12 @@
 * @subpackage  unittest module
 * @author      Laurent Jouanneau
 * @contributor Loic Mathaud, Julien Issler
-* @copyright   2007-2024 Laurent Jouanneau
+* @copyright   2007-2025 Laurent Jouanneau
 * @copyright   2007 Loic Mathaud
 * @copyright   2008 Julien Issler
 * @link        https://www.jelix.org
 * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
 */
-
 use Jelix\Forms\Compiler\XmlCompiler10;
 
 class testJFormsCompiler10 extends XmlCompiler10 {
@@ -29,7 +28,7 @@ class testJFormsCompiler10 extends XmlCompiler10 {
     }
 }
 
-class jforms_compilerTest extends \Jelix\UnitTests\UnitTestCase {
+class jForms_compilerTest extends \Jelix\UnitTests\UnitTestCase {
 
     protected $_XmlControls = array(
 0=>'<input ref="nom" xmlns="http://jelix.org/ns/forms/1.0">
@@ -797,7 +796,7 @@ array('','','myfile')
             }else{
                 try {
                     // getName() in simplexml doesn't exists in prior version of php 5.1.3, so we use a DOM
-                    $ct = $jfc->testPhpControl($dom->documentElement->localName, simplexml_import_dom($dom));
+                    $jfc->testPhpControl($dom->documentElement->localName, simplexml_import_dom($dom));
 
                     $this->fail("no exception during bad xml test content $k");
                 }catch(jException $e){
@@ -834,6 +833,7 @@ array( 'reset','myfile')
                 $this->fail("Can't load bad xml test content ($k)");
             }else{
                 try {
+                    // getName() in simplexml doesn't exists in prior version of php 5.1.3, so we use a DOM
                     $jfc->testPhpForm($dom);
                     $this->fail("no exception during bad xml test content $k");
                 }catch(jException $e){

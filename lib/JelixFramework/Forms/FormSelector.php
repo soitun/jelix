@@ -1,9 +1,7 @@
 <?php
 /**
- * see Jelix/Core/Selector/SelectorInterface.php for documentation about selectors.
- *
- * @author      Laurent Jouanneau
- * @copyright   2005-2024 Laurent Jouanneau
+ * @author     Laurent Jouanneau
+ * @copyright  2005-2025 Laurent Jouanneau
  *
  * @see        https://www.jelix.org
  * @licence    GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
@@ -11,6 +9,7 @@
 namespace Jelix\Forms;
 
 use Jelix\Core\App;
+use Jelix\Core\Selector\ModuleSelector;
 use Jelix\Core\Selector\Exception;
 
 /**
@@ -19,7 +18,7 @@ use Jelix\Core\Selector\Exception;
  * syntax : "module~formName".
  * file : forms/formName.form.xml .
  */
-class FormSelector extends \Jelix\Core\Selector\ModuleSelector
+class FormSelector extends ModuleSelector
 {
     protected $type = 'form';
     protected $_dirname = 'forms/';

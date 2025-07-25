@@ -13,6 +13,7 @@
  */
 use Jelix\Forms\Forms;
 use Jelix\Locale\Locale;
+use Jelix\Event\Event;
 
 class passwordCtrl extends jController
 {
@@ -58,7 +59,7 @@ class passwordCtrl extends jController
             $tpl->assign('viewaction', 'default:view');
         }
 
-        jEvent::notify('jauthdbAdminPasswordForm', array('form' => $form, 'tpl' => $tpl));
+        Event::notify('jauthdbAdminPasswordForm', array('form' => $form, 'tpl' => $tpl));
         $rep->body->assign('MAIN', $tpl->fetch('password_change'));
 
         return $rep;
@@ -82,7 +83,7 @@ class passwordCtrl extends jController
             return $this->redirect('password:index', ['j_user_login' => $login]);
         }
         $evresp = array();
-        $listenersOk = !jEvent::notify('jauthdbAdminCheckPasswordForm', array('form' => $form))
+        $listenersOk = !Event::notify('jauthdbAdminCheckPasswordForm', array('form' => $form))
                         ->inResponse('check', false, $evresp);
         if (!$form->check() || !$listenersOk) {
             return $this->redirect('password:index', ['j_user_login' => $login]);

@@ -4,9 +4,9 @@
  * @subpackage   core_config_plugin
  *
  * @author       Laurent Jouanneau
- * @copyright    2012 Laurent Jouanneau
+ * @copyright    2012-2025 Laurent Jouanneau
  *
- * @see         http://jelix.org
+ * @see          https://jelix.org
  * @licence      GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 class nsautoloaderConfigCompilerPlugin implements \Jelix\Core\Config\CompilerPluginInterface
@@ -19,13 +19,13 @@ class nsautoloaderConfigCompilerPlugin implements \Jelix\Core\Config\CompilerPlu
     public function atStart($config)
     {
         $config->_autoload_class = array();
-        $config->_autoload_namespacepsr0 = array(); // psr0
+        $config->_autoload_namespacepsr0 = array();
         $config->_autoload_classpattern = array();
         $config->_autoload_includepathmap = array();
         $config->_autoload_includepath = array();
-        $config->_autoload_namespacepsr4 = array(); // psr4
+        $config->_autoload_namespacepsr4 = array();
         $config->_autoload_autoloader = array();
-        $config->_autoload_fallback = array('psr4' => array(), 'psr0' => array());
+        $config->_autoload_fallback = array('psr4'=>array(), 'psr0'=>array());
     }
 
     public function onModule($config, Jelix\Core\Infos\ModuleInfos $module)

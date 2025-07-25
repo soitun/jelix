@@ -10,6 +10,7 @@
  * @licence  http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public Licence, see LICENCE file
  */
 use Jelix\Locale\Locale;
+use Jelix\Event\Event;
 
 class admin_menuZone extends jZone
 {
@@ -33,7 +34,7 @@ class admin_menuZone extends jZone
         $menu['refdata'] = new masterAdminMenuItem('refdata', Locale::get('gui.menu.item.refdata'), '', 80);
         $menu['system'] = new masterAdminMenuItem('system', Locale::get('gui.menu.item.system'), '', 100);
 
-        $items = jEvent::notify('masteradminGetMenuContent')->getResponse();
+        $items = Event::notify('masteradminGetMenuContent')->getResponse();
 
         foreach ($items as $item) {
             if ($item->parentId) {

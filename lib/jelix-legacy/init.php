@@ -53,6 +53,8 @@ class LegacyJelixAutoloader
     {
         if (strpos($class, 'jelix') === 0) {
             $f = LIB_PATH.$class.'.php';
+        } elseif (isset(self::$filePath[$class])) {
+            $f = self::$filePath[$class];
         } elseif (preg_match('/^j(Dao|Selector|Tpl|Db|Controller|Forms(?:Control)?|Auth|Installer|KV).*/i', $class, $m)) {
             $f = self::$libPath[$m[1]].$class.'.class.php';
         } elseif (preg_match('/^cDao(?:Record)?_(.+)_Jx_(.+)_Jx_(.+)$/', $class, $m)) {
@@ -78,8 +80,6 @@ class LegacyJelixAutoloader
             }
 
             return;
-        } elseif (isset(self::$filePath[$class])) {
-            $f = self::$filePath[$class];
         } else {
             $f = JELIX_LIB_UTILS_PATH.$class.'.class.php';
         }
@@ -108,6 +108,7 @@ LegacyJelixAutoloader::$filePath = array(
     'jIFormsDynamicDatasource' => JELIX_LIB_PATH.'forms/jIFormsDynamicDatasource.iface.php',
     'jEvent' => JELIX_LIB_PATH.'legacy/jEvent.php',
     'jEventListener' => JELIX_LIB_PATH.'legacy/jEventListener.php',
+    'jSelectorForm' => JELIX_LIB_PATH.'legacy/jSelectorForm.php',
 );
 
 spl_autoload_register('LegacyJelixAutoloader::loadClass');

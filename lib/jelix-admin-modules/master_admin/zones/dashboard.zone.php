@@ -9,6 +9,8 @@
  * @see      http://jelix.org
  * @licence  http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public Licence, see LICENCE file
  */
+use Jelix\Event\Event;
+
 class masterAdminDashboardWidget
 {
     public $title = '';
@@ -24,7 +26,7 @@ class dashboardZone extends jZone
     {
         $this->_tpl->assignIfNone('foo', 'bar');
 
-        $widgets = \Jelix\Event\Event::notify('masterAdminGetDashboardWidget')->getResponse();
+        $widgets = Event::notify('masterAdminGetDashboardWidget')->getResponse();
         usort($widgets, function ($itemA, $itemB) {
             if ($itemA->order == $itemB->order) {
                 return 0;

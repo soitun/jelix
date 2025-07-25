@@ -26,10 +26,12 @@ New features
   During the development, you can set a file watcher (into your IDE for example)
   that will call `php dev.php compile $FULLPATH_OF_FILE`, to compile a single
   file without calling the installer before each test into your browser.
-  Files that are compiled during installers:
+  Files that are compiled during installation:
   - configuration
   - properties files for locales
   - event listeners list
+  - url mapping
+  - forms
 
 
 - The `charset` configuration property is deprecated. You should keep the default value
@@ -40,12 +42,10 @@ New features
   You can set a directory without a namespace. This directory will be a root
   for namespaces that are not matched by other rules.
 
-
 **Locales**
 
-
 - classes `jLocale` and `jBundle` are deprecated, and replaced by `Jelix\Locale\Locale`
-  and `Jelix\Locale\Bundle`. 
+  and `Jelix\Locale\Bundle`.
 - These new classes support only UTF-8 charsets. `Jelix\Locale\Locale` call `jLocale`
   if the default charset is not UTF-8. 
 - Properties files are now compiled during installation to improve performance 
@@ -152,6 +152,9 @@ Broken API
 
 - Catching an exception about invalid/unknown profil (jProfile) must be done 
   by catching `\Jelix\Profiles\Exception` instead of `jException` from now.
+- `jFormsCompiler`, `jFormsCompiler_jf_1_0`, `jFormsCompiler_jf_1_1` have been
+  renamed to `Jelix\Forms\Compiler\FormCompiler`, `Jelix\Forms\Compiler\/XmlCompiler10`,
+  `Jelix\Forms\Compiler\/XmlCompiler11`, and so, are not existing anymore.
 
 
 Deprecated API and features
@@ -179,6 +182,7 @@ Deprecated API and features
 * classes `jLocale` and `jBundle` are deprecated, and replaced by `Jelix\Locale\Locale`
   and `Jelix\Locale\Bundle`.
 * The method `jConfigCompiler::findServerName()` has been moved to `jServer` 
+* `jSelectorForm`
 
 About jDb:
 

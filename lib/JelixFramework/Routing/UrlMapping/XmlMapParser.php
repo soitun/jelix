@@ -3,7 +3,7 @@
  * @author      Laurent Jouanneau
  * @contributor Thibault Piront (nuKs)
  *
- * @copyright   2005-2024 Laurent Jouanneau
+ * @copyright   2005-2025 Laurent Jouanneau
  * @copyright   2007 Thibault Piront
  *
  * @see         https://www.jelix.org

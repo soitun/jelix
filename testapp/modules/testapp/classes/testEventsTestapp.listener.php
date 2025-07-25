@@ -10,12 +10,14 @@ use Testapp\Tests\EventForTest;
  * @link        http://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
+use Jelix\Event\EventListener;
+use Jelix\Event\Event;
 
-class testEventsTestappListener extends jEventListener
+class testEventsTestappListener extends EventListener
 {
 
     /**
-     * @param jEvent $event
+     * @param Event $event
      */
     function onTestEventResponse($event)
     {

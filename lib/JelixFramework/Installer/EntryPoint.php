@@ -106,12 +106,7 @@ class EntryPoint
         $this->localEpConfigIni = new IniModifier($varConfigPath, ';<'.'?php die(\'\');?'.'>');
 
         $compiler = new Compiler($configFile, $this->scriptName);
-        if ($this->_isCliScript) {
-            $this->config = $compiler->readForCli(true);
-        }
-        else {
-            $this->config = $compiler->read(true);
-        }
+        $this->config = $compiler->read(true);
     }
 
     /**

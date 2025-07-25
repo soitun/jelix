@@ -3,7 +3,7 @@
  * @author      Laurent Jouanneau
  * @copyright   2005-2025 Laurent Jouanneau
  *
- * @see        http://www.jelix.org
+ * @see         https://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 
@@ -13,11 +13,9 @@ use Jelix\Core\App;
 use Jelix\Locale\Locale;
 
 /**
- * an url engine to parse,analyse and create significant url
+ * An url engine to parse,analyse and create significant url
  * it needs an urls.xml file in the app/system directory (see documentation).
  *
- * @author      Laurent Jouanneau
- * @copyright   2005-2016 Laurent Jouanneau
  */
 class UrlActionMapper
 {
@@ -55,7 +53,6 @@ class UrlActionMapper
         $this->config = $config;
         $this->xmlfileSelector = new SelectorUrlXmlMap($config->mapFile, $config->localMapFile);
         require $this->xmlfileSelector->getCompiledFilePath();
-
         $this->dataCreateUrl = &$GLOBALS['SIGNIFICANT_CREATEURL'];
     }
 

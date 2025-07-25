@@ -9,8 +9,9 @@
 * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
 */
 namespace  JelixTests\Tests\Listener;
+use Jelix\Event\EventListener;
 
-class TestEventsListener extends \jEventListener{
+class TestEventsListener extends EventListener{
 
    /**
    *

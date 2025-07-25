@@ -4,12 +4,11 @@
 * @subpackage  jelix_tests module
 * @author      Laurent Jouanneau
 * @contributor Thibault Piront (nuKs)
-* @copyright   2005-2024 Laurent Jouanneau
+* @copyright   2005-2025 Laurent Jouanneau
 * @copyright   2007 Thibault Piront
 * @link        https://www.jelix.org
 * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
 */
-
 use Jelix\Routing\UrlMapping\MapperConfig;
 use Jelix\Routing\UrlMapping\SelectorUrlXmlMap;
 use Jelix\Routing\UrlMapping\XmlMapParser;
@@ -34,7 +33,7 @@ class urlsParsingTest extends \Jelix\UnitTests\UnitTestCase {
         $xmlfileSelector = new SelectorUrlXmlMap($mapperConfig->mapFile, $mapperConfig->localMapFile);
         $compiler = new XmlMapParser();
         $compiler->compile($xmlfileSelector);
-        jUrl::getEngine(true); // on recharge le nouveau moteur d'url
+        jUrl::getEngine(true);
     }
 
     function testSignificantEngine() {
@@ -313,6 +312,7 @@ class urlsParsingTest extends \Jelix\UnitTests\UnitTestCase {
         }
 
         $config->urlengine['checkHttpsOnParsing'] = true;
+
         $this->reloadEngine($config);
         $config->urlengine['multiview']=true;
 
@@ -356,6 +356,7 @@ class urlsParsingTest extends \Jelix\UnitTests\UnitTestCase {
           'urlScriptIdenc'=>'index'
         );
         $config->compilation['force'] = true;
+
         $this->reloadEngine($config);
 
         $resultList=array();
@@ -420,6 +421,7 @@ class urlsParsingTest extends \Jelix\UnitTests\UnitTestCase {
           'urlScriptIdenc'=>'index'
         );
         $config->compilation['force'] = true;
+
         $this->reloadEngine($config);
 
         $resultList=array();
@@ -500,6 +502,7 @@ class urlsParsingTest extends \Jelix\UnitTests\UnitTestCase {
             'urlScriptIdenc'=>'index'
         );
         $config->compilation['force'] = true;
+
         $this->reloadEngine($config);
 
         $resultList=array();
@@ -579,6 +582,7 @@ class urlsParsingTest extends \Jelix\UnitTests\UnitTestCase {
             'urlScriptIdenc'=>'index'
         );
         $config->compilation['force'] = true;
+
         $this->reloadEngine($config);
 
         $resultList=array();
@@ -680,6 +684,7 @@ class urlsParsingTest extends \Jelix\UnitTests\UnitTestCase {
          'urlScriptIdenc'=>'index'
        );
         $config->compilation['force'] = true;
+
         try {
             $this->reloadEngine($config);
             $this->assertFalse(true, 'No expected error');
@@ -712,8 +717,8 @@ class urlsParsingTest extends \Jelix\UnitTests\UnitTestCase {
             'urlScriptIdenc'=>'index'
         );
         $config->compilation['force'] = true;
-        jUrl::getEngine(true);
 
+        $this->reloadEngine($config);
 
         $resultList=array();
         $resultList[]= array('module'=>'jelix_tests', 'action'=>'urlsig:url1', 'mois'=>'10',  'annee'=>'2005', 'id'=>'35');
@@ -731,10 +736,5 @@ class urlsParsingTest extends \Jelix\UnitTests\UnitTestCase {
 
             $this->assertEquals($resultList[$k], $p, 'test '.$k);
         }
-
     }
-
-
-
-
 }

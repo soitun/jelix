@@ -9,7 +9,9 @@
  * @see        http://jelix.org
  * @licence     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public Licence, see LICENCE file
  */
-class jacl2db_adminListener extends jEventListener
+use Jelix\Event\EventListener;
+
+class jacl2db_adminListener extends EventListener
 {
     /**
      * @param mixed $event

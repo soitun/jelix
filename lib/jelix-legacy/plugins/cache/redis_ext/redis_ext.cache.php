@@ -11,6 +11,8 @@
  * @see     http://www.jelix.org
  * @licence  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
+use Jelix\Event\Event;
+
 class redis_extCacheDriver implements jICacheDriver
 {
     /**
@@ -58,7 +60,7 @@ class redis_extCacheDriver implements jICacheDriver
      *     You can use a script to launch a worker which pops from this list
      *     prefix of keys to delete, and delete them with SCAN/DEL redis commands.
      *     See the redisworker controller in the jelix module.
-     * event: send a jEvent. It's up to your application to respond to this event
+     * event: send an Event. It's up to your application to respond to this event
      *     and to implement your prefered method to delete all keys.
      */
     protected $key_prefix_flush_method = 'direct';
@@ -326,7 +328,7 @@ class redis_extCacheDriver implements jICacheDriver
                 return true;
 
             case 'event':
-                jEvent::notify('jCacheRedisFlushKeyPrefix', array('prefix' => $this->key_prefix,
+                Event::notify('jCacheRedisFlushKeyPrefix', array('prefix' => $this->key_prefix,
                     'profile' => $this->profileName, ));
 
                 return true;

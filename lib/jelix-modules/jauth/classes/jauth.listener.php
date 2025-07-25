@@ -11,7 +11,9 @@
  * @see        http://www.jelix.org
  * @licence     GNU General Public Licence see LICENCE file or http://www.gnu.org/licenses/gpl.html
  */
-class jauthListener extends jEventListener
+use Jelix\Event\EventListener;
+
+class jauthListener extends EventListener
 {
     /**
      * @param mixed $event

@@ -4,11 +4,10 @@
 * @subpackage  jelix_tests module
 * @author      Laurent Jouanneau
 * @contributor
-* @copyright   2006-2024 Laurent Jouanneau
+* @copyright   2006-2025 Laurent Jouanneau
 * @link        https://www.jelix.org
 * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
 */
-
 use Jelix\Core\App;
 use Jelix\Routing\UrlMapping\MapperConfig;
 use Jelix\Routing\UrlMapping\SelectorUrlXmlMap;
@@ -30,6 +29,15 @@ class urlsGenerationTest extends \Jelix\UnitTests\UnitTestCase {
         jApp::popCurrentModule();
         jApp::restoreContext();
         $_SERVER = $this->oldserver;
+    }
+
+    protected function reloadEngine($config)
+    {
+        $mapperConfig = new MapperConfig($config->urlengine);
+        $xmlfileSelector = new SelectorUrlXmlMap($mapperConfig->mapFile, $mapperConfig->localMapFile);
+        $compiler = new XmlMapParser();
+        $compiler->compile($xmlfileSelector);
+        jUrl::getEngine(true);
     }
 
     protected function _doCompareUrl($title, $urlList, $trueResult ){
@@ -70,15 +78,6 @@ class urlsGenerationTest extends \Jelix\UnitTests\UnitTestCase {
 
             }
         }
-    }
-
-    protected function reloadEngine($config)
-    {
-        $mapperConfig = new MapperConfig($config->urlengine);
-        $xmlfileSelector = new SelectorUrlXmlMap($mapperConfig->mapFile, $mapperConfig->localMapFile);
-        $compiler = new XmlMapParser();
-        $compiler->compile($xmlfileSelector);
-        jUrl::getEngine(true); // on recharge le nouveau moteur d'url
     }
 
     function testSignificantEngine() {
@@ -455,7 +454,7 @@ class urlsGenerationTest extends \Jelix\UnitTests\UnitTestCase {
 
        $conf->_modulesPathList['news']='/';
 
-        $this->reloadEngine($conf);
+      $this->reloadEngine($conf); // on recharge le nouveau moteur d'url
 
       $urlList=array();
       $urlList[]= array('foo~bar@xmlrpc', array('aaa'=>'bbb'));

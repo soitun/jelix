@@ -4,7 +4,7 @@
  * @contributor Loic Mathaud, Dominique Papin
  * @contributor Uriel Corfa (Emotic SARL), Julien Issler
  *
- * @copyright   2006-2024 Laurent Jouanneau
+ * @copyright   2006-2025 Laurent Jouanneau
  * @copyright   2007 Loic Mathaud, 2007 Dominique Papin
  * @copyright   2007 Emotic SARL
  * @copyright   2008 Julien Issler
@@ -12,7 +12,6 @@
  * @see        https://www.jelix.org
  * @licence    GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
-
 namespace Jelix\Forms\Compiler;
 
 /**
@@ -121,7 +120,6 @@ class FormCompiler
         \jFile::createDir(dirname($cachePath));
         return $cachePath;
     }
-
 
     /**
      * @param string $module

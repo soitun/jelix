@@ -12,10 +12,9 @@
  * @see        https://www.jelix.org
  * @licence    GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
-
 namespace Jelix\Forms\Compiler;
 
-use jException;
+use Jelix\Forms\Controls as Ctl;
 
 /**
  * Generates form class from an xml file describing the form.
@@ -39,7 +38,7 @@ class XmlCompiler10
         $xml = simplexml_import_dom($doc);
 
         if (count($xml->reset) > 1) {
-            throw new jException('jelix~formserr.notunique.tag', array('reset', $this->sourceFile));
+            throw new \jException('jelix~formserr.notunique.tag', array('reset', $this->sourceFile));
         }
 
         foreach ($xml->children() as $controltype => $control) {
@@ -94,7 +93,7 @@ class XmlCompiler10
                     $class = '\\'.$class;
                 }
                 if (!class_exists($class, true)) {
-                    throw new jException('jelix~formserr.unknown.control.class', array($class, $controltype, $this->sourceFile));
+                    throw new \jException('jelix~formserr.unknown.control.class', array($class, $controltype, $this->sourceFile));
                 }
 
             }
@@ -103,11 +102,11 @@ class XmlCompiler10
 
         $method = 'generate' . $controltype;
         if (!method_exists($this, $method)) {
-            throw new jException('jelix~formserr.unknown.tag', array($controltype, $this->sourceFile));
+            throw new \jException('jelix~formserr.unknown.tag', array($controltype, $this->sourceFile));
         }
 
         if (!isset($attributes['ref']) || $attributes['ref'] == '') {
-            throw new jException('jelix~formserr.attribute.missing', array('ref', $controltype, $this->sourceFile));
+            throw new \jException('jelix~formserr.attribute.missing', array('ref', $controltype, $this->sourceFile));
         }
 
 
@@ -120,7 +119,7 @@ class XmlCompiler10
         if (count($attributes)) {
             reset($attributes);
 
-            throw new jException('jelix~formserr.attribute.not.allowed', array(key($attributes), $controltype, $this->sourceFile));
+            throw new \jException('jelix~formserr.attribute.not.allowed', array(key($attributes), $controltype, $this->sourceFile));
         }
 
         return $twocontrols;
@@ -138,21 +137,21 @@ class XmlCompiler10
 
         if (isset($attributes['minlength'])) {
             if ($type != 'string' && $type != 'html' && $type != 'xhtml') {
-                throw new jException('jelix~formserr.attribute.not.allowed', array('minlength', 'input', $this->sourceFile));
+                throw new \jException('jelix~formserr.attribute.not.allowed', array('minlength', 'input', $this->sourceFile));
             }
             $source[] = '$ctrl->datatype->addFacet(\'minLength\',' . intval($attributes['minlength']) . ');';
             unset($attributes['minlength']);
         }
         if (isset($attributes['maxlength'])) {
             if ($type != 'string' && $type != 'html' && $type != 'xhtml') {
-                throw new jException('jelix~formserr.attribute.not.allowed', array('maxlength', 'input', $this->sourceFile));
+                throw new \jException('jelix~formserr.attribute.not.allowed', array('maxlength', 'input', $this->sourceFile));
             }
             $source[] = '$ctrl->datatype->addFacet(\'maxLength\',' . intval($attributes['maxlength']) . ');';
             unset($attributes['maxlength']);
         }
         if (isset($attributes['minvalue'])) {
             if ($type != 'integer' && $type != 'decimal' && $type != 'html' && $type != 'xhtml') {
-                throw new jException('jelix~formserr.attribute.not.allowed', array('minvalue', 'input', $this->sourceFile));
+                throw new \jException('jelix~formserr.attribute.not.allowed', array('minvalue', 'input', $this->sourceFile));
             }
             // Make sure we don't alter the value if decimal
             if ($type != 'decimal') {
@@ -164,7 +163,7 @@ class XmlCompiler10
         }
         if (isset($attributes['maxvalue'])) {
             if ($type != 'integer' && $type != 'decimal' && $type != 'html' && $type != 'xhtml') {
-                throw new jException('jelix~formserr.attribute.not.allowed', array('maxvalue', 'input', $this->sourceFile));
+                throw new \jException('jelix~formserr.attribute.not.allowed', array('maxvalue', 'input', $this->sourceFile));
             }
             // Make sure we don't alter the value if decimal
             if ($type != 'decimal') {
@@ -353,7 +352,7 @@ class XmlCompiler10
             } elseif ((string)$control->confirm != '') {
                 $label = "'" . str_replace("'", "\\'", (string)$control->confirm) . "';";
             } else {
-                throw new jException('jelix~formserr.content.missing', array('confirm', $this->sourceFile));
+                throw new \jException('jelix~formserr.content.missing', array('confirm', $this->sourceFile));
             }
             $source[] = '$ctrl2 = new Ctl\\SecretConfirmControl(\'' . (string)$control['ref'] . '_confirm\');';
             $source[] = '$ctrl2->primarySecret = \'' . (string)$control['ref'] . '\';';
@@ -470,7 +469,7 @@ class XmlCompiler10
         if (isset($attributes['type'])) {
             $type = strtolower($attributes['type']);
             if (!in_array($type, $this->allowedType)) {
-                throw new jException('jelix~formserr.datatype.unknown', array($type, 'input', $this->sourceFile));
+                throw new \jException('jelix~formserr.datatype.unknown', array($type, 'input', $this->sourceFile));
             }
 
             if ($type == 'xhtml') {
@@ -487,7 +486,7 @@ class XmlCompiler10
     protected function readLabel(&$source, $control, $controltype)
     {
         if (!isset($control->label)) {
-            throw new jException('jelix~formserr.tag.missing', array('label', $controltype, $this->sourceFile));
+            throw new \jException('jelix~formserr.tag.missing', array('label', $controltype, $this->sourceFile));
         }
         if (isset($control->label['locale'])) {
             $labellocale = (string)$control->label['locale'];
@@ -563,14 +562,14 @@ class XmlCompiler10
     {
         // support of static data or daos
         if (isset($attributes['selectedvalue'], $control->selectedvalues)) {
-            throw new jException('jelix~formserr.attribute.not.allowed', array('selectedvalue', $controltype, $this->sourceFile));
+            throw new \jException('jelix~formserr.attribute.not.allowed', array('selectedvalue', $controltype, $this->sourceFile));
         }
         $hasSelectedValues = false;
         if (isset($control->selectedvalues, $control->selectedvalues->value)) {
             if (($controltype == 'listbox' && isset($control['multiple']) && (string)$control['multiple'] != 'true')
                 || $controltype == 'radiobuttons' || $controltype == 'menulist'
             ) {
-                throw new jException('jelix~formserr.defaultvalues.not.allowed', $this->sourceFile);
+                throw new \jException('jelix~formserr.defaultvalues.not.allowed', $this->sourceFile);
             }
             $str = ' array(';
             foreach ($control->selectedvalues->value as $value) {
@@ -638,7 +637,7 @@ class XmlCompiler10
 
                 if (isset($item['selected'])) {
                     if ($hasSelectedValues || $controltype == 'submit') {
-                        throw new jException('jelix~formserr.selected.attribute.not.allowed', $this->sourceFile);
+                        throw new \jException('jelix~formserr.selected.attribute.not.allowed', $this->sourceFile);
                     }
                     if ((string)$item['selected'] == 'true') {
                         $selectedvalues[] = (string)$item['value'];
@@ -650,7 +649,7 @@ class XmlCompiler10
                 if (count($selectedvalues) > 1
                     && (($controltype == 'listbox' && isset($control['multiple']) && (string)$control['multiple'] != 'true')
                         || $controltype == 'radiobuttons' || $controltype == 'menulist')) {
-                    throw new jException('jelix~formserr.multiple.selected.not.allowed', $this->sourceFile);
+                    throw new \jException('jelix~formserr.multiple.selected.not.allowed', $this->sourceFile);
                 }
                 $source[] = '$ctrl->defaultValue=' . var_export($selectedvalues, true) . ';';
             }
@@ -663,11 +662,11 @@ class XmlCompiler10
     {
         if (isset($control->placeholder)) {
             if (isset($control->placeholder['locale'])) {
-                $placeHolderlocale = (string) $control->placeholder['locale'];
-                $source[] = '$ctrl->placeholder=Locale::get(\''.$placeHolderlocale.'\');';
+                $placeHolderlocale = (string)$control->placeholder['locale'];
+                $source[] = '$ctrl->placeholder=Locale::get(\'' . $placeHolderlocale . '\');';
             } else {
-                $label = (string) $control->placeholder;
-                $source[] = '$ctrl->placeholder=\''.str_replace("'", "\\'", $label).'\';';
+                $label = (string)$control->placeholder;
+                $source[] = '$ctrl->placeholder=\'' . str_replace("'", "\\'", $label) . '\';';
             }
         }
     }

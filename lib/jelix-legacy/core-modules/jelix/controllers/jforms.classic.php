@@ -10,6 +10,7 @@
  * @copyright  2015 Julien Issler
  * @licence    http://www.gnu.org/licenses/gpl.html GNU General Public Licence, see LICENCE file
  */
+use Jelix\Event\Event;
 
 use Jelix\Forms\Forms;
 
@@ -60,7 +61,7 @@ class jformsCtrl extends jController
         }
 
         // event so the form can be prepared correctly for forms made dynamically
-        jEvent::notify('jformsPrepareToFillDynamicList', array('form' => $form, 'controlRef' => $this->param('__ref')));
+        Event::notify('jformsPrepareToFillDynamicList', array('form' => $form, 'controlRef' => $this->param('__ref')));
 
         // retrieve the control to fill
         $control = $form->getControl($this->param('__ref'));

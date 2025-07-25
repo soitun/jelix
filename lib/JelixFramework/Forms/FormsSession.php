@@ -4,7 +4,7 @@
  * @subpackage  forms
  *
  * @author      Laurent Jouanneau
- * @copyright   2016-2024 Laurent Jouanneau
+ * @copyright   2016-2025 Laurent Jouanneau
  *
  * @see         https://www.jelix.org
  * @licence     http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
@@ -120,7 +120,6 @@ class FormsSession
 
         return array($sel, $formId, $sel->module.':'.$sel->resource.':'.session_id().':'.sha1($fid));
     }
-
 
     public function getFormInstance($formSel, $formId)
     {

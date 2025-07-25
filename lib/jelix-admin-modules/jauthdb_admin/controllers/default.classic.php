@@ -12,6 +12,7 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public Licence
  */
 use Jelix\Locale\Locale;
+use Jelix\Event\Event;
 
 use Jelix\Forms\Forms;
 
@@ -206,7 +207,7 @@ class defaultCtrl extends jController
         $tpl->assign('canChangePass', jAcl2::check('auth.users.change.password')
             && jAuth::canChangePassword($login));
         $tpl->assign('otherLinks', array());
-        $tpl->assign('otherInfo', jEvent::notify(
+        $tpl->assign('otherInfo', Event::notify(
             'jauthdbAdminGetViewInfo',
             array('form' => $form, 'tpl' => $tpl, 'himself' => false)
         )->getResponse());
@@ -225,7 +226,7 @@ class defaultCtrl extends jController
         $form = Forms::create($this->form);
         $form->deactivate('password', false);
         $form->deactivate('password_confirm', false);
-        jEvent::notify('jauthdbAdminPrepareCreate', array('form' => $form));
+        Event::notify('jauthdbAdminPrepareCreate', array('form' => $form));
 
         return $this->redirect('default:create');
     }
@@ -246,7 +247,7 @@ class defaultCtrl extends jController
         $tpl->assign('form', $form);
         $tpl->assign('formOptions', []);
         $tpl->assign('randomPwd', jAuth::getRandomPassword());
-        $tpl->assign('otherInfo', jEvent::notify(
+        $tpl->assign('otherInfo', Event::notify(
             'jauthdbAdminEditCreate',
             array('form' => $form, 'tpl' => $tpl)
         )->getResponse());
@@ -268,7 +269,7 @@ class defaultCtrl extends jController
             return $this->redirect('default:index');
         }
 
-        jEvent::notify('jauthdbAdminBeforeCheckCreateForm', array('form' => $form));
+        Event::notify('jauthdbAdminBeforeCheckCreateForm', array('form' => $form));
 
         $form->initFromRequest();
 
@@ -282,7 +283,7 @@ class defaultCtrl extends jController
         $evresp = array();
         if (
             $form->check()
-            && !jEvent::notify('jauthdbAdminCheckCreateForm', array('form' => $form))
+            && !Event::notify('jauthdbAdminCheckCreateForm', array('form' => $form))
                 ->inResponse('check', false, $evresp)
         ) {
             $props = jDao::createRecord($this->dao, $this->dbProfile)->getProperties();
@@ -293,7 +294,7 @@ class defaultCtrl extends jController
             $form->prepareObjectFromControls($user, $props);
 
             jAuth::saveNewUser($user);
-            jEvent::notify('jauthdbAdminAfterCreate', array('form' => $form, 'user' => $user));
+            Event::notify('jauthdbAdminAfterCreate', array('form' => $form, 'user' => $user));
 
             // it will save files that are not already saved by listeners of jauthdbAdminAfterCreate
             $form->saveAllFiles($this->uploadsDirectory);
@@ -343,7 +344,7 @@ class defaultCtrl extends jController
             return $this->redirect('default:view', ['j_user_login' => $login]);
         }
 
-        jEvent::notify('jauthdbAdminPrepareUpdate', array('form' => $form, 'himself' => false));
+        Event::notify('jauthdbAdminPrepareUpdate', array('form' => $form, 'himself' => false));
         $form->setReadOnly('login');
         $form->deactivate('password');
         $form->deactivate('password_confirm');
@@ -371,7 +372,7 @@ class defaultCtrl extends jController
         $tpl->assign('id', $login);
         $tpl->assign('form', $form);
         $tpl->assign('formOptions', []);
-        $tpl->assign('otherInfo', jEvent::notify(
+        $tpl->assign('otherInfo', Event::notify(
             'jauthdbAdminEditUpdate',
             array('form' => $form, 'tpl' => $tpl, 'himself' => false)
         )->getResponse());
@@ -413,14 +414,14 @@ class defaultCtrl extends jController
             return $this->redirect('default:index');
         }
 
-        jEvent::notify('jauthdbAdminBeforeCheckUpdateForm', array('form' => $form, 'himself' => false));
+        Event::notify('jauthdbAdminBeforeCheckUpdateForm', array('form' => $form, 'himself' => false));
 
         $form->initFromRequest();
 
         $evresp = array();
         if (
             $form->check()
-            && !jEvent::notify('jauthdbAdminCheckUpdateForm', array('form' => $form, 'himself' => false))
+            && !Event::notify('jauthdbAdminCheckUpdateForm', array('form' => $form, 'himself' => false))
                 ->inResponse('check', false, $evresp)
         ) {
             $form->prepareObjectFromControls($daoUser, $daoUser->getProperties());
@@ -429,7 +430,7 @@ class defaultCtrl extends jController
             // all process, events...
             jAuth::updateUser($daoUser);
 
-            jEvent::notify('jauthdbAdminAfterUpdate', array('form' => $form, 'user' => $daoUser));
+            Event::notify('jauthdbAdminAfterUpdate', array('form' => $form, 'user' => $daoUser));
 
             // it will save files that are not saved by listeners of jauthdbAdminAfterUpdate
             $form->saveAllFiles($this->uploadsDirectory);

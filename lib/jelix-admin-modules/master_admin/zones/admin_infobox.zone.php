@@ -11,6 +11,8 @@
  * @see      http://jelix.org
  * @licence  http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public Licence, see LICENCE file
  */
+use Jelix\Event\Event;
+
 class admin_infoboxZone extends jZone
 {
     protected $_tplname = 'zone_admin_infobox';
@@ -19,7 +21,7 @@ class admin_infoboxZone extends jZone
     {
         jClasses::inc('masterAdminMenuItem');
 
-        $items = jEvent::notify('masteradminGetInfoBoxContent')->getResponse();
+        $items = Event::notify('masteradminGetInfoBoxContent')->getResponse();
 
         usort($items, 'masterAdminMenuItem::sortItems');
 

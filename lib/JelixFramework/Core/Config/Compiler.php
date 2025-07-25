@@ -611,11 +611,6 @@ class Compiler
             }
             $urlconf['jelixWWWPath'] = rtrim($urlconf['jelixWWWPath'], '/') . '/';
 
-            if ($urlconf['jqueryPath'][0] != '/') {
-                $urlconf['jqueryPath'] = $basepath . rtrim($urlconf['jqueryPath'], '/') . '/';
-            }
-            $urlconf['jqueryPath'] = rtrim($urlconf['jqueryPath'], '/') . '/';
-
             $snp = substr($urlconf['urlScript'], strlen($localBasePath));
 
             if (isset($_SERVER['DOCUMENT_ROOT'])) {
