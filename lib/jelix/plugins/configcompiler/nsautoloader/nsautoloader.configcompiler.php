@@ -131,5 +131,7 @@ class nsautoloaderConfigCompilerPlugin implements \Jelix\Core\Config\CompilerPlu
 
     public function atEnd($config)
     {
+        // namespace of compiled components
+        $config->_autoload_namespacepsr4['Jelix\\BuiltComponents'] = jApp::varLibPath().'|.php';
     }
 }
