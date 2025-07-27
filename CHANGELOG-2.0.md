@@ -115,6 +115,8 @@ class TestAttrEventsListener
 - `jLocale`, `jBundle`, `jExceptionSelector`
 - `jConfig`, `jConfigCompiler`, `jConfigAutoloader`
 - `jEvent`, `jEventListener`, `Jelix\Event\Event::clearCache()`
+- selector classes: `jSelectorForm`, `jSelectorAppCfg`, `jSelectorCfg`, `jSelectorDebugAction`, `jSelectorLib`, `jSelectorTmp`, `jSelectorVar`
+
 
 Internal classes and methods, you did not suppose to use, except for complex plugins:
 

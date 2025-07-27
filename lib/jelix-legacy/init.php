@@ -106,7 +106,6 @@ LegacyJelixAutoloader::$filePath = array(
     'jIFormsDatasource' => JELIX_LIB_PATH.'forms/jIFormsDatasource.iface.php',
     'jIFormsDatasource2' => JELIX_LIB_PATH.'forms/jIFormsDatasource2.iface.php',
     'jIFormsDynamicDatasource' => JELIX_LIB_PATH.'forms/jIFormsDynamicDatasource.iface.php',
-    'jSelectorForm' => JELIX_LIB_PATH.'legacy/jSelectorForm.php',
 );
 
 spl_autoload_register('LegacyJelixAutoloader::loadClass');
@@ -116,7 +115,6 @@ require JELIX_LIB_CORE_PATH.'jException.class.php';
 require JELIX_LIB_CORE_PATH.'selector/jSelectorDao.class.php';
 require JELIX_LIB_CORE_PATH.'selector/jSelectorDaoRecord.class.php';
 require JELIX_LIB_CORE_PATH.'selector/jSelectorZone.class.php';
-require JELIX_LIB_CORE_PATH.'selector/jSelectorAppCfg.class.php';
 require JELIX_LIB_CORE_PATH.'jUrlBase.class.php';
 require JELIX_LIB_CORE_PATH.'jUrlAction.class.php';
 require JELIX_LIB_CORE_PATH.'jUrl.class.php';
