@@ -6,8 +6,6 @@
     "jCoordinator": "\\Jelix\\Routing\\Router",
     "jCoordinatorDebug": "\\Jelix\\Routing\\RouterDebug",
     "jDb": "\\Jelix\\Services\\Database\\Database",
-    "jEvent": "\\Jelix\\Event\\Event",
-    "jEventListener": "\\Jelix\\Event\\EventListener",
     "jExceptionForms": "\\Jelix\\Forms\\FormException",
     "jFileLogger": "\\Jelix\\Logger\\Output\\File",
     "jForms": "\\Jelix\\Forms\\Forms",

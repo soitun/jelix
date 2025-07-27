@@ -47,8 +47,8 @@ class ListenerProvider implements \Psr\EventDispatcher\ListenerProviderInterface
     public function getListenersForEvent(object $event) : iterable
     {
         $eventClass = get_class($event);
-        if ($eventClass == 'jEvent' || $eventClass == 'Jelix\Event\Event') {
-            // if this is a jEvent or Jelix\Event\Event class, we search with the event name
+        if ($eventClass == 'Jelix\Event\Event') {
+            // if this is a Jelix\Event\Event class, we search with the event name
             $eventName = $event->getName();
             if (!isset($this->hashListened[$eventName])) {
                 $this->loadListenersFor($eventName);

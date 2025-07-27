@@ -97,7 +97,6 @@ class TestAttrEventsListener
 - `jHttpResponseException`
 - `jResponseHtml::$_CSSIELink` `jResponseHtml::$_JSIELink` `jResponseHtml::getJSIELinks` `jResponseHtml::setJSIELinks` `jResponseHtml::getCSSIELinks` `jResponseHtml::setCSSIELinks`
 - `jResponseStreamed`
-- `jEvent::clearCache()`, `Jelix\Event\Event::clearCache()`
 - `jFormsDaoDatasource::getDependentControls()`
 - `jFormsControlCaptcha::$question`, `jFormsControlCaptcha::initExpectedValue()`
 - `Jelix\Forms\HtmlWidget\RootWidget::$builder`
@@ -115,6 +114,7 @@ class TestAttrEventsListener
   `jDaoXmlException`, `jDaoDbMapper`
 - `jLocale`, `jBundle`, `jExceptionSelector`
 - `jConfig`, `jConfigCompiler`, `jConfigAutoloader`
+- `jEvent`, `jEventListener`, `Jelix\Event\Event::clearCache()`
 
 Internal classes and methods, you did not suppose to use, except for complex plugins:
 

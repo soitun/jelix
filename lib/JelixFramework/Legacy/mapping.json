@@ -6,8 +6,6 @@
     "jCoordinator": "core/jCoordinator.php",
     "jCoordinatorDebug": "core/jCoordinatorDebug.php",
     "jDb": "db/jDb.php",
-    "jEvent": "events/jEvent.php",
-    "jEventListener": "events/jEventListener.php",
     "jExceptionForms": "forms/jExceptionForms.php",
     "jFileLogger": "core/log/jFileLogger.php",
     "jForms": "forms/jForms.php",
