@@ -9,6 +9,10 @@ Next
 - fix(jdb) fix SQL error when changing a autoincremented column to integer with jDbSchema and Postgresql  
 - fix(jdb) `jDbPDOConnection::unprefixTable()` was missing
 - fix(jdb) `jDbSchema` must accept `jDbPDOConnection` objects on the constructor
+- fix(jauth) improve security on the cookie for the remember-me feature.
+  - A new table is created.
+  - The configuration parameter persistant_encryption_key is not used anymore.
+  - The `persistence` parameter on the `AuthLogin` event is deprecated
 
 1.8.23
 ------

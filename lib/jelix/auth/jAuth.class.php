@@ -6,7 +6,7 @@
  * @author     Laurent Jouanneau
  * @contributor Frédéric Guillot, Antoine Detante, Julien Issler, Dominique Papin, Tahina Ramaroson, Sylvain de Vathaire, Vincent Viaud
  *
- * @copyright  2001-2005 CopixTeam, 2005-2025 Laurent Jouanneau, 2007 Frédéric Guillot, 2007 Antoine Detante
+ * @copyright  2001-2005 CopixTeam, 2005-2026 Laurent Jouanneau, 2007 Frédéric Guillot, 2007 Antoine Detante
  * @copyright  2007-2008 Julien Issler, 2008 Dominique Papin, 2010 NEOV, 2010 BP2I
  *
  * This class was got originally from an experimental branch of the Copix project (Copix 2.3dev, http://www.copix.org)
@@ -112,19 +112,6 @@ class jAuth
                 } else {
                     $config['persistant_cookie_path'] = '/';
                 }
-            }
-
-            if (!isset($config['persistant_encryption_key']) || $config['persistant_encryption_key'] == '') {
-                // in the case of the use of a separate file, persistant_encryption_key may be into the liveconfig.ini.php
-                if (isset($appConfigAuth['persistant_encryption_key'])) {
-                    $config['persistant_encryption_key'] = trim($appConfigAuth['persistant_encryption_key']);
-                } else {
-                    $config['persistant_encryption_key'] = '';
-                }
-            }
-
-            if (!isset($config['persistant_cookie_name'])) {
-                $config['persistant_cookie_name'] = 'jauthSession';
             }
 
             // Read hash method configuration. If not empty, cryptPassword will use
@@ -400,6 +387,11 @@ class jAuth
                 return false;
             }
         }
+
+        $config = self::loadConfig();
+        $persistentLogin = new jAuthPersistentLogin($config);
+        $persistentLogin->deleteAllUserTokens($login);
+
         $user = $dr->getUser($login);
         if ($dr->removeUser($login) === false) {
             return false;
@@ -490,7 +482,7 @@ class jAuth
     }
 
     /**
-     * verify that the password correspond to the login.
+     * verify that the password corresponds to the login.
      *
      * @param string $login    the login of the user
      * @param string $password the password to test (not encrypted)
@@ -509,7 +501,7 @@ class jAuth
      *
      * @param string $login      the login of the user
      * @param string $password   the password to test (not encrypted)
-     * @param bool   $persistant (optional) the session must be persistant
+     * @param bool   $persistent (optional) the session must be persistant
      *
      * @return bool true if authentification is ok
      * @jelixevent AuthBeforeLogin  listeners should return processlogin=false to
@@ -527,7 +519,7 @@ class jAuth
      * @jelixevent AuthErrorLogin sent when the password is bad. Listeners receive
      *                           the login.
      */
-    public static function login($login, $password, $persistant = false)
+    public static function login($login, $password, $persistent = false)
     {
         $dr = self::getDriver();
         $config = self::loadConfig();
@@ -556,13 +548,13 @@ class jAuth
 
             $_SESSION[$config['session_name']] = $user;
 
-            if ($persistant) {
+            if ($persistent) {
                 $persistence = self::generateCookieToken($login, $password);
             } else {
                 $persistence = 0;
             }
 
-            jEvent::notify('AuthLogin', array('login' => $login, 'persistence' => $persistence));
+            jEvent::notify('AuthLogin', array('login' => $login, /* @deprecated */ 'persistence' => $persistence));
 
             return true;
         }
@@ -570,6 +562,42 @@ class jAuth
 
         return false;
     }
+
+    protected static function loginWithoutPassword($login, $persistence = 0)
+    {
+        $dr = self::getDriver();
+        $config = self::loadConfig();
+
+        $eventresp = jEvent::notify('AuthBeforeLogin', array('login' => $login));
+        foreach ($eventresp->getResponse() as $rep) {
+            if (isset($rep['processlogin']) && $rep['processlogin'] === false) {
+                return false;
+            }
+        }
+
+        // to avoid "Session fixation" attacks, we regenerate the session id.
+        if (session_status() == \PHP_SESSION_ACTIVE) {
+            jSession::regenerateId(true);
+        }
+
+        if ($user = $dr->getUser($login)) {
+            // the given login may be another property like email, so get the real login
+            $login = $user->login;
+            $eventresp = jEvent::notify('AuthCanLogin', array('login' => $login, 'user' => $user));
+            foreach ($eventresp->getResponse() as $rep) {
+                if (!isset($rep['canlogin']) || $rep['canlogin'] === false) {
+                    return false;
+                }
+            }
+
+            $_SESSION[$config['session_name']] = $user;
+            jEvent::notify('AuthLogin', array('login' => $login, /** @deprecated */'persistence' => $persistence));
+            return true;
+        }
+        jEvent::notify('AuthErrorLogin', array('login' => $login));
+        return false;
+    }
+
 
     /**
      * Check if persistant session is enabled in config.
@@ -579,11 +607,8 @@ class jAuth
     public static function isPersistant()
     {
         $config = self::loadConfig();
-        if (!isset($config['persistant_enable'])) {
-            return false;
-        }
-
-        return $config['persistant_enable'];
+        $persistentLogin = new jAuthPersistentLogin($config);
+        return $persistentLogin->isPersistencyEnabled() && jServer::isHttpsFromServer();
     }
 
     /**
@@ -594,7 +619,8 @@ class jAuth
     public static function logout()
     {
         $config = self::loadConfig();
-        jEvent::notify('AuthLogout', array('login' => $_SESSION[$config['session_name']]->login));
+        $currentLogin = $_SESSION[$config['session_name']]->login;
+        jEvent::notify('AuthLogout', array('login' => $currentLogin));
         $_SESSION[$config['session_name']] = new jAuthDummyUser();
 
         if (isset($config['session_destroy']) && $config['session_destroy']) {
@@ -606,14 +632,9 @@ class jAuth
             jSession::regenerateId(false);
         }
 
-        if (isset($config['persistant_enable']) && $config['persistant_enable']) {
-            if (isset($config['persistant_cookie_name'])) {
-                if (jServer::isHttpsFromServer()) {
-                    setcookie($config['persistant_cookie_name'], '', time() - 3600, $config['persistant_cookie_path'], '', true, true);
-                }
-            } else {
-                jLog::log(jLocale::get('jelix~auth.error.persistant.incorrectconfig', 'persistant_cookie_name'), 'error');
-            }
+        if (jServer::isHttpsFromServer()) {
+            $persistentLogin = new jAuthPersistentLogin($config);
+            $persistentLogin->deleteUserToken($_COOKIE, $currentLogin);
         }
     }
 
@@ -714,7 +735,7 @@ class jAuth
     /**
      * check the token from the cookie used for persistant session.
      *
-     * If the cookie is good, the login  is made
+     * If the cookie is good, the login process is started
      *
      * @throws jException
      *
@@ -722,92 +743,40 @@ class jAuth
      */
     public static function checkCookieToken()
     {
+        if (self::isConnected() || !jServer::isHttpsFromServer()) {
+            return false;
+        }
+
         $config = self::loadConfig();
-        if (isset($config['persistant_enable']) && $config['persistant_enable'] && !self::isConnected()) {
-            if (trim($config['persistant_cookie_name']) != ''
-                && trim($config['persistant_encryption_key']) != ''
-                ) {
-                $cookieName = $config['persistant_cookie_name'];
-                if (isset($_COOKIE[$cookieName])
-                    && is_string($_COOKIE[$cookieName])
-                    && strlen($_COOKIE[$cookieName])) {
-                    try {
-                        $cryptokey = \Defuse\Crypto\Key::loadFromAsciiSafeString(
-                            $config['persistant_encryption_key']
-                        );
-                        $decrypted = \Defuse\Crypto\Crypto::decrypt(
-                            $_COOKIE[$cookieName],
-                            $cryptokey
-                        );
-                    } catch (\Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException $e) {
-                        jLog::log('User not logged with authentication cookie: error during decryption of the cookie. Cookie not encrypted with the current encryption key.', 'notice');
+        $persistentLogin = new jAuthPersistentLogin($config);
 
-                        return false;
-                    } catch (\Defuse\Crypto\Exception\CryptoException $e) {
-                        jLog::log('User not logged with authentication cookie: error during decryption of the cookie. Bad encryption key or bad cookie content.', 'warning');
-
-                        return false;
-                    }
-                    $decrypted = json_decode($decrypted, true);
-                    if ($decrypted && is_array($decrypted) && count($decrypted) == 2) {
-                        list($login, $password) = $decrypted;
-
-                        return self::login($login, $password, true);
-                    }
-                }
-            }
+        $login = $persistentLogin->checkTokenFromCookie($_COOKIE, self::isConnected());
+        if ($login !== false) {
+            // the user can be connected
+            return self::loginWithoutPassword($login);
         }
 
         return false;
     }
 
     /**
-     * Generate and set an encrypted cookie with the given login password.
+     * Generate and set a cookie for persistency and the given login.
      *
-     * The cookie may not be set if the persistence is disable or if there is
-     * an issue with the encryption.
+     * The cookie may not be set if the persistence is disable
      *
      * @param string $login
-     * @param string $password
+     * @param string $password @deprecated
      *
      * @return int expiration date (UNIX timestamp), or 0 if cookie is not set
      */
     public static function generateCookieToken($login, $password)
     {
-        $persistence = 0;
-        $config = self::loadConfig();
-
-        // Add a cookie for session persistance, if enabled
-        if (isset($config['persistant_enable']) && $config['persistant_enable']) {
-            if (trim($config['persistant_encryption_key']) == ''
-                || trim($config['persistant_cookie_name']) == '') {
-                jLog::log(jLocale::get('jelix~auth.error.persistant.incorrectconfig', 'persistant_cookie_name, persistant_encryption_key'), 'error');
-
-                return 0;
-            }
-
-            if (isset($config['persistant_duration'])) {
-                $persistence = intval($config['persistant_duration']) * 86400;
-            } else {
-                $persistence = 86400; // 24h
-            }
-            $persistence += time();
-
-            try {
-                $cryptokey = \Defuse\Crypto\Key::loadFromAsciiSafeString($config['persistant_encryption_key']);
-                $encrypted = \Defuse\Crypto\Crypto::encrypt(json_encode(array($login, $password)), $cryptokey);
-                if (\jServer::isHttpsFromServer()) {
-                    setcookie($config['persistant_cookie_name'], $encrypted, $persistence, $config['persistant_cookie_path'], '', true, true);
-                }
-            } catch (\Defuse\Crypto\Exception\CryptoException $e) {
-                jLog::log('Cookie for persistant authentication. Error during encryption of the cookie token for authentication', 'warning');
-                jLog::logEx($e, 'warning');
-
-                return false;
-            }
+        if (!\jServer::isHttpsFromServer()) {
+            return 0;
         }
-
-        return $persistence;
+        $config = self::loadConfig();
+        $persistentLogin = new jAuthPersistentLogin($config);
+        return $persistentLogin->generateCookieWithNewToken($login);
     }
 
     public static function checkReturnUrl($url)

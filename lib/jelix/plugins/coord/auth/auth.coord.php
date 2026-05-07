@@ -49,7 +49,7 @@ class AuthCoordPlugin implements jICoordPlugin
         $notLogged = false;
         $badip = false;
         $selector = null;
-        // Check if auth cookie exist and user isn't logged on
+        // Check if auth cookie exists and user isn't logged on
         jAuth::checkCookieToken();
         //Do we check the ip ?
         if ($this->config['secure_with_ip']) {
