@@ -13,6 +13,7 @@ Next
   - A new table is created.
   - The configuration parameter persistant_encryption_key is not used anymore.
   - The `persistence` parameter on the `AuthLogin` event is deprecated
+- fix(jauth) password parameter on AuthChangePassword parameter is deprecated (security issue)
 
 1.8.23
 ------

@@ -472,9 +472,15 @@ class jAuth
         if ($dr->changePassword($login, $newpassword) === false) {
             return false;
         }
-        jEvent::notify('AuthChangePassword', array('login' => $login, 'password' => $newpassword));
+
+        $config = self::loadConfig();
+        if (isset($config['authChangePassEventSetDeprecatedParameter']) && $config['authChangePassEventSetDeprecatedParameter']) {
+            jEvent::notify('AuthChangePassword', array('login' => $login, 'password' => $newpassword));
+        } else {
+            jEvent::notify('AuthChangePassword', array('login' => $login));
+        }
+
         if (self::isConnected() && self::getUserSession()->login === $login) {
-            $config = self::loadConfig();
             $_SESSION[$config['session_name']] = self::getUser($login);
         }
 
