@@ -625,11 +625,22 @@ class jAuth
 
 
     /**
-     * Check if persistant session is enabled in config.
+     * Check if the persistency of sessions is enabled in config.
      *
      * @return bool true if persistant session in enabled
+     * @deprecated use canBePersistent() instead
      */
     public static function isPersistant()
+    {
+        return self::canBePersistent();
+    }
+
+    /**
+     * Check if the persistency of sessions is enabled in config.
+     *
+     * @return bool true if it is enabled
+     */
+    public static function canBePersistent()
     {
         $persistentLogin = self::_getPersistentLoginInstance();
         return $persistentLogin->isPersistencyEnabled() && jServer::isHttpsFromServer();

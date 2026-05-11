@@ -15,6 +15,7 @@ Next
   - The `persistence` parameter on the `AuthLogin` event is deprecated
 - fix(jauth) password parameter on AuthChangePassword parameter is deprecated (security issue)
 - fix(installer) execSQLScript should check if the SQL file exists before executing
+- fix(jAuth) `canBePersistent()` is renammed to `isPersistant()` (which is deprecated from now)
 
 1.8.23
 ------
