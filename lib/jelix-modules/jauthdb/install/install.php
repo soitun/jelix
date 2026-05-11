@@ -20,6 +20,7 @@ use Jelix\Installer\Module\API\InstallHelpers;
 class jauthdbModuleInstaller extends \Jelix\Installer\Module\Installer
 {
     protected $dbTablesInstalled = false;
+    protected $dbRemTablesInstalled = false;
 
     public function install(InstallHelpers $helpers)
     {
@@ -67,7 +68,10 @@ class jauthdbModuleInstaller extends \Jelix\Installer\Module\Installer
         $dbConn->useDbProfile($profile);
         // the script is into the jelix module, because the jauthdb module may not be installed and
         // replaced by another one, for example jcommunity.
-        $dbConn->execSQLScript('sql/install_jauthremembertoken.schema', 'jelix');
+        if (!$this->dbRemTablesInstalled) {
+            $this->dbRemTablesInstalled = true;
+            $dbConn->execSQLScript('sql/install_jauthremembertoken.schema', 'jelix');
+        }
 
         $compatibleWithDb = (isset($driverConfig['compatiblewithdb']) ? $driverConfig['compatiblewithdb']: false);
         if ($driver == '' || ($driver != 'Db' && !$compatibleWithDb)) {

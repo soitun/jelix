@@ -14,9 +14,11 @@ class jAuthPersistentLogin
     protected $persistentCookiePath = '';
     protected $persistencyEnabled = false;
     protected $persistentCookieDuration = 172800; // 48h
+    protected $dbProfile = '';
 
-    public function __construct(array $authConfig)
+    public function __construct(array $authConfig, $dbProfile = '')
     {
+        $this->dbProfile = $dbProfile;
         $this->persistencyEnabled = isset($authConfig['persistant_enable']) && $authConfig['persistant_enable'];
         $this->persistentCookieName = isset($authConfig['persistant_cookie_name']) ? $authConfig['persistant_cookie_name'] : 'jauthPersistentSession';
         $this->persistentCookiePath = isset($authConfig['persistant_cookie_path']) ? $authConfig['persistant_cookie_path'] : '';
@@ -75,7 +77,7 @@ class jAuthPersistentLogin
 
         if ($userIsConnected) {
             // opportunity to delete expired tokens
-            $dao = jDao::get('jelix~jauthremembertoken');
+            $dao = jDao::get('jelix~jauthremembertoken', $this->dbProfile);
             $dao->deleteExpiredTokens(time());
         }
         else if ($this->persistentCookieName != '') {
@@ -88,7 +90,7 @@ class jAuthPersistentLogin
                 $tokenHash = hash('sha256', $token);
                 $seriesHash = hash('sha256', $series);
 
-                $dao = jDao::get('jelix~jauthremembertoken');
+                $dao = jDao::get('jelix~jauthremembertoken', $this->dbProfile);
                 $rec = $dao->getByLoginAndSeries($login, $seriesHash, time());
                 if ($rec && $rec->token_hash == $tokenHash) {
                      // found !!
@@ -130,7 +132,7 @@ class jAuthPersistentLogin
         $series = bin2hex(random_bytes(32));
 
         // store into the database
-        $dao = jDao::get('jelix~jauthremembertoken');
+        $dao = jDao::get('jelix~jauthremembertoken', $this->dbProfile);
         $rec = $dao->createRecord();
         $rec->token_hash = hash('sha256', $token);
         $rec->login = $login;
@@ -152,7 +154,7 @@ class jAuthPersistentLogin
 
                 $this->deleteCookie();
 
-                $dao = jDao::get('jelix~jauthremembertoken');
+                $dao = jDao::get('jelix~jauthremembertoken', $this->dbProfile);
                 if ($cookieLogin == $login) {
                     $seriesHash = hash('sha256', $series);
 
@@ -172,13 +174,13 @@ class jAuthPersistentLogin
 
     public function deleteAllUserTokens($login)
     {
-        $dao = jDao::get('jelix~jauthremembertoken');
+        $dao = jDao::get('jelix~jauthremembertoken', $this->dbProfile);
         $dao->deleteByLogin($login);
     }
 
     public function deleteExpiredTokens()
     {
-        $dao = jDao::get('jelix~jauthremembertoken');
+        $dao = jDao::get('jelix~jauthremembertoken', $this->dbProfile);
         $dao->deleteExpiredTokens(time());
     }
 }

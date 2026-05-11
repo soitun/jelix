@@ -23,7 +23,7 @@ require JELIX_LIB_PATH.'auth/jIAuthDriver3.iface.php';
 require JELIX_LIB_PATH.'auth/jAuthDriverBase.class.php';
 
 /**
- * This is the main class for authentification process.
+ * This is the main class for the authentication process.
  *
  * @package    jelix
  * @subpackage auth
@@ -47,18 +47,23 @@ class jAuth
     protected static $driver;
 
     /**
+     * @var jAuthPersistentLogin
+     */
+    protected static $peristentLogin;
+
+    /**
      * Load the configuration of authentification, stored in the auth plugin config.
      *
-     * The configuration is readed from the auth.coord.ini.php if it exists
+     * The configuration is read from the auth.coord.ini.php if it exists
      * and indicated into the `coordplugin` section.
-     * or readed from the section `auth` from the main configuration
-     * or readed from the section `coordplugin_auth` from the main configuration
+     * or read from the section `auth` from the main configuration
+     * or read from the section `coordplugin_auth` from the main configuration
      *
      * The plugin configuration file can be merged with the section `auth`
-     * or `coordplugin_auth` if there is a `auth.mergeconfig`
+     * or `coordplugin_auth` if there is an `auth.mergeconfig`
      * parameter in the `coordplugins` section.
      *
-     * The driver to should be indicated into the `driver` configuration
+     * The driver should be indicated into the `driver` configuration
      * parameter from the auth.coord.ini.php file, or into the `driver` configuration
      * of the `coordplugin_auth` section.
      *
@@ -262,6 +267,21 @@ class jAuth
         return null;
     }
 
+    protected static function _getPersistentLoginInstance()
+    {
+        if (!self::$peristentLogin) {
+            $config = self::loadConfig();
+            $driverConfig = self::getDriverConfig();
+            if (isset($driverConfig['compatiblewithdb']) && $driverConfig['compatiblewithdb']) {
+                $profile = $driverConfig['profile'];
+            }
+
+            self::$peristentLogin = new jAuthPersistentLogin($config, $profile);
+        }
+        return self::$peristentLogin;
+    }
+
+
     /**
      * load user data.
      *
@@ -388,8 +408,7 @@ class jAuth
             }
         }
 
-        $config = self::loadConfig();
-        $persistentLogin = new jAuthPersistentLogin($config);
+        $persistentLogin = self::_getPersistentLoginInstance();
         $persistentLogin->deleteAllUserTokens($login);
 
         $user = $dr->getUser($login);
@@ -612,8 +631,7 @@ class jAuth
      */
     public static function isPersistant()
     {
-        $config = self::loadConfig();
-        $persistentLogin = new jAuthPersistentLogin($config);
+        $persistentLogin = self::_getPersistentLoginInstance();
         return $persistentLogin->isPersistencyEnabled() && jServer::isHttpsFromServer();
     }
 
@@ -639,7 +657,7 @@ class jAuth
         }
 
         if (jServer::isHttpsFromServer()) {
-            $persistentLogin = new jAuthPersistentLogin($config);
+            $persistentLogin = self::_getPersistentLoginInstance();
             $persistentLogin->deleteUserToken($_COOKIE, $currentLogin);
         }
     }
@@ -753,8 +771,7 @@ class jAuth
             return false;
         }
 
-        $config = self::loadConfig();
-        $persistentLogin = new jAuthPersistentLogin($config);
+        $persistentLogin = self::_getPersistentLoginInstance();
 
         $login = $persistentLogin->checkTokenFromCookie($_COOKIE, self::isConnected());
         if ($login !== false) {
@@ -780,8 +797,7 @@ class jAuth
         if (!\jServer::isHttpsFromServer()) {
             return 0;
         }
-        $config = self::loadConfig();
-        $persistentLogin = new jAuthPersistentLogin($config);
+        $persistentLogin = self::_getPersistentLoginInstance();
         return $persistentLogin->generateCookieWithNewToken($login);
     }
 
