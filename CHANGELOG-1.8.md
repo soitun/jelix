@@ -16,6 +16,7 @@ Next
 - fix(jauth) password parameter on AuthChangePassword parameter is deprecated (security issue)
 - fix(jAuth) `canBePersistent()` is renammed to `isPersistant()` (which is deprecated from now)
 - fix(jauthdb_admin) remove the maxlength of the password into the user profile form
+- fix(jauthdb_admin) actions on the list of accounts: escape html content into links 
 - fix(installer) execSQLScript should check if the SQL file exists before executing
 
 1.8.23
