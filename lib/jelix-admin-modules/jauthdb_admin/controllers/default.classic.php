@@ -507,13 +507,12 @@ class defaultCtrl extends jController
 
         $dao = jDao::get($this->dao, $this->dbProfile);
         $cond = jDao::createConditions();
+        $cond->addCondition('login', 'LIKE', '%' . $term . '%');
         $cond->addItemOrder('login', 'asc');
         $list = $dao->findBy($cond);
         $users = array();
         foreach ($list as $prop) {
-            if (strstr($prop->login, $term) || $term === '') {
-                $users[] = $prop->login;
-            }
+            $users[] = $prop->login;
         }
         $rep->data = $users;
 
