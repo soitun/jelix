@@ -1,23 +1,23 @@
 <?php
 
 /**
- * @package     jelix
- * @subpackage  jauthdb
+ * @package     jelix-modules
+ * @subpackage  jelix-module
  *
  * @author      Laurent Jouanneau
  * @copyright   2026 Laurent Jouanneau
  *
- * @see        http://www.jelix.org
+ * @see         https://www.jelix.org
  * @licence     GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
  */
 
 use Jelix\Installer\Module\Installer;
 use Jelix\Installer\Module\API\InstallHelpers;
 
-class jauthdbModuleUpgrader_jauthremembertoken extends Installer
+class jelixModuleUpgrader_jauthremembertoken extends Installer
 {
-    public $targetVersions = array('1.8.24-a1');
-    public $date = '2026-05-06 16:30';
+    public $targetVersions = array('1.8.24a1');
+    public $date = '2026-05-11';
 
     public function install(InstallHelpers $helpers)
     {
@@ -25,6 +25,14 @@ class jauthdbModuleUpgrader_jauthremembertoken extends Installer
 
         $confList = array();
         foreach ($helpers->getEntryPointsList() as $entryPoint) {
+
+            $configEp = $entryPoint->getConfigObj();
+            if ((!isset($configEp->modules['jauth.enabled']) || !$configEp->modules['jauth.enabled'])
+                && (!isset($configEp->modules['jcommunity.enabled']) || !$configEp->modules['jcommunity.enabled'])
+            ) {
+                continue;
+            }
+
             $authConfig = $entryPoint->getCoordPluginConfig('auth');
             if (!$authConfig) {
                 continue;
@@ -35,12 +43,12 @@ class jauthdbModuleUpgrader_jauthremembertoken extends Installer
             $path = Jelix\FileUtilities\Path::shortestPath(jApp::appPath(), $conf->getFileName());
             if (!isset($confList[$path])) {
                 $confList[$path] = true;
-                $this->setupAuth($helpers, $conf, $section, $entryPoint->getConfigObj());
+                $this->installTable($helpers, $conf, $section, $entryPoint->getConfigObj());
             }
         }
     }
 
-    protected function setupAuth(InstallHelpers $helpers, Jelix\IniFile\IniModifier $conf, $section_auth, $epConfig)
+    protected function installTable(InstallHelpers $helpers, Jelix\IniFile\IniModifier $conf, $section_auth, $epConfig)
     {
         // load the configuration of jAuth
         $configContent = $conf->getValues($section_auth);
