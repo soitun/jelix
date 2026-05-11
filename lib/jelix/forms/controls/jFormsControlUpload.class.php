@@ -6,7 +6,7 @@
  * @author      Laurent Jouanneau
  * @contributor Julien Issler
  *
- * @copyright   2006-2022 Laurent Jouanneau
+ * @copyright   2006-2026 Laurent Jouanneau
  * @copyright   2009 Julien Issler
  *
  * @see        http://www.jelix.org
@@ -126,11 +126,16 @@ class jFormsControlUpload extends jFormsControl
         }
 
         if ($alternateName == '') {
-            $directoryPath .= $_FILES[$this->ref]['name'];
+            $directoryPath .= $this->sanitizeFilename($_FILES[$this->ref]['name']);
         } else {
             $directoryPath .= $alternateName;
         }
 
         return move_uploaded_file($_FILES[$this->ref]['tmp_name'], $directoryPath);
+    }
+
+    protected function sanitizeFilename($filename)
+    {
+        return basename(str_replace('\\','/', $filename));
     }
 }

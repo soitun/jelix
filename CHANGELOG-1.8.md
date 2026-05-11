@@ -4,16 +4,22 @@ Changes into Jelix 1.8
 Next
 ----
 
+Fixed security issues:
+
+- fix(jauth) improve security on the cookie for the remember-me feature.
+    - A new table is created.
+    - The configuration parameter persistant_encryption_key is not used anymore.
+    - The `persistence` parameter on the `AuthLogin` event is deprecated
+- fix(jauth) password parameter on AuthChangePassword parameter is deprecated (it may be a security issue)
+- fix(jforms) sanitize filenames of uploaded files (security issue)
+
+Other fixes:
+
 - new(jdb) Support of identity column for Postgresql
 - fix(jdb) fix SQL error when changing an identity column to serial with jDbSchema and Postgresql  
 - fix(jdb) fix SQL error when changing a autoincremented column to integer with jDbSchema and Postgresql  
 - fix(jdb) `jDbPDOConnection::unprefixTable()` was missing
 - fix(jdb) `jDbSchema` must accept `jDbPDOConnection` objects on the constructor
-- fix(jauth) improve security on the cookie for the remember-me feature.
-  - A new table is created.
-  - The configuration parameter persistant_encryption_key is not used anymore.
-  - The `persistence` parameter on the `AuthLogin` event is deprecated
-- fix(jauth) password parameter on AuthChangePassword parameter is deprecated (security issue)
 - fix(jAuth) `canBePersistent()` is renammed to `isPersistant()` (which is deprecated from now)
 - fix(jauthdb_admin) remove the maxlength of the password into the user profile form
 - fix(jauthdb_admin) actions on the list of accounts: escape html content into links 
