@@ -14,8 +14,9 @@ Next
   - The configuration parameter persistant_encryption_key is not used anymore.
   - The `persistence` parameter on the `AuthLogin` event is deprecated
 - fix(jauth) password parameter on AuthChangePassword parameter is deprecated (security issue)
-- fix(installer) execSQLScript should check if the SQL file exists before executing
 - fix(jAuth) `canBePersistent()` is renammed to `isPersistant()` (which is deprecated from now)
+- fix(jauthdb_admin) remove the maxlength of the password into the user profile form
+- fix(installer) execSQLScript should check if the SQL file exists before executing
 
 1.8.23
 ------
