@@ -270,13 +270,14 @@ class jAuth
     protected static function _getPersistentLoginInstance()
     {
         if (!self::$peristentLogin) {
-            $config = self::loadConfig();
+            $authConfig = self::loadConfig();
             $driverConfig = self::getDriverConfig();
-            if (isset($driverConfig['compatiblewithdb']) && $driverConfig['compatiblewithdb']) {
+            $profile = '';
+            if ($authConfig['driver'] == 'Db' || (isset($driverConfig['compatiblewithdb']) && $driverConfig['compatiblewithdb'])) {
                 $profile = $driverConfig['profile'];
             }
 
-            self::$peristentLogin = new jAuthPersistentLogin($config, $profile);
+            self::$peristentLogin = new jAuthPersistentLogin($authConfig, $profile);
         }
         return self::$peristentLogin;
     }
@@ -654,8 +655,10 @@ class jAuth
     public static function logout()
     {
         $config = self::loadConfig();
-        $currentLogin = $_SESSION[$config['session_name']]->login;
-        jEvent::notify('AuthLogout', array('login' => $currentLogin));
+        if (isset($_SESSION[$config['session_name']])) {
+            $currentLogin = $_SESSION[$config['session_name']]->login;
+            jEvent::notify('AuthLogout', array('login' => $currentLogin));
+        }
         $_SESSION[$config['session_name']] = new jAuthDummyUser();
 
         if (isset($config['session_destroy']) && $config['session_destroy']) {
