@@ -9,7 +9,7 @@
    <label locale="jauthdb_admin~crud.form.email"/>
 </input>
 
-<secret ref="password" maxlength="50">
+<secret ref="password" minlength="12">
    <label locale="jauthdb_admin~crud.form.password"/>
    <confirm locale="jauthdb_admin~crud.form.password.confirm"/>
 </secret>

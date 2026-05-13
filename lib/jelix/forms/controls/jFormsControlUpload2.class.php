@@ -6,7 +6,7 @@
  * @author      Laurent Jouanneau
  * @contributor Julien Issler
  *
- * @copyright   2006-2022 Laurent Jouanneau
+ * @copyright   2006-2026 Laurent Jouanneau
  * @copyright   2009 Julien Issler
  *
  * @see        http://www.jelix.org
@@ -34,6 +34,11 @@ class jFormsControlUpload2 extends jFormsControl
     protected $error;
 
     protected $modified = false;
+
+    protected function sanitizeFilename($filename)
+    {
+        return basename(str_replace('\\','/', $filename));
+    }
 
     public function setForm($form)
     {
@@ -181,6 +186,7 @@ class jFormsControlUpload2 extends jFormsControl
 
         if ($fileInfo) {
             $this->fileInfo = $fileInfo;
+            $this->fileInfo['name'] = $this->sanitizeFilename($this->fileInfo['name']);
         } else {
             $this->fileInfo = array('name' => '', 'type' => '', 'size' => 0,
                 'tmp_name' => '', 'error' => UPLOAD_ERR_NO_FILE, );
@@ -242,6 +248,7 @@ class jFormsControlUpload2 extends jFormsControl
     public function setNewFile($fileName)
     {
         if ($fileName) {
+            $fileName = $this->sanitizeFilename($fileName);
             if ($this->container->privateData[$this->ref]['newfile'] != $fileName) {
                 $this->deleteNewFile();
             }

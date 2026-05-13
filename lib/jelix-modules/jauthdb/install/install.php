@@ -20,6 +20,7 @@ use Jelix\Installer\Module\API\InstallHelpers;
 class jauthdbModuleInstaller extends \Jelix\Installer\Module\Installer
 {
     protected $dbTablesInstalled = false;
+    protected $dbRemTablesInstalled = false;
 
     public function install(InstallHelpers $helpers)
     {
@@ -62,20 +63,28 @@ class jauthdbModuleInstaller extends \Jelix\Installer\Module\Installer
         $driver = $authConfig['driver'];
         $driverConfig = $authConfig[$driver];
 
+        $profile = (isset($driverConfig['profile']) ? $driverConfig['profile']: '');
+        $dbConn = $helpers->database();
+        $dbConn->useDbProfile($profile);
+        // the script is into the jelix module, because the jauthdb module may not be installed and
+        // replaced by another one, for example jcommunity.
+        if (!$this->dbRemTablesInstalled) {
+            $this->dbRemTablesInstalled = true;
+            $dbConn->execSQLScript('sql/install_jauthremembertoken.schema', 'jelix');
+        }
+
         $compatibleWithDb = (isset($driverConfig['compatiblewithdb']) ? $driverConfig['compatiblewithdb']: false);
         if ($driver == '' || ($driver != 'Db' && !$compatibleWithDb)) {
             return;
         }
-        $profile = (isset($driverConfig['profile']) ? $driverConfig['profile']: '');
-        $helpers->database()->useDbProfile($profile);
 
         // FIXME: should use the given dao to create the table
         $daoName = (isset($driverConfig['dao']) ? $driverConfig['dao']: '');
         if ($daoName == 'jauthdb~jelixuser' && !$this->dbTablesInstalled) {
             $this->dbTablesInstalled = true;
-            $helpers->database()->execSQLScript('install_jauth.schema');
+            $dbConn->execSQLScript('install_jauth.schema');
             if ($this->getParameter('defaultuser')) {
-                $cn = $helpers->database()->dbConnection();
+                $cn = $dbConn->dbConnection();
                 $rs = $cn->query('SELECT usr_login FROM '.$cn->prefixTable('jlx_user')." WHERE usr_login = 'admin'");
                 if (!$rs->fetch()) {
                     require_once JELIX_LIB_PATH.'auth/jAuth.class.php';

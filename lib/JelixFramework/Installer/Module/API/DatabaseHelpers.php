@@ -131,6 +131,10 @@ class DatabaseHelpers
             $file .= '.'.$conn->dbms.'.sql';
         }
 
+        if (!file_exists($file)) {
+            throw new \Exception('SQL script file '.$name.' not found');
+        }
+
         if ($inTransaction) {
             $conn->beginTransaction();
         }
