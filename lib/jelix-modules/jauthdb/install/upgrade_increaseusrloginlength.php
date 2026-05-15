@@ -2,7 +2,7 @@
 
 /**
  * @package     jelix
- * @subpackage  jacl2db
+ * @subpackage  jauthdb
  *
  * @author      Laurent Jouanneau
  * @copyright   2022 Laurent Jouanneau

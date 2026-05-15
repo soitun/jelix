@@ -91,7 +91,7 @@ function resetMysql() {
     local login="$2"
     local pass="$3"
     local prefix="$4"
-    mysql -h mysql -u $login -p$pass -e "drop table if exists ${prefix}jacl2_group;drop table if exists ${prefix}jacl2_rights;drop table if exists ${prefix}jacl2_subject;drop table if exists ${prefix}jacl2_subject_group;drop table if exists ${prefix}jlx_cache;drop table if exists ${prefix}jlx_user;drop table if exists ${prefix}jsessions;drop table if exists ${prefix}jacl2_user_group;" $base;
+    mysql -h mysql -u $login -p$pass -e "drop table if exists ${prefix}jacl2_group;drop table if exists ${prefix}jacl2_rights;drop table if exists ${prefix}jacl2_subject;drop table if exists ${prefix}jacl2_subject_group;drop table if exists ${prefix}jlx_cache;drop table if exists ${prefix}jlx_user;drop table if exists ${prefix}jsessions;drop table if exists ${prefix}jacl2_user_group;drop table if exists ${prefix}jauthremembertoken;" $base;
 
     MYSQLTABLES="labels1_test labels_test myconfig product_tags_test product_test products towns testkvdb"
     for TABLE in $MYSQLTABLES
@@ -103,7 +103,7 @@ function resetMysql() {
 
 function resetPostgresql() {
   echo "--- Reset Postgresql database"
-  PGTABLES="jacl2_group jacl2_rights jacl2_subject jacl2_subject_group jacl2_user_group jsessions labels1_tests labels_tests product_tags_test product_test products testkvdb generated_column_test products_with_identity"
+  PGTABLES="jacl2_group jacl2_rights jacl2_subject jacl2_subject_group jacl2_user_group jsessions labels1_tests labels_tests product_tags_test product_test products testkvdb generated_column_test products_with_identity article3serial test_prod, jauthremembertoken"
   for TABLE in $PGTABLES
   do
       PGPASSWORD=jelix psql -h pgsql -U test_user -d testapp -c "drop table if exists $TABLE cascade;"

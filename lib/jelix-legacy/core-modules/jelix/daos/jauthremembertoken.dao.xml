@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+    <datasources>
+        <primarytable name="rmb" realname="jauthremembertoken" primarykey="login,token_hash" />
+    </datasources>
+    <record>
+        <property name="login" fieldname="login" required="yes" datatype="string"  maxlength="255" />
+        <property name="token_hash" fieldname="token_hash" datatype="string" required="true" maxlength="128"/>
+        <property name="series_hash" fieldname="series_hash"  datatype="string" required="true" maxlength="128" />
+        <property name="expires_at" fieldname="expires_at" datatype="int" required="true"/>
+        <property name="created_at" fieldname="created_at" datatype="datetime"
+                  insertpattern="now()" required="true"/>
+    </record>
+    <factory>
+        <method name="getByLoginAndSeries" type="selectfirst">
+            <parameter name="login" />
+            <parameter name="series" />
+            <parameter name="limitTimeStamp" />
+            <conditions>
+                <eq property="login" expr="$login" />
+                <eq property="series_hash" expr="$series" />
+                <gt property="expires_at" expr="$limitTimeStamp" />
+            </conditions>
+            <order>
+                <orderitem property="expires_at" way="asc" />
+            </order>
+        </method>
+        <method name="deleteByLoginAndSeries" type="delete">
+            <parameter name="login" />
+            <parameter name="series" />
+            <conditions>
+                <eq property="login" expr="$login" />
+                <eq property="series_hash" expr="$series" />
+            </conditions>
+        </method>
+
+        <method name="deleteExpiredTokensByLogin" type="delete">
+            <parameter name="login" />
+            <parameter name="limitTimeStamp" />
+            <conditions>
+                <eq property="login" expr="$login" />
+                <lt property="expires_at" expr="$limitTimeStamp" />
+            </conditions>
+        </method>
+        <method name="deleteByLogin" type="delete">
+            <parameter name="login" />
+            <conditions>
+                <eq property="login" expr="$login" />
+            </conditions>
+        </method>
+        <method name="deleteExpiredTokens" type="delete">
+            <parameter name="limitTimeStamp" />
+            <conditions>
+                <lt property="expires_at" expr="$limitTimeStamp" />
+            </conditions>
+        </method>
+    </factory>
+</dao>
